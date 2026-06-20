@@ -441,28 +441,133 @@ const clothes = {
 
   // ── TOPS ─────────────────────────────────────────────────
   tops: [
-    { id:'top_none',         name:'None',             name_ru:'Нет',               src:null, pos:null, tags:[] },
-    { id:'top_dress_new_1',  name:'K-Pop Dress',      name_ru:'K-Pop платье',      src:'Items/Dress/dress_new_1.png',
-      pos:{left:0,top:0,width:100},   tags:['kpop','cute','pastel','formal','elegant'],  sub:'dresses' },
+    { id:'top_none', name:'None', name_ru:'Нет', src:null, pos:null, tags:[] },
+    { id:'top_dress_new_1', name:'K-Pop Dress', name_ru:'K-Pop платье', src:'Items/Dress/dress_new_1.png', pos:{left:0,top:0,width:100}, tags:['kpop','cute','pastel','formal','elegant'], sub:'dresses' },
+    { id:'black_lace_crop_top', name:'Black Lace Crop Top', name_ru:'Черный кружевной кроп-топ', src:'Items/Shirt/black_lace_crop_top.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'], sub:'blouses' },
+    { id:'kpop_sequin_crop_top', name:'Sequin Crop Top', name_ru:'Кроп-топ с пайетками', src:'Items/Shirt/kpop_sequin_crop_top.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold','pastel','cute'], sub:'blouses' },
+    { id:'casual_hoodie', name:'Oversized Hoodie', name_ru:'Объемное худи', src:'Items/Shirt/casual_hoodie.png', pos:{left:0,top:0,width:100}, tags:['casual','sporty'], sub:'blouses' },
+    { id:'pink_y2k_cardigan', name:'Pink Y2K Cardigan', name_ru:'Розовый Y2K кардиган', src:'Items/Shirt/pink_y2k_cardigan.png', pos:{left:0,top:0,width:100}, tags:['cute','pastel','kpop'], sub:'blouses' },
+    { id:'gothic_mini_dress', name:'Gothic Mini Dress', name_ru:'Готическое mini-платье', src:'Items/Dress/gothic_mini_dress.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'], sub:'dresses' },
+    { id:'navy_sailor_dress', name:'Navy Sailor Dress', name_ru:'Синее матросское платье', src:'Items/Dress/navy_sailor_dress.png', pos:{left:0,top:0,width:100}, tags:['school','cute','formal'], sub:'dresses' },
+    { id:'pink_sequin_dress', name:'Pink Sequin Dress', name_ru:'Розовое блестящее платье', src:'Items/Dress/pink_sequin_dress.png', pos:{left:0,top:0,width:100}, tags:['kpop','elegant','pastel','cute'], sub:'dresses' },
+    { id:'school_uniform_dress', name:'School Uniform Dress', name_ru:'Школьная форма', src:'Items/Dress/school_uniform_dress.png', pos:{left:0,top:0,width:100}, tags:['school','formal','casual'], sub:'blouses' },
+    { id:'silver_bodycon_dress', name:'Silver Bodycon Dress', name_ru:'Серебристое облегающее платье', src:'Items/Dress/silver_bodycon_dress.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold','elegant'], sub:'dresses' },
+    
+    // 16 новых топов
+    { id:'athletic_track_jacket', name:'Athletic Track Jacket', name_ru:'Спортивная ветровка', src:'Items/Shirt/athletic_track_jacket.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'], sub:'blouses' },
+    { id:'beige_cable_sweater', name:'Beige Cable Sweater', name_ru:'Бежевый вязаный свитер', src:'Items/Shirt/beige_cable_sweater.png', pos:{left:0,top:0,width:100}, tags:['casual','pastel'], sub:'blouses' },
+    { id:'crimson_corset', name:'Crimson Corset', name_ru:'Малиновый корсет', src:'Items/Shirt/crimson_corset.png', pos:{left:0,top:0,width:100}, tags:['bold','elegant','kpop'], sub:'blouses' },
+    { id:'cropped_black_leather_jacket', name:'Cropped Leather Jacket', name_ru:'Черная кожаная косуха', src:'Items/Shirt/cropped_black_leather_jacket.png', pos:{left:0,top:0,width:100}, tags:['bold','dark','gothic'], sub:'blouses' },
+    { id:'cropped_cardigan', name:'Cropped Cardigan', name_ru:'Укороченный кардиган', src:'Items/Shirt/cropped_cardigan.png', pos:{left:0,top:0,width:100}, tags:['cute','pastel'], sub:'blouses' },
+    { id:'futuristic_crop_top', name:'Futuristic Crop Top', name_ru:'Футуристичный кроп-топ', src:'Items/Shirt/futuristic_crop_top.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold'], sub:'blouses' },
+    { id:'gothic_velvet_top_1', name:'Gothic Velvet Top I', name_ru:'Готический бархатный топ I', src:'Items/Shirt/gothic_velvet_top_1.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'], sub:'blouses' },
+    { id:'gothic_velvet_top_2', name:'Gothic Velvet Top II', name_ru:'Готический бархатный топ II', src:'Items/Shirt/gothic_velvet_top_2.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'], sub:'blouses' },
+    { id:'grunge_knit_sweater', name:'Grunge Knit Sweater', name_ru:'Гранжевый рваный свитер', src:'Items/Shirt/grunge_knit_sweater.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','casual'], sub:'blouses' },
+    { id:'kpop_stage_top', name:'K-Pop Stage Top', name_ru:'Сценический кроп-топ', src:'Items/Shirt/kpop_stage_top.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold','cute'], sub:'blouses' },
+    { id:'kpop_top_set_lavender', name:'Lavender Stage Top', name_ru:'Лавандовый топ-сет', src:'Items/Shirt/kpop_top_set_lavender.png', pos:{left:0,top:0,width:100}, tags:['kpop','pastel','cute'], sub:'blouses' },
+    { id:'lavender_sweatshirt', name:'Lavender Sweatshirt', name_ru:'Лавандовый свитшот', src:'Items/Shirt/lavender_sweatshirt.png', pos:{left:0,top:0,width:100}, tags:['casual','pastel'], sub:'blouses' },
+    { id:'layered_cherry_top', name:'Cherry Print Top', name_ru:'Топ с вишневым принтом', src:'Items/Shirt/layered_cherry_top.png', pos:{left:0,top:0,width:100}, tags:['cute','casual'], sub:'blouses' },
+    { id:'navy_sweater_vest', name:'Navy Sweater Vest', name_ru:'Школьный вязаный жилет', src:'Items/Shirt/navy_sweater_vest.png', pos:{left:0,top:0,width:100}, tags:['school','formal','casual'], sub:'blouses' },
+    { id:'puffer_vest_tshirt', name:'Puffer Vest Over T-Shirt', name_ru:'Дутый жилет с футболкой', src:'Items/Shirt/puffer_vest_tshirt.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'], sub:'blouses' },
+    { id:'white_blouse_black_bow', name:'White Blouse with Bow', name_ru:'Блузка с черным бантом', src:'Items/Shirt/white_blouse_black_bow.png', pos:{left:0,top:0,width:100}, tags:['school','formal','elegant'], sub:'blouses' },
+
+    // 13 новых платьев
+    { id:'beige_cable_knit_dress', name:'Beige Cable-Knit Dress', name_ru:'Бежевое вязаное платье', src:'Items/Dress/beige_cable_knit_dress.png', pos:{left:0,top:0,width:100}, tags:['casual','pastel','elegant'], sub:'dresses' },
+    { id:'gothic_lolita_dress_1', name:'Gothic Lolita Dress I', name_ru:'Платье Готическая Лолита I', src:'Items/Dress/gothic_lolita_dress_1.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','cute'], sub:'dresses' },
+    { id:'gothic_lolita_dress_2', name:'Gothic Lolita Dress II', name_ru:'Платье Готическая Лолита II', src:'Items/Dress/gothic_lolita_dress_2.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','cute'], sub:'dresses' },
+    { id:'gothic_stage_dress', name:'Gothic Stage Dress', name_ru:'Сценическое готик-платье', src:'Items/Dress/gothic_stage_dress.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold','kpop'], sub:'dresses' },
+    { id:'kpop_stage_dress', name:'K-Pop Stage Dress', name_ru:'Яркое сценическое платье', src:'Items/Dress/kpop_stage_dress.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold','cute'], sub:'dresses' },
+    { id:'tank_dress_with_jacket', name:'Tank Dress with Jacket', name_ru:'Платье с курткой', src:'Items/Dress/tank_dress_with_jacket.png', pos:{left:0,top:0,width:100}, tags:['casual','sporty'], sub:'dresses' },
+    { id:'simple_mini_dress', name:'Simple Mini Dress', name_ru:'Простое мини-платье', src:'Items/Dress/simple_mini_dress.png', pos:{left:0,top:0,width:100}, tags:['casual','cute'], sub:'dresses' },
+    { id:'navy_chiffon_star_dress', name:'Navy Chiffon Star Dress', name_ru:'Шифоновое платье со звездами', src:'Items/Dress/navy_chiffon_star_dress.png', pos:{left:0,top:0,width:100}, tags:['elegant','pastel','kpop'], sub:'dresses' },
+    { id:'pinafore_dress_blouse', name:'Pinafore School Dress', name_ru:'Сарафан поверх блузки', src:'Items/Dress/pinafore_dress_blouse.png', pos:{left:0,top:0,width:100}, tags:['school','formal','cute'], sub:'dresses' },
+    { id:'polo_mini_dress', name:'Polo Mini Dress', name_ru:'Спортивное платье-поло', src:'Items/Dress/polo_mini_dress.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'], sub:'dresses' },
+    { id:'red_tartan_plaid_dress', name:'Red Tartan Plaid Dress', name_ru:'Платье в красную клетку', src:'Items/Dress/red_tartan_plaid_dress.png', pos:{left:0,top:0,width:100}, tags:['school','casual','cute'], sub:'dresses' },
+    { id:'ribbed_knit_pastel_dress', name:'Ribbed Knit Pastel Dress', name_ru:'Трикотажное нежное платье', src:'Items/Dress/ribbed_knit_pastel_dress.png', pos:{left:0,top:0,width:100}, tags:['cute','pastel','casual'], sub:'dresses' },
+    { id:'sleeveless_sequin_dress', name:'Sleeveless Sequin Dress', name_ru:'Серебристое платье без рукавов', src:'Items/Dress/sleeveless_sequin_dress.png', pos:{left:0,top:0,width:100}, tags:['kpop','elegant','bold'], sub:'dresses' }
   ],
 
   // ── BOTTOMS ───────────────────────────────────────────────
   bottoms: [
-    { id:'bot_none',   name:'None',            name_ru:'Нет',              src:null, pos:null, tags:[] },
+    { id:'bot_none', name:'None', name_ru:'Нет', src:null, pos:null, tags:[] },
+    { id:'athletic_joggers', name:'Athletic Joggers', name_ru:'Спортивные джоггеры', src:'Items/Legs/Jeans/athletic_joggers.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'], sub:'pants' },
+    { id:'gothic_shorts', name:'Gothic Leather Shorts', name_ru:'Готические шорты', src:'Items/Legs/Jeans/gothic_shorts.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'], sub:'pants' },
+    { id:'y2k_cargo_pants', name:'Y2K Cargo Pants', name_ru:'Широкие брюки карго', src:'Items/Legs/Jeans/y2k_cargo_pants.png', pos:{left:0,top:0,width:100}, tags:['casual','bold','sporty'], sub:'pants' },
+    { id:'kpop_ruffled_skirt', name:'Ruffled Mini Skirt', name_ru:'Мини-юбка с оборками', src:'Items/Legs/Skirt/kpop_ruffled_skirt.png', pos:{left:0,top:0,width:100}, tags:['kpop','cute','pastel'], sub:'skirts' },
+    { id:'kpop_plaid_skirt', name:'Plaid Pleated Skirt', name_ru:'Плиссированная юбка в клетку', src:'Items/Legs/Skirt/kpop_plaid_skirt.png', pos:{left:0,top:0,width:100}, tags:['school','cute','formal'], sub:'skirts' },
+    { id:'kpop_style_skirt_1', name:'K-Pop Skirt I', name_ru:'K-Pop юбка I', src:'Items/Legs/Skirt/kpop_style_skirt_1.png', pos:{left:0,top:0,width:100}, tags:['kpop','cute'], sub:'skirts' },
+    { id:'kpop_style_skirt_2', name:'K-Pop Skirt II', name_ru:'K-Pop юбка II', src:'Items/Legs/Skirt/kpop_style_skirt_2.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold'], sub:'skirts' },
+    { id:'kpop_style_skirt_3', name:'K-Pop Skirt III', name_ru:'K-Pop юбка III', src:'Items/Legs/Skirt/kpop_style_skirt_3.png', pos:{left:0,top:0,width:100}, tags:['kpop','elegant'], sub:'skirts' },
+    { id:'pleated_mini_skirt_classic', name:'Classic Pleated Skirt', name_ru:'Классическая плиссированная юбка', src:'Items/Legs/Skirt/pleated_mini_skirt_classic.png', pos:{left:0,top:0,width:100}, tags:['school','casual'], sub:'skirts' },
+    
+    // 4 новых брюк/шорт
+    { id:'classic_pants', name:'Classic Trousers', name_ru:'Классические брюки', src:'Items/Legs/Jeans/classic_pants.png', pos:{left:0,top:0,width:100}, tags:['formal','school','casual'], sub:'pants' },
+    { id:'running_shorts', name:'Running Shorts', name_ru:'Спортивные шорты', src:'Items/Legs/Jeans/running_shorts.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'], sub:'pants' },
+    { id:'tailored_shorts', name:'Tailored Shorts', name_ru:'Строгие шорты', src:'Items/Legs/Jeans/tailored_shorts.png', pos:{left:0,top:0,width:100}, tags:['formal','school'], sub:'pants' },
+    { id:'stylish_cargo_pants', name:'Stylish Cargo Pants', name_ru:'Стильные брюки карго', src:'Items/Legs/Jeans/stylish_cargo_pants.png', pos:{left:0,top:0,width:100}, tags:['casual','bold','sporty'], sub:'pants' },
+
+    // 6 новых юбок
+    { id:'mini_skirt_basic_1', name:'Basic Mini Skirt I', name_ru:'Базовая мини-юбка I', src:'Items/Legs/Skirt/mini_skirt_basic_1.png', pos:{left:0,top:0,width:100}, tags:['casual','cute'], sub:'skirts' },
+    { id:'mini_skirt_basic_2', name:'Basic Mini Skirt II', name_ru:'Базовая мини-юбка II', src:'Items/Legs/Skirt/mini_skirt_basic_2.png', pos:{left:0,top:0,width:100}, tags:['casual','cute'], sub:'skirts' },
+    { id:'navy_chiffon_skirt', name:'Navy Chiffon Skirt', name_ru:'Синяя шифоновая юбка', src:'Items/Legs/Skirt/navy_chiffon_skirt.png', pos:{left:0,top:0,width:100}, tags:['elegant','cute','pastel'], sub:'skirts' },
+    { id:'pleated_mini_skirt_new', name:'Pleated Mini Skirt', name_ru:'Плиссированная мини-юбка', src:'Items/Legs/Skirt/pleated_mini_skirt_new.png', pos:{left:0,top:0,width:100}, tags:['school','casual','cute'], sub:'skirts' },
+    { id:'silver_metallic_skirt', name:'Silver Metallic Skirt', name_ru:'Серебристая блестящая юбка', src:'Items/Legs/Skirt/silver_metallic_skirt.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold'], sub:'skirts' },
+    { id:'y2k_denim_mini_skirt', name:'Y2K Denim Mini Skirt', name_ru:'Джинсовая мини-юбка Y2K', src:'Items/Legs/Skirt/y2k_denim_mini_skirt.png', pos:{left:0,top:0,width:100}, tags:['casual','cute'], sub:'skirts' }
   ],
 
   // ── SHOES ─────────────────────────────────────────────────
   shoes: [
-    { id:'shoe_none',     name:'None',             name_ru:'Нет',               src:null, pos:null, tags:[] },
+    { id:'shoe_none', name:'None', name_ru:'Нет', src:null, pos:null, tags:[] },
+    { id:'gothic_combat_boots', name:'Gothic Combat Boots', name_ru:'Готические армейские ботинки', src:'Items/Shoes/gothic_combat_boots.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'] },
+    { id:'classic_loafers', name:'Classic Loafers', name_ru:'Классические лоферы', src:'Items/Shoes/classic_loafers.png', pos:{left:0,top:0,width:100}, tags:['school','formal','elegant'] },
+    { id:'pink_hightop_sneakers', name:'Pink High-Top Sneakers', name_ru:'Розовые высокие кеды', src:'Items/Shoes/pink_hightop_sneakers.png', pos:{left:0,top:0,width:100}, tags:['cute','pastel','sporty'] },
+    { id:'sporty_sneakers', name:'Sporty Sneakers', name_ru:'Спортивные кроссовки', src:'Items/Shoes/sporty_sneakers.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'] },
+    { id:'white_high_heels', name:'White High Heels', name_ru:'Белые лаковые туфли', src:'Items/Shoes/white_high_heels.png', pos:{left:0,top:0,width:100}, tags:['elegant','formal','kpop'] },
+    
+    // 15 новых пар обуви
+    { id:'black_sneakers', name:'Black Sneakers', name_ru:'Черные кеды', src:'Items/Shoes/black_sneakers.png', pos:{left:0,top:0,width:100}, tags:['casual','sporty'] },
+    { id:'classic_boots', name:'Classic Boots', name_ru:'Осенние ботинки', src:'Items/Shoes/classic_boots.png', pos:{left:0,top:0,width:100}, tags:['casual','school'] },
+    { id:'brown_oxford_shoes', name:'Brown Oxford Shoes', name_ru:'Коричневые оксфорды', src:'Items/Shoes/brown_oxford_shoes.png', pos:{left:0,top:0,width:100}, tags:['school','formal','elegant'] },
+    { id:'futuristic_boots', name:'Futuristic Boots', name_ru:'Футуристичные сапоги', src:'Items/Shoes/futuristic_boots.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold'] },
+    { id:'gothic_high_boots', name:'Gothic High Boots', name_ru:'Высокие готические сапоги', src:'Items/Shoes/gothic_high_boots.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'] },
+    { id:'gothic_combat_boots_2', name:'Gothic Combat Boots II', name_ru:'Готические ботинки II', src:'Items/Shoes/gothic_combat_boots_2.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'] },
+    { id:'gothic_creeper_shoes', name:'Gothic Creeper Shoes', name_ru:'Готические криперы', src:'Items/Shoes/gothic_creeper_shoes.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','casual'] },
+    { id:'glam_high_heels', name:'Glam High Heels', name_ru:'Элегантные туфли на шпильке', src:'Items/Shoes/glam_high_heels.png', pos:{left:0,top:0,width:100}, tags:['elegant','formal','kpop'] },
+    { id:'loafers_new', name:'Classic Black Loafers', name_ru:'Черные лоферы', src:'Items/Shoes/loafers_new.png', pos:{left:0,top:0,width:100}, tags:['school','formal'] },
+    { id:'mary_jane_shoes', name:'Mary Jane Shoes', name_ru:'Туфли Мэри Джейн', src:'Items/Shoes/mary_jane_shoes.png', pos:{left:0,top:0,width:100}, tags:['school','cute','formal'] },
+    { id:'pink_mary_jane_shoes', name:'Pink Mary Jane Shoes', name_ru:'Розовые туфли Мэри Джейн', src:'Items/Shoes/pink_mary_jane_shoes.png', pos:{left:0,top:0,width:100}, tags:['cute','pastel'] },
+    { id:'silver_metallic_boots', name:'Silver Metallic Boots', name_ru:'Серебристые сапоги', src:'Items/Shoes/silver_metallic_boots.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold','elegant'] },
+    { id:'sneakers_basic', name:'Basic Sneakers', name_ru:'Базовые кроссовки', src:'Items/Shoes/sneakers_basic.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'] },
+    { id:'white_red_sneakers', name:'White & Red Sneakers', name_ru:'Бело-красные кроссовки', src:'Items/Shoes/white_red_sneakers.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual','kpop'] }
   ],
 
   // ── ACCESSORIES ───────────────────────────────────────────
   socks: [
-    { id:'sock_none',     name:'None',             name_ru:'Нет',               src:null, pos:null, tags:[] },
+    { id:'sock_none', name:'None', name_ru:'Нет', src:null, pos:null, tags:[] },
+    { id:'gothic_fishnet_stockings', name:'Fishnet Stockings', name_ru:'Колготки в сеточку', src:'Items/Socks/gothic_fishnet_stockings.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'] },
+    { id:'white_frilly_socks', name:'Frilly Knee-High Socks', name_ru:'Гольфы с рюшами', src:'Items/Socks/white_frilly_socks.png', pos:{left:0,top:0,width:100}, tags:['cute','school','pastel'] },
+    { id:'y2k_overknee_socks', name:'Y2K Over-Knee Socks', name_ru:'Гольфы выше колена Y2K', src:'Items/Socks/y2k_overknee_socks.png', pos:{left:0,top:0,width:100}, tags:['casual','cute','school'] },
+    
+    // 5 новых носков
+    { id:'gothic_thigh_high_stockings', name:'Gothic Thigh-High Stockings', name_ru:'Готические чулки', src:'Items/Socks/gothic_thigh_high_stockings.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'] },
+    { id:'kpop_patterned_stockings', name:'K-Pop Patterned Stockings', name_ru:'K-Pop колготки', src:'Items/Socks/kpop_patterned_stockings.png', pos:{left:0,top:0,width:100}, tags:['kpop','cute','bold'] },
+    { id:'casual_white_socks', name:'Casual White Socks', name_ru:'Белые носки', src:'Items/Socks/casual_white_socks.png', pos:{left:0,top:0,width:100}, tags:['casual','school'] },
+    { id:'stage_glitter_tights', name:'Stage Glitter Tights', name_ru:'Блестящие колготки', src:'Items/Socks/stage_glitter_tights.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold','elegant'] },
+    { id:'striped_sporty_socks', name:'Striped Sporty Socks', name_ru:'Спортивные носки в полоску', src:'Items/Socks/striped_sporty_socks.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'] },
+    
+    // Новейшие гольфы
+    { id:'white_knee_high_socks_classic', name:'Classic White Knee-High Socks', name_ru:'Классические белые гольфы', src:'Items/Socks/white_knee_high_socks_classic.png', pos:{left:0,top:0,width:100}, tags:['school','formal','cute'] }
   ],
 
   accessories: [
-    { id:'acc_none',      name:'None',           name_ru:'Нет',               src:null, pos:null, tags:[] },
+    { id:'acc_none', name:'None', name_ru:'Нет', src:null, pos:null, tags:[] },
+    { id:'gothic_cross_choker', name:'Gothic Cross Choker', name_ru:'Готический чокер с крестом', src:'Items/Accessories/gothic_cross_choker.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','bold'] },
+    { id:'accessories_headphones', name:'Idol Headphones', name_ru:'Наушники идола', src:'Items/Accessories/accessories_headphones.png', pos:{left:0,top:0,width:100}, tags:['kpop','casual','sporty'] },
+    
+    // 3 новых аксессуара
+    { id:'cyber_goggles', name:'Cyber Goggles', name_ru:'Кибер-очки', src:'Items/Accessories/cyber_goggles.png', pos:{left:0,top:0,width:100}, tags:['bold','kpop'] },
+    { id:'headphones_on_head', name:'Stylish Headphones', name_ru:'Стильные наушники', src:'Items/Accessories/headphones_on_head.png', pos:{left:0,top:0,width:100}, tags:['kpop','casual','sporty'] },
+    { id:'pink_heart_bag', name:'Pink Heart Bag', name_ru:'Розовая сумка-сердце', src:'Items/Accessories/pink_heart_bag.png', pos:{left:0,top:0,width:100}, tags:['cute','pastel','kpop'] }
   ],
 };
 
@@ -483,6 +588,55 @@ const FREE_ITEMS = new Set([
   'shoe_none',
   'sock_none',
   'acc_none',
+  
+  // Ранее добавленные бесплатные вещи
+  'kpop_sequin_crop_top',
+  'casual_hoodie',
+  'navy_sailor_dress',
+  'school_uniform_dress',
+  'athletic_joggers',
+  'kpop_plaid_skirt',
+  'pleated_mini_skirt_classic',
+  'classic_loafers',
+  'sporty_sneakers',
+  'white_frilly_socks',
+  'y2k_overknee_socks',
+  'accessories_headphones',
+
+  // Новые бесплатные вещи из 54 ассетов
+  'athletic_track_jacket',
+  'beige_cable_sweater',
+  'cropped_cardigan',
+  'lavender_sweatshirt',
+  'layered_cherry_top',
+  'navy_sweater_vest',
+  'puffer_vest_tshirt',
+  'white_blouse_black_bow',
+  'tank_dress_with_jacket',
+  'simple_mini_dress',
+  'pinafore_dress_blouse',
+  'polo_mini_dress',
+  'red_tartan_plaid_dress',
+  'classic_pants',
+  'running_shorts',
+  'tailored_shorts',
+  'mini_skirt_basic_1',
+  'mini_skirt_basic_2',
+  'pleated_mini_skirt_new',
+  'y2k_denim_mini_skirt',
+  'black_sneakers',
+  'classic_boots',
+  'brown_oxford_shoes',
+  'loafers_new',
+  'mary_jane_shoes',
+  'sneakers_basic',
+  'white_red_sneakers',
+  
+  // Новейшие бесплатные вещи (носки и аксессуары)
+  'casual_white_socks',
+  'striped_sporty_socks',
+  'headphones_on_head',
+  'white_knee_high_socks_classic'
 ]);
 
 const ITEM_COSTS = {
@@ -500,7 +654,60 @@ const ITEM_COSTS = {
   'split_dye_hair_2': 45,
   'pastel_pink_bob': 20,
   'ponytail_black_velvet_bow': 30,
-  'spiky_pixie_teal_blue': 30
+  'spiky_pixie_teal_blue': 30,
+  
+  // Ранее добавленные платные вещи
+  'black_lace_crop_top': 25,
+  'pink_y2k_cardigan': 30,
+  'gothic_mini_dress': 40,
+  'pink_sequin_dress': 35,
+  'silver_bodycon_dress': 45,
+  'gothic_shorts': 30,
+  'y2k_cargo_pants': 35,
+  'kpop_ruffled_skirt': 30,
+  'kpop_style_skirt_1': 25,
+  'kpop_style_skirt_2': 25,
+  'kpop_style_skirt_3': 25,
+  'gothic_combat_boots': 30,
+  'pink_hightop_sneakers': 20,
+  'white_high_heels': 35,
+  'gothic_fishnet_stockings': 20,
+  'gothic_cross_choker': 15,
+
+  // Новые платные вещи из 54 ассетов
+  'crimson_corset': 30,
+  'cropped_black_leather_jacket': 35,
+  'futuristic_crop_top': 25,
+  'gothic_velvet_top_1': 30,
+  'gothic_velvet_top_2': 30,
+  'grunge_knit_sweater': 25,
+  'kpop_stage_top': 30,
+  'kpop_top_set_lavender': 30,
+  'beige_cable_knit_dress': 35,
+  'gothic_lolita_dress_1': 45,
+  'gothic_lolita_dress_2': 45,
+  'gothic_stage_dress': 50,
+  'kpop_stage_dress': 40,
+  'navy_chiffon_star_dress': 35,
+  'ribbed_knit_pastel_dress': 30,
+  'sleeveless_sequin_dress': 40,
+  'stylish_cargo_pants': 30,
+  'navy_chiffon_skirt': 25,
+  'silver_metallic_skirt': 30,
+  'futuristic_boots': 35,
+  'gothic_high_boots': 40,
+  'gothic_combat_boots_2': 30,
+  'gothic_creeper_shoes': 25,
+  'glam_high_heels': 35,
+  'pink_mary_jane_shoes': 20,
+  'silver_metallic_boots': 35,
+  
+  // Новейшие платные вещи
+  'gothic_thigh_high_stockings': 20,
+  'kpop_patterned_stockings': 25,
+  'stage_glitter_tights': 30,
+  'cyber_goggles': 20,
+  'pink_heart_bag': 25
 };
 
 // Вещи за рекламу (можно также купить за звёзды)
@@ -1180,12 +1387,12 @@ function showAchievementsModal() {
 
 const LAYER_ORDER = [
   { key:'body',        zIndex:0 },
-  { key:'shoes',       zIndex:1 },
-  { key:'socks',       zIndex:2 },
+  { key:'socks',       zIndex:1 },
+  { key:'shoes',       zIndex:2 },
   { key:'bottoms',     zIndex:3 },
   { key:'tops',        zIndex:4 },
-  { key:'accessories', zIndex:5 },
-  { key:'hair',        zIndex:6 },
+  { key:'hair',        zIndex:5 },
+  { key:'accessories', zIndex:6 },
 ];
 
 function getCategories() {
@@ -1892,6 +2099,23 @@ function equipItem(category, itemId) {
   equipped[category] = itemId;
   const item = findItem(category, itemId);
   updateLayer(category, item, true);
+
+  // Auto-remove bottoms when equipping a dress
+  if (category === 'tops' && item && item.sub === 'dresses') {
+    if (equipped.bottoms !== 'bot_none') {
+      equipped.bottoms = 'bot_none';
+      updateLayer('bottoms', findItem('bottoms', 'bot_none'), false);
+    }
+  }
+  // Auto-remove dress when equipping bottoms
+  if (category === 'bottoms' && itemId !== 'bot_none') {
+    const currentTop = findItem('tops', equipped.tops);
+    if (currentTop && currentTop.sub === 'dresses') {
+      equipped.tops = 'top_none';
+      updateLayer('tops', findItem('tops', 'top_none'), false);
+    }
+  }
+
   spawnSparkles(12);
   sfxEquip();
   updateOutfitName();
@@ -1909,9 +2133,22 @@ function equipItem(category, itemId) {
 // ────────────────────────────────────────────────────────────
 
 function randomOutfit() {
+  let hasDress = false;
   Object.keys(clothes).forEach(cat => {
-    const items = clothes[cat].filter((item, i) => i === 0 || isUnlocked(item.id));
-    const pick = items[1 + Math.floor(Math.random() * (items.length - 1))];
+    const items = clothes[cat];
+    let pick;
+    if (cat === 'bottoms' && hasDress) {
+      pick = items.find(i => i.id === 'bot_none') || items[0];
+    } else if (cat === 'accessories' && Math.random() < 0.5) {
+      pick = items.find(i => i.id === 'acc_none') || items[0];
+    } else {
+      pick = items[1 + Math.floor(Math.random() * (items.length - 1))];
+    }
+
+    if (cat === 'tops' && pick && pick.sub === 'dresses') {
+      hasDress = true;
+    }
+
     equipped[cat] = pick.id;
     updateLayer(cat, pick, true);
   });
@@ -1920,6 +2157,8 @@ function randomOutfit() {
   updateOutfitName();
   buildItemsGrid(activeCategory);
   saveOutfit();
+  updateRunwayBtn();
+  checkRunwayHint();
 }
 
 function resetOutfit() {
@@ -1952,6 +2191,12 @@ function loadOutfit() {
     equipped.accessories = 'acc_none';
   }
   if (!equipped.socks) equipped.socks = 'sock_none';
+
+  // Auto-resolve dress/bottoms conflict on loaded state
+  const topItem = findItem('tops', equipped.tops);
+  if (topItem && topItem.sub === 'dresses' && equipped.bottoms !== 'bot_none') {
+    equipped.bottoms = 'bot_none';
+  }
 }
 // ────────────────────────────────────────────────────────────
 // SHARE OUTFIT — скачать PNG с образом
@@ -2628,6 +2873,7 @@ async function init() {
   $('btn-sound').addEventListener('click', toggleSound);
   $('btn-share-score').addEventListener('click', () => { sfxClick(); shareOutfit(); });
   $('btn-share-stage').addEventListener('click', () => { sfxClick(); shareOutfit(); });
+  $('btn-random-stage').addEventListener('click', () => { sfxClick(); randomOutfit(); });
   updateStarsDisplay();
   initAudio();
   $('btn-new-day').addEventListener('click', () => {

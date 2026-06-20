@@ -731,6 +731,24 @@ button { cursor: pointer; border: none; font-family: inherit; }
 .btn-share-stage:hover { transform: scale(1.12); box-shadow: 0 4px 14px rgba(255,110,180,.4); background: #fff; }
 .btn-share-stage:active { transform: scale(.9); }
 
+/* Random button — плавающий кубик на сцене */
+.btn-random-stage {
+  position: absolute;
+  bottom: 6px; left: 6px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.82);
+  border: 1.5px solid rgba(255,110,180,.4);
+  font-size: 1.05rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(168,85,247,.2);
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s, background .15s;
+  z-index: 10;
+}
+.btn-random-stage:hover { transform: scale(1.12); box-shadow: 0 4px 14px rgba(255,110,180,.4); background: #fff; }
+.btn-random-stage:active { transform: scale(.9); }
+
 /* Summary modal */
 .summary-box { gap: .6rem; }
 #summary-emoji-big { text-align: center; font-size: 3rem; }
@@ -1015,8 +1033,8 @@ button { cursor: pointer; border: none; font-family: inherit; }
   #intro-name-badge { font-size: .7rem; }
   #intro-next-btn { font-size: .8rem; padding: .42rem; }
 
-  /* Share camera */
-  .btn-share-stage { width: 38px; height: 38px; font-size: 1.1rem; }
+  /* Share camera & Random button */
+  .btn-share-stage, .btn-random-stage { width: 38px; height: 38px; font-size: 1.1rem; }
 
   /* Catwalk */
   #catwalk-phrase { font-size: 1.1rem; }
