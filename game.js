@@ -29,17 +29,17 @@ function t(key) {
 const T = {
   en: {
     // Loading
-    loadingTitle:  'K-Pop Dress Up',
-    loadingText:   'Preparing your idol debut...',
+    loadingTitle:  'K-Pop Idol: Star Maker',
+    loadingText:   'Preparing your K-Pop group debut...',
     // Header
-    gameTitle:     '✨ K-Pop Dress Up ✨',
+    gameTitle:     '✨ K-Pop Star Maker ✨',
     btnRandom:     '🎲 Random',
     btnReset:      '🔄 Reset',
     btnSave:       '💾 Save',
     btnSaved:      '✅ Saved!',
-    btnSchool:     '🏫 School',
-    btnSchoolOn:   '🏫 School ON',
-    btnRunway:     '🌟 Runway!',
+    btnSchool:     '🌟 Promo',
+    btnSchoolOn:   '🌟 Promo ON',
+    btnRunway:     '🌟 Show Stage!',
     // Panels
     categoryLabel: 'Category',
     itemsLabel:    'Items',
@@ -50,46 +50,46 @@ const T = {
     catSocks:      'Socks',
     catAcc:        'Acc.',
     // Banner
-    bannerDayLesson: 'Day {d} · Lesson {l}/5',
+    bannerDayLesson: 'Week {d} · Day {l}/5',
     // Score screen
     scoreResults:    '{title} Results',
     scoreRequired:   'Required style: {tags} · Matched {m}/{r}',
-    scoreTagMatch:   'Tag Match',
+    scoreTagMatch:   'Style Match',
     scoreComplete:   'Completeness',
     scoreJudgeBonus: 'Judge Bonus',
-    scoreLessonPts:  'Lesson Score',
-    btnNextClass:    '➡ Next Class',
-    btnSeeResults:   '🌟 Day Results!',
+    scoreLessonPts:  'Activity Rating',
+    btnNextClass:    '➡ Next Day',
+    btnSeeResults:   '🌟 Week Results!',
     // Summary
-    summaryTitle:    'Day {d} Complete!',
-    summaryDayScore: 'Day Score: {s} / 500 pts',
-    summaryRankLine: '{rank}  ·  Total: {pts} pts',
-    summaryNextRank: 'Next rank: {name} at {at} pts',
-    summaryMaxRank:  '👑 Maximum rank achieved! Legendary idol!',
-    btnNewDay:       '☀️ Next School Day',
+    summaryTitle:    'Week {d} Complete!',
+    summaryDayScore: 'Fandom Growth: +{s} / 500 тыс.',
+    summaryRankLine: '{rank}  ·  Total: {pts} тыс.',
+    summaryNextRank: 'Next rank: {name} at {at} тыс.',
+    summaryMaxRank:  '👑 Maximum rank achieved! K-Pop Legends!',
+    btnNewDay:       '☀️ Next Promo Tour',
     btnExitSchool:   '🎨 Free Style Mode',
     // Ranks
-    rankTrainee:     '🌱 Trainee',
-    rankDebut:       '⭐ Debut',
-    rankIdol:        '🌟 Idol',
-    rankStar:        '👑 K-Pop Star',
+    rankTrainee:     '🌱 Nugu (Rookies)',
+    rankDebut:       '⭐ Rising Stars',
+    rankIdol:        '🌟 Chart Toppers',
+    rankStar:        '👑 K-Pop Legends',
     // Outfit names (free mode)
     adj: ['Sparkly','Dreamy','Fierce','Sweet','Chic','Bold','Pastel','Glam','Iconic','Fresh'],
     noun:['Idol','Star','Diva','Queen','Vision','Dream','Look','Vibe','Moment','Era'],
   },
   ru: {
     // Loading
-    loadingTitle:  'k pop одевалка',
-    loadingText:   'Готовим твой дебют идола...',
+    loadingTitle:  'Путь к славе: K-Pop',
+    loadingText:   'Готовим дебют твоей K-Pop группы...',
     // Header
-    gameTitle:     '✨ k pop одевалка ✨',
+    gameTitle:     '✨ K-Pop: Путь к славе ✨',
     btnRandom:     '🎲 Случайно',
     btnReset:      '🔄 Сброс',
     btnSave:       '💾 Сохранить',
     btnSaved:      '✅ Сохранено!',
-    btnSchool:     '🏫 Учёба',
-    btnSchoolOn:   '🏫 Учёба ВКЛ',
-    btnRunway:     '🌟 На подиум!',
+    btnSchool:     '🌟 Промо',
+    btnSchoolOn:   '🌟 Промо ВКЛ',
+    btnRunway:     '🌟 На сцену!',
     // Panels
     categoryLabel: 'Категория',
     itemsLabel:    'Вещи',
@@ -100,29 +100,29 @@ const T = {
     catSocks:      'Носки',
     catAcc:        'Акс.',
     // Banner
-    bannerDayLesson: 'День {d} · Урок {l}/5',
+    bannerDayLesson: 'Неделя {d} · День {l}/5',
     // Score screen
     scoreResults:    'Итоги: {title}',
     scoreRequired:   'Стиль задания: {tags} · Совпало {m}/{r}',
     scoreTagMatch:   'Стиль образа',
     scoreComplete:   'Полнота образа',
-    scoreJudgeBonus: 'Бонус судей',
-    scoreLessonPts:  'Очки за урок',
-    btnNextClass:    '➡ Следующий урок',
-    btnSeeResults:   '🌟 Итоги дня!',
+    scoreJudgeBonus: 'Бонус судьи',
+    scoreLessonPts:  'Рейтинг активности',
+    btnNextClass:    '➡ Следующий день',
+    btnSeeResults:   '🌟 Итоги недели!',
     // Summary
-    summaryTitle:    'День {d} завершён!',
-    summaryDayScore: 'Очки за день: {s} / 500',
-    summaryRankLine: '{rank}  ·  Всего: {pts} оч.',
-    summaryNextRank: 'Следующий ранг: {name} с {at} оч.',
-    summaryMaxRank:  '👑 Максимальный ранг! Легендарный идол!',
-    btnNewDay:       '☀️ Следующий день',
+    summaryTitle:    'Неделя {d} завершена!',
+    summaryDayScore: 'Прирост фанатов: +{s} / 500 тыс.',
+    summaryRankLine: '{rank}  ·  Всего: {pts} тыс.',
+    summaryNextRank: 'Следующий ранг: {name} с {at} тыс.',
+    summaryMaxRank:  '👑 Максимальный ранг! Легенды K-Pop!',
+    btnNewDay:       '☀️ Следующий промо-тур',
     btnExitSchool:   '🎨 Свободный стиль',
     // Ranks
-    rankTrainee:     '🌱 Стажёр',
-    rankDebut:       '⭐ Дебют',
-    rankIdol:        '🌟 Идол',
-    rankStar:        '👑 K-Pop Звезда',
+    rankTrainee:     '🌱 Nugu (Новички)',
+    rankDebut:       '⭐ Восходящие звёзды',
+    rankIdol:        '🌟 Лидеры чартов',
+    rankStar:        '👑 K-Pop Легенды',
     // Outfit names (free mode)
     adj:  ['Сверкающий','Мечтательный','Дерзкий','Сладкий','Шикарный','Смелый','Пастельный','Гламурный','Культовый','Свежий'],
     noun: ['Идол','Звезда','Дива','Королева','Образ','Мечта','Лук','Вайб','Момент','Эпоха'],
@@ -1429,68 +1429,68 @@ function translateTags(tags) {
   return tags.map(t => TAG_NAMES_RU[t] || t);
 }
 
-const ASSIGNMENTS = [
-  { id:'music_class',   judge:'kim',
-    title:'🎵 Music Class',          title_ru:'🎵 Урок музыки',
-    desc: 'Teacher Kim wants idol energy on stage!',
-    desc_ru:'Учитель Ким хочет энергию идола на сцене!',
+const PROMO_ACTIVITIES = [
+  { id:'recording',     judge:'kim',
+    title:'🎙️ Recording Session',     title_ru:'🎙️ Запись трека',
+    desc: 'Producer Song wants pure charisma and bold vibe for the title track!',
+    desc_ru:'Продюсер Сон хочет чистую харизму и дерзкий вайб для заглавного трека!',
     requiredTags:['kpop','bold'],    bonusTags:['pastel','cute'] },
-  { id:'pe_class',      judge:'lee',
-    title:'🏃 PE Class',             title_ru:'🏃 Физкультура',
-    desc: 'Coach Lee needs you in sporty gear! Move freely!',
-    desc_ru:'Тренер Ли хочет спортивный образ. Двигайся свободно!',
+  { id:'fitness',       judge:'lee',
+    title:'🧘 Fitness & Stretching',  title_ru:'🧘 Фитнес и растяжка',
+    desc: 'Choreographer Min expects comfortable, sporty outfit. Keep moving!',
+    desc_ru:'Хореограф Мин ждет удобный спортивный лук. Двигайся свободно!',
     requiredTags:['sporty','casual'],bonusTags:['kpop'] },
-  { id:'assembly',      judge:'park',
-    title:'📋 School Assembly',      title_ru:'📋 Торжественная линейка',
-    desc: 'Mrs. Park demands proper school attire. Look sharp!',
-    desc_ru:'Мисс Пак требует настоящую школьную форму. Выгляди безупречно!',
+  { id:'photoshoot',    judge:'park',
+    title:'📸 Album Photoshoot',      title_ru:'📸 Фотосессия для альбома',
+    desc: 'Stylist Yuri wants an elegant, concept-driven outfit for the album book.',
+    desc_ru:'Стилист Юри требует элегантный концептуальный образ для буклета альбома.',
+    requiredTags:['kpop','elegant'], bonusTags:['pastel','cute'] },
+  { id:'fansign',       judge:'park',
+    title:'🤝 Fansign Event',         title_ru:'🤝 Автограф-сессия',
+    desc: 'Meet your fans! Stylist Yuri demands elegant and neat appearance.',
+    desc_ru:'Встреться с фанатами! Стилист Юри требует элегантный и аккуратный вид.',
     requiredTags:['school','formal'],bonusTags:['elegant'] },
-  { id:'photoshoot',    judge:'kim',
-    title:'📸 Yearbook Photoshoot',  title_ru:'📸 Фотосессия для ежегодника',
-    desc: 'Your photo will last forever — show your best self!',
-    desc_ru:'Эта фотография навсегда — покажи свой лучший образ!',
-    requiredTags:['kpop','cute'],    bonusTags:['pastel','elegant'] },
-  { id:'fan_meeting',   judge:'kim',
-    title:'💜 Fan Meeting',           title_ru:'💜 Встреча с фанатами',
-    desc: 'Your fans are here! Dress to impress and spread love!',
-    desc_ru:'Твои фанаты ждут! Одевайся чтобы покорить их сердца!',
-    requiredTags:['kpop','elegant'], bonusTags:['cute','bold'] },
+  { id:'variety_show',  judge:'kim',
+    title:'📺 Variety Show',          title_ru:'📺 Развлекательное шоу',
+    desc: 'Producer Song wants cute, eye-catching look for the television screen!',
+    desc_ru:'Продюсер Сон хочет милый, выделяющийся образ для экранов ТВ!',
+    requiredTags:['kpop','cute'],    bonusTags:['pastel','bold'] },
   { id:'dance_practice',judge:'lee',
-    title:'💃 Dance Practice',        title_ru:'💃 Репетиция танца',
-    desc: 'Coach Lee wants style AND movement. Dance ready!',
-    desc_ru:'Тренер Ли хочет стиль И свободу движений. Готова танцевать?',
+    title:'💃 Choreography Practice', title_ru:'💃 Репетиция хореографии',
+    desc: 'Choreographer Min wants style AND movement. Ready to dance?',
+    desc_ru:'Хореограф Мин хочет стиль И свободу движений. Готова танцевать?',
     requiredTags:['sporty','kpop'],  bonusTags:['bold','casual'] },
-  { id:'graduation',    judge:'park',
-    title:'🎓 Graduation Ceremony',  title_ru:'🎓 Церемония выпуска',
-    desc: 'A moment of pride! Mrs. Park expects perfection.',
-    desc_ru:'Момент гордости! Мисс Пак ожидает совершенства.',
-    requiredTags:['formal','elegant'],bonusTags:['school','cute'] },
-  { id:'stage_perf',    judge:'kim',
-    title:'🎤 Stage Performance',    title_ru:'🎤 Выступление на сцене',
-    desc: 'The spotlight is yours! Teacher Kim is watching!',
-    desc_ru:'Прожектор светит на тебя! Учитель Ким наблюдает!',
-    requiredTags:['kpop','bold'],    bonusTags:['cute','gothic'] },
-  { id:'lunch_break',   judge:'lee',
-    title:'☕ Lunch Break',           title_ru:'☕ Перемена на обед',
-    desc: 'Relaxed vibes today — comfort is key, but stay cute!',
-    desc_ru:'Расслабленный день — комфорт важен, но оставайся милашкой!',
+  { id:'vlog',          judge:'kim', // Продюсер Сон отвечает за видео-контент
+    title:'🧋 Vlog Recording',        title_ru:'🧋 Запись влога',
+    desc: 'Producer Song wants to show your casual everyday style behind-the-scenes!',
+    desc_ru:'Продюсер Сон хочет показать твой естественный повседневный стиль за кулисами!',
     requiredTags:['casual','cute'],  bonusTags:['kpop','school'] },
-  { id:'art_class',     judge:'kim',
-    title:'🎨 Art Class',            title_ru:'🎨 Урок рисования',
-    desc: 'Express yourself! Teacher Kim loves creative outfits!',
-    desc_ru:'Выражай себя! Учитель Ким обожает творческие образы!',
-    requiredTags:['cute','bold'],    bonusTags:['gothic','pastel'] },
-  { id:'library',       judge:'park',
-    title:'📚 Library Study',        title_ru:'📚 Занятия в библиотеке',
-    desc: 'Quiet and studious. Mrs. Park expects respectful dress.',
-    desc_ru:'Тихо и усердно. Мисс Пак ждёт скромный наряд.',
+  { id:'fans_qa',       judge:'park',
+    title:'📱 Live with Fans',        title_ru:'📱 Эфир с фанатами',
+    desc: 'Live stream time! Stylist Yuri expects neat and casual dress for the broadcast with fans.',
+    desc_ru:'Время прямого эфира! Стилист Юри ждет опрятный и повседневный наряд для трансляции с фанатами.',
     requiredTags:['school','casual'],bonusTags:['elegant','formal'] },
-  { id:'festival',      judge:'kim',
-    title:'🎉 School Festival',      title_ru:'🎉 Школьный фестиваль',
-    desc: 'The biggest event of the year — make it iconic!',
-    desc_ru:'Главное событие года — сделай образ культовым!',
-    requiredTags:['kpop','bold'],    bonusTags:['cute','pastel','elegant'] },
+  { id:'dance_challenge', judge:'kim',
+    title:'🎵 Viral Dance Challenge', title_ru:'🎵 Вирусный танец',
+    desc: 'Record a viral dance! Producer Song wants a bright, trendy look for social media!',
+    desc_ru:'Запиши вирусный танец! Продюсер Сон ждет яркий, трендовый образ для соцсетей!',
+    requiredTags:['cute','bold'],    bonusTags:['gothic','pastel'] }
 ];
+
+const FINAL_STAGES = [
+  { id:'live_stage',    judge:'kim',
+    title:'🎤 Inkigayo Live Stage',    title_ru:'🎤 Выступление на Inkigayo',
+    desc: 'Your debut performance! Producer Song is watching your bold stage style!',
+    desc_ru:'Твое дебютное выступление! Продюсер Сон оценивает дерзкий сценический стиль!',
+    requiredTags:['kpop','bold'],    bonusTags:['cute','gothic'] },
+  { id:'grand_concert', judge:'park',
+    title:'🏆 Rookie Awards Stage',   title_ru:'🏆 Сцена премии Rookie Awards',
+    desc: 'The biggest event! Stylist Yuri expects maximum elegance and perfection.',
+    desc_ru:'Главное событие! Стилист Юри ждет максимальную элегантность и совершенство.',
+    requiredTags:['formal','elegant'],bonusTags:['school','cute'] }
+];
+
+const ASSIGNMENTS = [...PROMO_ACTIVITIES, ...FINAL_STAGES];
 
 function assignmentTitle(a) { return lang === 'ru' ? a.title_ru : a.title; }
 function assignmentDesc(a)  { return lang === 'ru' ? a.desc_ru  : a.desc;  }
@@ -1501,49 +1501,49 @@ function assignmentDesc(a)  { return lang === 'ru' ? a.desc_ru  : a.desc;  }
 
 const JUDGES = {
   park: {
-    name:'Mrs. Park',   name_ru:'Мисс Пак',
-    title:'Elegance Queen', title_ru:'Королева Элегантности',
-    emoji:'👩‍🏫',
+    name:'Stylist Yuri',   name_ru:'Стилист Юри',
+    title:'Trend Queen', title_ru:'Королева Трендов',
+    emoji:'👗',
     favoredTags:  ['school','formal','elegant','pastel'],
     dislikedTags: ['gothic','bold'],
     comments: {
       excellent: [
         'Simply impeccable, my dear! 💫',
-        'Outstanding! This is what proper dressing looks like!',
-        'Excellent! You would make any school proud!',
+        'Outstanding! This is what high fashion looks like!',
+        'Excellent! You would make any agency proud!',
       ],
       good: [
-        'Acceptable. A little more formality next time, perhaps.',
+        'Acceptable. A little more trendiness next time, perhaps.',
         'Not bad! But we can always be more refined. A bit more effort!',
         'I see the effort! Keep it elegant and neat. Keep improving!',
       ],
       poor: [
-        'Absolutely not! This is a school, not a pop concert!',
+        'Absolutely not! This is a high fashion event, not a casual rehearsal!',
         'I expected better. Please dress properly next time.',
-        'Disappointing. Show more respect for the school with your attire.',
+        'Disappointing. Show more respect for the fans with your attire.',
       ],
     },
     comments_ru: {
       excellent: [
         'Просто безупречно, дорогая! 💫',
-        'Великолепно! Вот как нужно одеваться!',
-        'Отлично! Любая школа гордилась бы тобой!',
+        'Великолепно! Вот как выглядит высокая мода!',
+        'Отлично! Любое агентство гордилось бы тобой!',
       ],
       good: [
-        'Приемлемо. В следующий раз — чуть больше строгости, пожалуйста.',
+        'Приемлемо. В следующий раз — чуть больше чувства стиля, пожалуйста.',
         'Неплохо! Но можно быть более утончённой. Чуть больше усилий!',
         'Вижу старание! Держи стиль элегантным и аккуратным. Продолжай расти!',
       ],
       poor: [
-        'Недопустимо! Это школа, а не концерт!',
+        'Недопустимо! Это показ высокой моды, а не обычная репетиция!',
         'Я ожидала большего. Оденься прилично в следующий раз.',
-        'Я разочарована. Уважай школу своим внешним видом.',
+        'Я разочарована. Уважай наших фанатов своим внешним видом.',
       ],
     },
   },
   kim: {
-    name:'Teacher Kim', name_ru:'Учитель Ким',
-    title:'K-Pop Visionary', title_ru:'K-Pop Провидец',
+    name:'Producer Song', name_ru:'Продюсер Сон',
+    title:'K-Pop Visionary', title_ru:'K-Pop Визионер',
     emoji:'🎤',
     favoredTags:  ['kpop','bold','cute','pastel'],
     dislikedTags: ['formal','casual'],
@@ -1583,42 +1583,42 @@ const JUDGES = {
     },
   },
   lee: {
-    name:'Coach Lee',  name_ru:'Тренер Ли',
-    title:'Athletic Champion', title_ru:'Спортивный Чемпион',
-    emoji:'🏃',
+    name:'Choreographer Min',  name_ru:'Хореограф Мин',
+    title:'Dance Champion', title_ru:'Мастер Танца',
+    emoji:'🕺',
     favoredTags:  ['sporty','casual','kpop'],
     dislikedTags: ['elegant','formal','gothic'],
     comments: {
       excellent: [
         'LETS GO! Perfect athletic spirit! Champion! 🏆',
-        'Now THAT is a winning look! Ready to run a marathon!',
+        'Now THAT is a winning look! Ready to rock the dancefloor!',
         'Energy! Power! Style! You have it ALL today! Amazing!',
       ],
       good: [
-        'Decent! But can you actually run in that?',
-        'Good effort! I want to see more sporty energy next time!',
+        'Decent! But can you actually dance in that?',
+        'Good effort! I want to see more dance energy next time!',
         'Nice! Keep that active spirit alive! Keep going! 💪',
       ],
       poor: [
-        'Seriously?! How are you supposed to run in that?!',
-        'This is PE class! Where are the practical clothes?!',
+        'Seriously?! How are you supposed to dance in that?!',
+        'This is dance practice! Where are the practical clothes?!',
         'Come on... those shoes worry me. You need sneakers!',
       ],
     },
     comments_ru: {
       excellent: [
         'ДАВАЙ! Идеальный спортивный дух! Чемпион! 🏆',
-        'ВОТ это победный образ! Готова бежать марафон!',
+        'ВОТ это победный образ! Готова зажечь танцпол!',
         'Энергия! Сила! Стиль! У тебя есть ВСЁ сегодня! Потрясающе!',
       ],
       good: [
-        'Неплохо! Но ты точно сможешь в этом бегать?',
-        'Хороший результат! В следующий раз — больше спортивной энергии!',
+        'Неплохо! Но ты точно сможешь в этом танцевать?',
+        'Хороший результат! В следующий раз — больше танцевальной энергии!',
         'Молодец! Сохраняй этот активный дух! Продолжай! 💪',
       ],
       poor: [
-        'Серьёзно?! Как ты вообще собираешься бегать в этом?!',
-        'Это урок физкультуры! Где практичная одежда?!',
+        'Серьёзно?! Как ты вообще собираешься танцевать в этом?!',
+        'Это репетиция танца! Где практичная одежда?!',
         'Ну как так... эта обувь меня беспокоит. Нужны кроссовки!',
       ],
     },
@@ -1697,6 +1697,10 @@ const $ = id => document.getElementById(id);
 function buildCharacterLayers() {
   const container = $('character-layers');
   container.innerHTML = '';
+  const shadowDiv = document.createElement('div');
+  shadowDiv.className = 'character-shadow';
+  container.appendChild(shadowDiv);
+
   LAYER_ORDER.forEach(({ key, zIndex }) => {
     const div = document.createElement('div');
     div.id = `layer-${key}`;
@@ -2247,8 +2251,8 @@ async function shareOutfit() {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, SHARE_W, CANVAS_H);
 
-    // — Фоновая картинка (студия) с прозрачностью
-    const bgImg = await loadImageForCanvas('Background/background_1.png');
+    // — Фоновая картинка (студия) с прозрачностью (временно background_1.jpeg)
+    const bgImg = await loadImageForCanvas(BACKGROUNDS[currentBackgroundIndex]);
     if (bgImg) {
       ctx.globalAlpha = 0.35;
       ctx.drawImage(bgImg, 0, 0, SHARE_W, CANVAS_H);
@@ -2271,6 +2275,27 @@ async function shareOutfit() {
     ctx.arcTo(0, 0, r, 0, r);
     ctx.closePath();
     ctx.stroke();
+    ctx.restore();
+
+    // — Тень персонажа (овал под ногами)
+    ctx.save();
+    const cx = SHARE_W * 0.52;
+    const cy = TOP_PAD + SHARE_H * 0.95; // Соответствует bottom: 5%
+    const rx = SHARE_W * 0.3; // 60% ширины -> радиус 30%
+    const ry = SHARE_H * 0.0225; // 4.5% высоты -> радиус 2.25%
+    
+    ctx.translate(cx, cy);
+    ctx.scale(1, ry / rx);
+    
+    const shadowGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+    shadowGrad.addColorStop(0, 'rgba(0, 0, 0, 0.45)');
+    shadowGrad.addColorStop(0.84, 'rgba(0, 0, 0, 0.15)');
+    shadowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    
+    ctx.fillStyle = shadowGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, rx, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
 
     // — Тело персонажа: смещено вниз на TOP_PAD, занимает SHARE_H
@@ -2392,15 +2417,19 @@ function scoreOutfit(assignment) {
   const req     = assignment.requiredTags;
   const matched = req.filter(t => tags.includes(t)).length;
   const tagScore         = Math.round((matched / Math.max(req.length, 1)) * 50);
-  const completenessScore= Math.round((filled / 5) * 20);
+  const completenessScore= Math.min(20, Math.round((filled / 5) * 20));
   const judgeScores = {};
   Object.keys(JUDGES).forEach(jKey => {
-    const j = JUDGES[jKey];
-    const fav  = j.favoredTags.filter(t => tags.includes(t)).length;
-    const bad  = j.dislikedTags.filter(t => tags.includes(t)).length;
-    judgeScores[jKey] = Math.max(0, Math.min(10, 3 + fav * 2 - bad * 2));
+    if (jKey === assignment.judge) {
+      const j = JUDGES[jKey];
+      const fav  = j.favoredTags.filter(t => tags.includes(t)).length;
+      const bad  = j.dislikedTags.filter(t => tags.includes(t)).length;
+      judgeScores[jKey] = Math.max(0, Math.min(10, 3 + fav * 2 - bad * 2));
+    } else {
+      judgeScores[jKey] = 0;
+    }
   });
-  const judgeTotal = Object.values(judgeScores).reduce((a, b) => a + b, 0);
+  const judgeTotal = judgeScores[assignment.judge] * 3;
   const total = Math.min(100, tagScore + completenessScore + judgeTotal);
   return { tagScore, completenessScore, judgeScores, judgeTotal, total, matched, req };
 }
@@ -2410,7 +2439,9 @@ function scoreOutfit(assignment) {
 // ────────────────────────────────────────────────────────────
 
 function buildDaySchedule() {
-  school.schedule = [...ASSIGNMENTS].sort(() => Math.random() - 0.5).slice(0, 5);
+  const promos = [...PROMO_ACTIVITIES].sort(() => Math.random() - 0.5).slice(0, 4);
+  const finalStage = FINAL_STAGES[Math.floor(Math.random() * FINAL_STAGES.length)];
+  school.schedule = [...promos, finalStage];
 }
 
 function startSchoolMode() {
@@ -2425,8 +2456,46 @@ function startSchoolMode() {
   saveSchoolProgress();
 }
 
+const BACKGROUNDS = [
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_08_30.png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_12_14.png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_19_29 (1).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_19_30 (2).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_19_31 (4).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_19_32 (6).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_48_57 (2).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_48_57 (3).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_49_01 (7).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 19_49_02 (8).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 22_14_33 (3).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 22_14_34 (5).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_55 (1).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_55 (2).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_56 (3).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_57 (4).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_57 (5).png',
+  'Background/ChatGPT Image 20 июн. 2026 г., 23_31_11.png',
+  'Background/background_1.jpeg'
+];
+let currentBackgroundIndex = 18; // Default to 'Background/background_1.jpeg'
+
+function updateStageBackground(bgName) {
+  const stage = $('stage');
+  const bgUrl = BACKGROUNDS[currentBackgroundIndex];
+  if (stage) {
+    stage.style.backgroundImage = 'none';
+  }
+  document.documentElement.style.setProperty('--page-bg', `url('${bgUrl}')`);
+}
+
+function changeBackground(direction) {
+  currentBackgroundIndex = (currentBackgroundIndex + direction + BACKGROUNDS.length) % BACKGROUNDS.length;
+  updateStageBackground();
+}
+
 function exitSchoolMode() {
   school.active = false;
+  updateStageBackground('photoshoot');
   $('assignment-banner').classList.add('hidden');
   updateRunwayBtn();
   $('outfit-name-display').textContent = '';
@@ -2437,6 +2506,7 @@ function exitSchoolMode() {
 function showAssignmentBanner() {
   const a = school.schedule[school.lessonIndex];
   if (!a) return; // guard: schedule not ready yet
+  updateStageBackground(a.id);
   $('banner-lesson').textContent = tf('bannerDayLesson', { d: school.day, l: school.lessonIndex + 1 });
   $('banner-task').textContent   = assignmentTitle(a) + ' — ' + assignmentDesc(a);
   $('banner-tags').textContent   = '🏷 ' + translateTags(a.requiredTags).join(', ');
@@ -2469,6 +2539,10 @@ const CATWALK_PHRASES = {
 function buildCatwalkCharacter() {
   const stage = $('catwalk-stage');
   stage.innerHTML = '';
+  const shadowDiv = document.createElement('div');
+  shadowDiv.className = 'character-shadow';
+  stage.appendChild(shadowDiv);
+
   const bodyDiv = document.createElement('div');
   bodyDiv.style.cssText = 'position:absolute;inset:0;z-index:0;';
   const bodyImg = document.createElement('img');
@@ -2535,11 +2609,11 @@ function showScoreScreen(assignment, result, earned) {
   judgesContainer.innerHTML = '';
   let delay = 200;
   Object.keys(JUDGES).forEach(jKey => {
+    if (assignment.judge !== jKey) return; // ONLY RENDER THE MAIN JUDGE CARD!
     const score   = result.judgeScores[jKey];
     const comment = pickJudgeComment(jKey, score);
-    const isMain  = assignment.judge === jKey;
     const card = document.createElement('div');
-    card.className = 'judge-card' + (isMain ? ' judge-high' : '');
+    card.className = 'judge-card judge-high';
     card.innerHTML = `
       <div class="judge-emoji">${JUDGES[jKey].emoji}</div>
       <div class="judge-name">${judgeName(jKey)}</div>
@@ -2744,7 +2818,7 @@ function onRunwayClick() {
 function getAllImageSrcs() {
   const srcs = new Set();
   srcs.add('Items/body/body_new.png');
-  srcs.add('Background/background_1.png');
+  BACKGROUNDS.forEach(bg => srcs.add(bg));
   Object.values(clothes).forEach(category => {
     category.forEach(item => { if (item.src) srcs.add(item.src); });
   });
@@ -2860,6 +2934,7 @@ async function init() {
   buildCharacterLayers();
   renderAllLayers();
   updateOutfitName();
+  updateStageBackground('photoshoot');
 
   // Apply full translations (lang now finalised)
   applyTranslations();
@@ -2874,6 +2949,8 @@ async function init() {
   $('btn-share-score').addEventListener('click', () => { sfxClick(); shareOutfit(); });
   $('btn-share-stage').addEventListener('click', () => { sfxClick(); shareOutfit(); });
   $('btn-random-stage').addEventListener('click', () => { sfxClick(); randomOutfit(); });
+  $('btn-prev-bg').addEventListener('click', () => { sfxClick(); changeBackground(-1); });
+  $('btn-next-bg').addEventListener('click', () => { sfxClick(); changeBackground(1); });
   updateStarsDisplay();
   initAudio();
   $('btn-new-day').addEventListener('click', () => {
@@ -2890,6 +2967,9 @@ async function init() {
     exitSchoolMode();
     updateOutfitName();
   });
+
+  // Initialize developer tools panel
+  initDevPanel();
 
   // Hide loading, show intro or game
   const loadingEl = $('loading-screen');
@@ -2938,6 +3018,10 @@ let _introTyping = null;
 function buildIntroCharacter() {
   const stage = $('intro-char-stage');
   stage.innerHTML = '';
+
+  const shadowDiv = document.createElement('div');
+  shadowDiv.className = 'character-shadow';
+  stage.appendChild(shadowDiv);
 
   // Body (fills entire stage)
   const bodyImg = document.createElement('img');
@@ -3080,6 +3164,161 @@ function applyLoadingTranslations() {
   const lp = $('loading-text');
   if (lt) lt.textContent = t('loadingTitle');
   if (lp) lp.textContent = t('loadingText');
+}
+
+// ────────────────────────────────────────────────────────────
+// DEVELOPER TOOLS PANEL
+// ────────────────────────────────────────────────────────────
+
+function initDevPanel() {
+  const trigger = $('dev-panel-trigger');
+  const panel = $('dev-panel');
+  const closeBtn = $('dev-panel-close');
+  const resetBtn = $('dev-panel-reset');
+  const charSlider = $('dev-char-scale');
+  const charVal = $('dev-char-scale-val');
+  const charYSlider = $('dev-char-y');
+  const charYVal = $('dev-char-y-val');
+  const bgSlider = $('dev-bg-scale');
+  const bgVal = $('dev-bg-scale-val');
+  const bgYSlider = $('dev-bg-y');
+  const bgYVal = $('dev-bg-y-val');
+  const bgBlurSlider = $('dev-bg-blur');
+  const bgBlurVal = $('dev-bg-blur-val');
+
+  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider) return;
+
+  // Toggle dev panel view
+  trigger.addEventListener('click', () => {
+    panel.classList.toggle('closed');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    panel.classList.add('closed');
+  });
+
+  // Close with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.classList.contains('closed')) {
+      panel.classList.add('closed');
+    }
+  });
+
+  // Load values from localStorage
+  const savedCharScale = localStorage.getItem('dev_char_scale') || '1.0';
+  const savedCharY = localStorage.getItem('dev_char_y') || '0';
+  const savedBgScale = localStorage.getItem('dev_bg_scale') || '1.0';
+  const savedBgY = localStorage.getItem('dev_bg_y') || '0';
+  const savedBgBlur = localStorage.getItem('dev_bg_blur') || '1.5';
+
+  // Apply scales and values initially
+  applyCharScale(savedCharScale);
+  applyCharY(savedCharY);
+  applyBgScale(savedBgScale);
+  applyBgY(savedBgY);
+  applyBgBlur(savedBgBlur);
+
+  // Sync sliders
+  charSlider.value = savedCharScale;
+  charVal.textContent = parseFloat(savedCharScale).toFixed(2) + 'x';
+  
+  charYSlider.value = savedCharY;
+  charYVal.textContent = savedCharY + 'px';
+
+  bgSlider.value = savedBgScale;
+  bgVal.textContent = parseFloat(savedBgScale).toFixed(2) + 'x';
+
+  bgYSlider.value = savedBgY;
+  bgYVal.textContent = savedBgY + 'px';
+
+  bgBlurSlider.value = savedBgBlur;
+  bgBlurVal.textContent = parseFloat(savedBgBlur).toFixed(1) + 'px';
+
+  // Slider change listeners
+  charSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    applyCharScale(val);
+    charVal.textContent = parseFloat(val).toFixed(2) + 'x';
+    localStorage.setItem('dev_char_scale', val);
+  });
+
+  charYSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    applyCharY(val);
+    charYVal.textContent = val + 'px';
+    localStorage.setItem('dev_char_y', val);
+  });
+
+  bgSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    applyBgScale(val);
+    bgVal.textContent = parseFloat(val).toFixed(2) + 'x';
+    localStorage.setItem('dev_bg_scale', val);
+  });
+
+  bgYSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    applyBgY(val);
+    bgYVal.textContent = val + 'px';
+    localStorage.setItem('dev_bg_y', val);
+  });
+
+  bgBlurSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    applyBgBlur(val);
+    bgBlurVal.textContent = parseFloat(val).toFixed(1) + 'px';
+    localStorage.setItem('dev_bg_blur', val);
+  });
+
+  // Reset function
+  resetBtn.addEventListener('click', () => {
+    applyCharScale('1.0');
+    applyCharY('0');
+    applyBgScale('1.0');
+    applyBgY('0');
+    applyBgBlur('1.5');
+    
+    charSlider.value = '1.0';
+    charVal.textContent = '1.00x';
+    
+    charYSlider.value = '0';
+    charYVal.textContent = '0px';
+
+    bgSlider.value = '1.0';
+    bgVal.textContent = '1.00x';
+
+    bgYSlider.value = '0';
+    bgYVal.textContent = '0px';
+
+    bgBlurSlider.value = '1.5';
+    bgBlurVal.textContent = '1.5px';
+    
+    localStorage.setItem('dev_char_scale', '1.0');
+    localStorage.setItem('dev_char_y', '0');
+    localStorage.setItem('dev_bg_scale', '1.0');
+    localStorage.setItem('dev_bg_y', '0');
+    localStorage.setItem('dev_bg_blur', '1.5');
+  });
+
+  function applyCharScale(val) {
+    document.documentElement.style.setProperty('--char-scale', val);
+  }
+
+  function applyCharY(val) {
+    document.documentElement.style.setProperty('--char-y', val + 'px');
+  }
+
+  function applyBgScale(val) {
+    document.documentElement.style.setProperty('--bg-scale', val);
+  }
+
+  function applyBgY(val) {
+    document.documentElement.style.setProperty('--bg-y', val + 'px');
+  }
+
+  function applyBgBlur(val) {
+    document.documentElement.style.setProperty('--bg-blur', val + 'px');
+  }
 }
 
 if (document.readyState === 'loading') {
