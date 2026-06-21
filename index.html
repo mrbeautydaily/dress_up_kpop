@@ -36,6 +36,8 @@
 <header id="game-header" style="display: none !important;">
 <h1 class="game-title" id="header-title">✨ K-Pop Star Maker ✨</h1>
 </header>
+<!-- Main layout -->
+<main id="main-layout">
 <!-- Assignment Banner (turned into a floating card, school mode only) -->
 <div id="assignment-banner" class="assignment-card hidden">
 <div class="assignment-card-header" id="assignment-card-toggle">
@@ -52,14 +54,14 @@
 <div id="banner-tags-container" class="assignment-card-tags"></div>
 </div>
 </div>
-<!-- Main layout -->
-<main id="main-layout">
 <!-- Top right controls for stars, achievements, sound -->
 <div id="panel-controls" class="panel-controls">
+<div id="panel-controls-inner" class="panel-controls-inner">
 <button id="stars-display" class="stars-btn">⭐ <span id="stars-count">0</span></button>
 <button id="btn-runway" class="btn btn-runway-main hidden">🌟 <span id="btn-runway-label">Runway!</span></button>
 <button id="btn-achievements" class="btn btn-yellow">🏆</button>
 <button id="btn-sound" class="btn btn-sound">🔊</button>
+</div>
 </div>
 <!-- CENTER: character stage -->
 <section id="stage-wrap">
@@ -207,16 +209,16 @@
   </div>
   <div class="dev-panel-content">
     <div class="dev-control-group">
-      <label for="dev-char-scale">Масштаб персонажа: <span id="dev-char-scale-val">1.00x</span></label>
-      <input type="range" id="dev-char-scale" min="0.5" max="2.0" step="0.05" value="1.0">
+      <label for="dev-char-scale">Масштаб персонажа: <span id="dev-char-scale-val">1.15x</span></label>
+      <input type="range" id="dev-char-scale" min="0.5" max="2.0" step="0.05" value="1.15">
     </div>
     <div class="dev-control-group">
-      <label for="dev-char-y">Смещение персонажа по Y: <span id="dev-char-y-val">0px</span></label>
-      <input type="range" id="dev-char-y" min="-300" max="300" step="5" value="0">
+      <label for="dev-char-y">Смещение персонажа по Y: <span id="dev-char-y-val">30px</span></label>
+      <input type="range" id="dev-char-y" min="-300" max="300" step="5" value="30">
     </div>
     <div class="dev-control-group">
-      <label for="dev-bg-scale">Масштаб фона: <span id="dev-bg-scale-val">1.00x</span></label>
-      <input type="range" id="dev-bg-scale" min="0.5" max="2.0" step="0.05" value="1.0">
+      <label for="dev-bg-scale">Масштаб фона: <span id="dev-bg-scale-val">0.95x</span></label>
+      <input type="range" id="dev-bg-scale" min="0.5" max="2.0" step="0.05" value="0.95">
     </div>
     <div class="dev-control-group">
       <label for="dev-bg-y">Смещение фона по Y: <span id="dev-bg-y-val">0px</span></label>

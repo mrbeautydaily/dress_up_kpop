@@ -2457,31 +2457,34 @@ function startSchoolMode() {
 }
 
 const BACKGROUNDS = [
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_08_30.png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_12_14.png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_19_29 (1).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_19_30 (2).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_19_31 (4).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_19_32 (6).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_48_57 (2).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_48_57 (3).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_49_01 (7).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 19_49_02 (8).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 22_14_33 (3).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 22_14_34 (5).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_55 (1).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_55 (2).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_56 (3).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_57 (4).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 23_27_57 (5).png',
-  'Background/ChatGPT Image 20 июн. 2026 г., 23_31_11.png',
-  'Background/background_1.jpeg'
+  'Background/recording.jpg',
+  'Background/fitness.jpg',
+  'Background/photoshoot.jpg',
+  'Background/fansign.jpg',
+  'Background/variety_show.jpg',
+  'Background/dance_practice.jpg',
+  'Background/vlog.jpg',
+  'Background/fans_qa.jpg',
+  'Background/dance_challenge.jpg',
+  'Background/live_stage.jpg',
+  'Background/grand_concert.jpg'
 ];
-let currentBackgroundIndex = 18; // Default to 'Background/background_1.jpeg'
+let currentBackgroundIndex = 2; // Default to 'Background/photoshoot.jpg'
 
 function updateStageBackground(bgName) {
   const stage = $('stage');
-  const bgUrl = BACKGROUNDS[currentBackgroundIndex];
+  let bgUrl = '';
+  
+  if (bgName) {
+    bgUrl = `Background/${bgName}.jpg`;
+    const idx = BACKGROUNDS.findIndex(b => b.endsWith(`${bgName}.jpg`));
+    if (idx !== -1) {
+      currentBackgroundIndex = idx;
+    }
+  } else {
+    bgUrl = BACKGROUNDS[currentBackgroundIndex];
+  }
+  
   if (stage) {
     stage.style.backgroundImage = 'none';
   }
@@ -2968,6 +2971,19 @@ async function init() {
     });
   }
 
+  // Auto-collapse assignment banner on very narrow screens to prevent overlapping the character
+  window.addEventListener('resize', () => {
+    const banner = $('assignment-banner');
+    if (banner && !banner.classList.contains('hidden') && window.innerWidth < 768) {
+      banner.classList.add('collapsed');
+    }
+  });
+  // Trigger once on load
+  if (window.innerWidth < 768) {
+    const banner = $('assignment-banner');
+    if (banner) banner.classList.add('collapsed');
+  }
+
   $('stars-display').addEventListener('click', () => { sfxClick(); showShopModal(); });
   $('btn-runway').addEventListener('click', onRunwayClick);
   $('btn-achievements').addEventListener('click', () => { sfxClick(); showAchievementsModal(); });
@@ -2978,6 +2994,50 @@ async function init() {
   $('btn-share-stage').addEventListener('click', () => { sfxClick(); shareOutfit(); });
   $('btn-random-stage').addEventListener('click', () => { sfxClick(); randomOutfit(); });
   $('btn-prev-bg').addEventListener('click', () => { sfxClick(); changeBackground(-1); });
+
+  // --- Dynamic Proportional Scaling for Panel Controls ---
+  function fitPanelControls() {
+    const outer = $('panel-controls');
+    const inner = $('panel-controls-inner');
+    if (!outer || !inner) return;
+
+    // Temporarily remove transform to measure natural sizes
+    inner.style.transform = 'none';
+
+    // In mobile view (absolute positioned), we don't necessarily want to force scaling,
+    // but the CSS handles width: auto. Let's still protect against extreme overflow.
+    
+    // Get available width from the outer container (subtracting padding)
+    const computedStyle = window.getComputedStyle(outer);
+    const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+    const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+    const availableWidth = outer.clientWidth - paddingLeft - paddingRight;
+
+    // Get the required physical width of the inner content
+    const requiredWidth = inner.scrollWidth;
+
+    if (requiredWidth > availableWidth && availableWidth > 0) {
+      // If it doesn't fit, scale it down proportionally
+      const scale = availableWidth / requiredWidth;
+      inner.style.transform = `scale(${scale})`;
+    } else {
+      // It fits perfectly, keep natural size
+      inner.style.transform = 'none';
+    }
+  }
+
+  // Use ResizeObserver to watch for changes to the panel's physical size
+  const panelResizeObserver = new ResizeObserver(() => {
+    fitPanelControls();
+  });
+  const panelControlsEl = $('panel-controls');
+  if (panelControlsEl) {
+    panelResizeObserver.observe(panelControlsEl);
+    // Initial fit
+    fitPanelControls();
+  }
+  // Also hook into window resize just in case fonts load later and change inner width
+  window.addEventListener('resize', fitPanelControls);
   $('btn-next-bg').addEventListener('click', () => { sfxClick(); changeBackground(1); });
   updateStarsDisplay();
   initAudio();
@@ -3233,9 +3293,9 @@ function initDevPanel() {
   });
 
   // Load values from localStorage
-  const savedCharScale = localStorage.getItem('dev_char_scale') || '1.0';
-  const savedCharY = localStorage.getItem('dev_char_y') || '0';
-  const savedBgScale = localStorage.getItem('dev_bg_scale') || '1.0';
+  const savedCharScale = localStorage.getItem('dev_char_scale') || '1.15';
+  const savedCharY = localStorage.getItem('dev_char_y') || '30';
+  const savedBgScale = localStorage.getItem('dev_bg_scale') || '0.95';
   const savedBgY = localStorage.getItem('dev_bg_y') || '0';
   const savedBgBlur = localStorage.getItem('dev_bg_blur') || '1.5';
 
@@ -3300,20 +3360,20 @@ function initDevPanel() {
 
   // Reset function
   resetBtn.addEventListener('click', () => {
-    applyCharScale('1.0');
-    applyCharY('0');
-    applyBgScale('1.0');
+    applyCharScale('1.15');
+    applyCharY('30');
+    applyBgScale('0.95');
     applyBgY('0');
     applyBgBlur('1.5');
     
-    charSlider.value = '1.0';
-    charVal.textContent = '1.00x';
+    charSlider.value = '1.15';
+    charVal.textContent = '1.15x';
     
-    charYSlider.value = '0';
-    charYVal.textContent = '0px';
+    charYSlider.value = '30';
+    charYVal.textContent = '30px';
 
-    bgSlider.value = '1.0';
-    bgVal.textContent = '1.00x';
+    bgSlider.value = '0.95';
+    bgVal.textContent = '0.95x';
 
     bgYSlider.value = '0';
     bgYVal.textContent = '0px';
@@ -3321,9 +3381,9 @@ function initDevPanel() {
     bgBlurSlider.value = '1.5';
     bgBlurVal.textContent = '1.5px';
     
-    localStorage.setItem('dev_char_scale', '1.0');
-    localStorage.setItem('dev_char_y', '0');
-    localStorage.setItem('dev_bg_scale', '1.0');
+    localStorage.setItem('dev_char_scale', '1.15');
+    localStorage.setItem('dev_char_y', '30');
+    localStorage.setItem('dev_bg_scale', '0.95');
     localStorage.setItem('dev_bg_y', '0');
     localStorage.setItem('dev_bg_blur', '1.5');
   });
