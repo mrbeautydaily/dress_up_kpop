@@ -32,26 +32,35 @@
 </div>
 <!-- ===== MAIN GAME ===== -->
 <div id="game" class="hidden">
-<!-- Header -->
-<header id="game-header">
+<!-- Header (hidden in CSS, buttons moved to panel-controls and stage-wrap) -->
+<header id="game-header" style="display: none !important;">
 <h1 class="game-title" id="header-title">✨ K-Pop Star Maker ✨</h1>
-<div class="header-buttons">
+</header>
+<!-- Assignment Banner (turned into a floating card, school mode only) -->
+<div id="assignment-banner" class="assignment-card hidden">
+<div class="assignment-card-header" id="assignment-card-toggle">
+<span class="calendar-icon">📅</span>
+<span id="banner-lesson"></span>
+<span class="arrow-icon" id="assignment-card-arrow">▼</span>
+</div>
+<div class="assignment-card-content" id="assignment-card-content">
+<div class="assignment-card-title-row">
+<span class="camera-icon">📷</span>
+<span id="banner-task-title" class="assignment-card-title"></span>
+</div>
+<p id="banner-task-desc" class="assignment-card-desc"></p>
+<div id="banner-tags-container" class="assignment-card-tags"></div>
+</div>
+</div>
+<!-- Main layout -->
+<main id="main-layout">
+<!-- Top right controls for stars, achievements, sound -->
+<div id="panel-controls" class="panel-controls">
 <button id="stars-display" class="stars-btn">⭐ <span id="stars-count">0</span></button>
 <button id="btn-runway" class="btn btn-runway-main hidden">🌟 <span id="btn-runway-label">Runway!</span></button>
 <button id="btn-achievements" class="btn btn-yellow">🏆</button>
 <button id="btn-sound" class="btn btn-sound">🔊</button>
 </div>
-</header>
-<!-- Assignment Banner (school mode only) -->
-<div id="assignment-banner" class="hidden">
-<div id="banner-inner">
-<span id="banner-lesson"></span>
-<span id="banner-task"></span>
-<span id="banner-tags"></span>
-</div>
-</div>
-<!-- Main layout -->
-<main id="main-layout">
 <!-- CENTER: character stage -->
 <section id="stage-wrap">
 <div id="stage">
@@ -64,12 +73,13 @@
 <button id="btn-prev-bg" class="btn-prev-bg" title="Предыдущий фон">◀</button>
 <button id="btn-next-bg" class="btn-next-bg" title="Следующий фон">▶</button>
 </div>
-<button id="btn-share-stage" class="btn-share-stage">📸</button>
 </section>
 <!-- LEFT: category selector -->
 <aside id="category-panel">
 <p class="panel-label">Category</p>
 <div id="category-list"></div>
+<!-- Camera/Share button moved here, to sit at the bottom in desktop -->
+<button id="btn-share-stage" class="btn-share-stage">📸</button>
 </aside>
 <!-- RIGHT: items grid -->
 <aside id="items-panel">

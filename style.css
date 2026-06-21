@@ -298,7 +298,30 @@ button { cursor: pointer; border: none; font-family: inherit; }
 #main-layout {
   display: grid;
   grid-template-columns: 1fr 68px 0px;
+  grid-template-rows: auto 1fr;
   flex: 1; overflow: hidden; gap: 0;
+  position: relative;
+}
+#stage-wrap {
+  grid-row: 1 / 3;
+  grid-column: 1;
+}
+#panel-controls {
+  grid-row: 1;
+  grid-column: 2 / 4;
+  background: linear-gradient(90deg, #f472b6, #c084fc) !important;
+  border-left: 2px solid rgba(255, 182, 219, 0.5) !important;
+  border-bottom: 3px solid rgba(168, 85, 247, 0.28) !important;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1) !important;
+  z-index: 5 !important;
+}
+#category-panel {
+  grid-row: 2;
+  grid-column: 2;
+}
+#items-panel {
+  grid-row: 2;
+  grid-column: 3;
 }
 
 /* ---------- CATEGORY PANEL (left) ---------- */
@@ -821,22 +844,22 @@ button { cursor: pointer; border: none; font-family: inherit; }
    RESPONSIVE
    ============================================================ */
 @media (min-width: 600px) {
-  #main-layout { grid-template-columns: 1fr 76px 150px; }
+  #main-layout { grid-template-columns: 1fr 76px 150px; grid-template-rows: auto 1fr; }
   .btn { padding: .42rem .75rem; font-size: .78rem; }
 }
 @media (min-width: 640px) {
-  #main-layout { grid-template-columns: 1fr 84px 180px; }
+  #main-layout { grid-template-columns: 1fr 84px 180px; grid-template-rows: auto 1fr; }
   .cat-btn { width: 60px; height: 60px; font-size: .62rem; }
   .cat-btn .cat-icon { font-size: 1.5rem; }
 }
 @media (min-width: 860px) {
-  #main-layout { grid-template-columns: 1fr 96px 220px; }
+  #main-layout { grid-template-columns: 1fr 96px 220px; grid-template-rows: auto 1fr; }
   .game-title { font-size: 1.2rem; }
   .btn { padding: .48rem .95rem; font-size: .82rem; }
   .cat-btn { width: 68px; height: 68px; font-size: .65rem; }
 }
 @media (min-width: 1100px) {
-  #main-layout { grid-template-columns: 1fr 108px 260px; }
+  #main-layout { grid-template-columns: 1fr 108px 260px; grid-template-rows: auto 1fr; }
 }
 
 /* ── Большие экраны / 4K ── */
@@ -1562,7 +1585,34 @@ button { cursor: pointer; border: none; font-family: inherit; }
     display: grid !important;
     flex-direction: initial !important;
     grid-template-columns: minmax(0, 1fr) clamp(48px, 8vw, 70px) clamp(120px, 23vw, 180px) !important;
+    grid-template-rows: auto 1fr !important;
     min-height: 0;
+  }
+  #stage-wrap {
+    grid-row: 1 / 3 !important;
+    grid-column: 1 !important;
+  }
+  #panel-controls {
+    grid-row: 1 !important;
+    grid-column: 2 / 4 !important;
+    display: flex !important;
+    position: static !important;
+    padding: .35rem .5rem !important;
+    background: linear-gradient(90deg, #f472b6, #c084fc) !important;
+    border-left: 2px solid rgba(255, 182, 219, 0.5) !important;
+    border-bottom: 3px solid rgba(168, 85, 247, 0.28) !important;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1) !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    z-index: 5 !important;
+  }
+  #category-panel {
+    grid-row: 2 !important;
+    grid-column: 2 !important;
+  }
+  #items-panel {
+    grid-row: 2 !important;
+    grid-column: 3 !important;
   }
 
   /* ── Панель категорий: скрыть лейбл, крупные кнопки ── */
@@ -1948,5 +1998,263 @@ button { cursor: pointer; border: none; font-family: inherit; }
     font-size: 1.1rem;
     bottom: 12px;
     left: 12px;
+  }
+}
+
+/* ============================================================
+   NEW INTERFACE ADJUSTMENTS (floating card, controls panel, runway, camera)
+   ============================================================ */
+
+/* Hide original header */
+#game-header {
+  display: none !important;
+}
+
+/* Floating assignment card styling */
+.assignment-card {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  z-index: 20 !important;
+  width: 290px !important;
+  max-width: calc(100% - 24px) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+  border: 1.5px solid rgba(255, 110, 180, 0.35) !important;
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.15) !important;
+  font-family: inherit !important;
+  overflow: hidden !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.assignment-card-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 10px 14px !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: #7c3aed !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-bottom: 1px solid rgba(255, 110, 180, 0.15) !important;
+}
+
+.assignment-card-header .calendar-icon {
+  font-size: 0.95rem !important;
+}
+
+.assignment-card-header .arrow-icon {
+  margin-left: auto !important;
+  font-size: 0.75rem !important;
+  transition: transform 0.3s ease !important;
+  color: #a855f7 !important;
+}
+
+.assignment-card-content {
+  padding: 12px 14px !important;
+  transition: max-height 0.3s ease, padding 0.3s ease !important;
+}
+
+.assignment-card-title-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+.assignment-card-title-row .camera-icon {
+  font-size: 0.95rem !important;
+}
+
+.assignment-card-title {
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  color: #1f2937 !important;
+}
+
+.assignment-card-desc {
+  font-size: 0.76rem !important;
+  line-height: 1.35 !important;
+  color: #4b5563 !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.assignment-card-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+.tag-badge {
+  background: rgba(168, 85, 247, 0.08) !important;
+  color: #7c3aed !important;
+  padding: 3px 10px !important;
+  border-radius: 99px !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(168, 85, 247, 0.15) !important;
+  text-transform: none !important;
+}
+
+.assignment-card.collapsed {
+  border-radius: 12px !important;
+}
+
+.assignment-card.collapsed .assignment-card-content {
+  max-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  overflow: hidden !important;
+}
+
+.assignment-card.collapsed .arrow-icon {
+  transform: rotate(-90deg) !important;
+}
+
+/* Controls panel for stars, achievements, sound */
+.panel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, #f472b6, #c084fc);
+  border-bottom: 3px solid rgba(168, 85, 247, 0.28);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.panel-controls .stars-btn {
+  font-size: 0.82rem !important;
+  padding: 0.35rem 0.65rem !important;
+  min-height: unset !important;
+  height: 34px !important;
+  border-radius: 99px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1 !important;
+  margin: 0 !important;
+}
+
+.panel-controls .stars-btn #stars-count {
+  font-size: 0.88rem !important;
+}
+
+.panel-controls .btn-yellow,
+.panel-controls .btn-sound {
+  width: 34px !important;
+  height: 34px !important;
+  min-height: unset !important;
+  min-width: unset !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  font-size: 1.05rem !important;
+}
+
+/* Runway button (integrated into panel controls - LARGE CTA) */
+.btn-runway-main {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 38px !important;
+  min-height: unset !important;
+  padding: 0 1.95rem !important; /* Увеличили внутренние отступы еще на ~10% для ширины */
+  border-radius: 99px !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  background: linear-gradient(90deg, #ff2d8d, #9d1df2) !important;
+  color: #fff !important;
+  border: 2px solid rgba(255, 255, 255, 0.7) !important;
+  box-shadow: 0 0 16px rgba(255, 45, 141, 0.65), 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+  animation: runwayPulse 1.4s ease-in-out infinite !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  gap: 6px !important;
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s !important;
+  margin: 0 4px !important; /* Ровный зазор 16px с обеих сторон (12px gap + 4px margin) */
+  transform: none !important;
+  flex: 1.65 !important; /* Увеличили пропорцию flex, чтобы кнопка выглядела шире и солиднее */
+  flex-shrink: 0 !important;
+  min-width: 135px !important;
+  letter-spacing: 0.5px !important;
+}
+
+.btn-runway-main:hover {
+  filter: brightness(1.1) !important;
+  box-shadow: 0 0 24px rgba(255, 45, 141, 0.85), 0 4px 10px rgba(0, 0, 0, 0.25) !important;
+}
+
+.btn-runway-main:active {
+  transform: scale(0.95) !important;
+}
+
+@keyframes runwayPulse {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(255, 45, 141, 0.5), 0 2px 6px rgba(0, 0, 0, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(255, 45, 141, 0.85), 0 2px 6px rgba(0, 0, 0, 0.2);
+    transform: scale(1.04);
+  }
+}
+
+/* Camera button (stays at the bottom of the category panel in landscape) */
+#category-panel .btn-share-stage {
+  margin-top: auto !important;
+  position: static !important;
+  margin-bottom: 0.4rem !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+}
+
+/* Mobile Portrait Mode (< 599px) */
+@media (max-width: 599px) {
+  #main-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: unset !important;
+    grid-template-rows: unset !important;
+  }
+  
+  #panel-controls {
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    z-index: 25 !important;
+    background: transparent !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    gap: 8px !important;
+    width: auto !important;
+  }
+  
+  #category-panel .btn-share-stage {
+    position: absolute !important;
+    bottom: 16px !important; /* Stays at the bottom right corner of the stage since Runway is moved */
+    right: 16px !important;
+    left: auto !important;
+    z-index: 10 !important;
+    margin: 0 !important;
+  }
+
+  .btn-runway-main {
+    margin: 0 4px !important;
+    padding: 0 1.95rem !important;
   }
 }

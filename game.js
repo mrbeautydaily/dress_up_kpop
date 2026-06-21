@@ -2507,9 +2507,29 @@ function showAssignmentBanner() {
   const a = school.schedule[school.lessonIndex];
   if (!a) return; // guard: schedule not ready yet
   updateStageBackground(a.id);
-  $('banner-lesson').textContent = tf('bannerDayLesson', { d: school.day, l: school.lessonIndex + 1 });
-  $('banner-task').textContent   = assignmentTitle(a) + ' — ' + assignmentDesc(a);
-  $('banner-tags').textContent   = '🏷 ' + translateTags(a.requiredTags).join(', ');
+  
+  const lessonText = tf('bannerDayLesson', { d: school.day, l: school.lessonIndex + 1 });
+  if ($('banner-lesson')) {
+    $('banner-lesson').textContent = lessonText;
+  }
+  if ($('banner-task-title')) {
+    $('banner-task-title').textContent = assignmentTitle(a);
+  }
+  if ($('banner-task-desc')) {
+    $('banner-task-desc').textContent = assignmentDesc(a);
+  }
+  
+  const tagsContainer = $('banner-tags-container');
+  if (tagsContainer) {
+    tagsContainer.innerHTML = '';
+    translateTags(a.requiredTags).forEach(tag => {
+      const span = document.createElement('span');
+      span.className = 'tag-badge';
+      span.textContent = tag;
+      tagsContainer.appendChild(span);
+    });
+  }
+  
   $('outfit-name-display').textContent = assignmentDesc(a);
 }
 
@@ -2940,6 +2960,14 @@ async function init() {
   applyTranslations();
 
   // Wire up buttons
+  const cardToggle = $('assignment-card-toggle');
+  if (cardToggle) {
+    cardToggle.addEventListener('click', () => {
+      sfxClick();
+      $('assignment-banner').classList.toggle('collapsed');
+    });
+  }
+
   $('stars-display').addEventListener('click', () => { sfxClick(); showShopModal(); });
   $('btn-runway').addEventListener('click', onRunwayClick);
   $('btn-achievements').addEventListener('click', () => { sfxClick(); showAchievementsModal(); });
