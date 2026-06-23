@@ -344,11 +344,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   gap: .8rem;
   width: 100%;
 }
-.panel-label {
-  font-size: .62rem; font-weight: 700; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: .15rem; text-align: center;
-}
+
 
 /* Category buttons */
 .cat-btn {
@@ -480,7 +476,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   padding: .5rem .45rem; overflow: hidden;
   width: 100%;
 }
-#items-panel-title { text-align: center; margin-bottom: .35rem; }
+
 #items-grid {
   min-width: 0;          /* fix CSS Grid overflow */
   width: 100%;
@@ -935,7 +931,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
     justify-content: flex-start;
     touch-action: pan-x;
   }
-  .panel-label { display: none; }
+
   #category-list {
     flex-direction: row;
     flex-shrink: 0;
@@ -958,7 +954,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
     border-left: none;
     padding: .35rem .45rem .3rem !important;
   }
-  #items-panel-title { font-size: .65rem; margin-bottom: .2rem; }
+
   #items-grid {
     display: flex !important;
     flex-direction: row !important;
@@ -1683,7 +1679,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
     border-right: none;
     touch-action: pan-y;
   }
-  .panel-label    { display: none; }
+
   #category-list {
     flex-direction: column;
     gap: .55rem;
@@ -1719,7 +1715,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
     border-left: 2px solid rgba(255,182,219,.5);
     padding: .3rem .35rem;
   }
-  #items-panel-title { font-size: .58rem; margin-bottom: .25rem; }
+
   #items-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: .3rem;
@@ -1856,7 +1852,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   #main-layout   { grid-template-columns: 42px 1fr 115px !important; }
   .cat-btn       { width: 34px; height: 34px; }
   .cat-btn .cat-icon { font-size: .95rem; }
-  .panel-label   { display: none; }
+
   #stage         { height: 94%; }
   .btn           { padding: .18rem .35rem; font-size: .6rem; }
 }
@@ -2394,3 +2390,896 @@ button { cursor: pointer; border: none; font-family: inherit; }
     box-shadow: 0 0 16px rgba(255, 45, 141, 0.65), 0 2px 6px rgba(0, 0, 0, 0.2) !important;
   }
 }
+
+/* ============================================================
+   K-POP SOCIAL NETWORK / INSTAGRAM STYLE POST IN SCORE MODAL
+   ============================================================ */
+
+/* Сетка горизонтального поста */
+/* Сетка горизонтального поста с двухцветным фоном */
+.score-box {
+  max-width: 860px;
+  width: 92vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--white);
+}
+
+.score-left-col {
+  width: 42%;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 12px;
+  padding: 1.5rem 1.2rem;
+  box-sizing: border-box;
+  position: relative !important;
+}
+
+.score-right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-y: auto;
+  background: var(--white);
+  padding: 1.5rem;
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+.score-right-col::-webkit-scrollbar { display: none; }
+
+/* Image container */
+.social-post-image-container {
+  width: 100%;
+  max-height: 72vh;
+  aspect-ratio: 768 / 1376;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #000000;
+  position: relative;
+  border: none;
+  box-shadow: none;
+}
+
+.social-post-image-container #cloned-stage {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  height: 100% !important;
+  width: auto !important;
+  aspect-ratio: 768 / 1376 !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+.cloned-character-layers {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform: translateY(-20px) scale(0.92) !important;
+  transform-origin: bottom center;
+}
+.cloned-layer-body {
+  position: absolute;
+  inset: 0;
+}
+.cloned-layer-body img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+  pointer-events: none;
+}
+
+/* Post text and header */
+.score-right-col .score-header {
+  text-align: left;
+}
+
+.social-post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 2px;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.social-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: block;
+}
+
+.social-meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.social-author {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #111827; /* Dark charcoal text like in real social networks */
+  line-height: 1.2;
+}
+
+.social-location {
+  font-size: 0.72rem;
+  color: #0284c7; /* Sky blue/cyan color from reference */
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.social-post-text {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #4b5563; /* Softer gray for post content */
+  margin: 6px 0 8px 0;
+  text-align: left;
+  white-space: pre-line;
+  font-weight: 400;
+}
+
+#score-tag-info {
+  font-size: 0.72rem;
+  color: #6b7280; /* Gray-500 */
+  margin-top: 4px;
+  margin-bottom: 8px;
+  text-align: left;
+  font-weight: 500;
+}
+
+/* Evaluator comments list (Horizontal Instagram layout) */
+.social-eval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.eval-comment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.eval-comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.eval-comment-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+
+.eval-comment-nick {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #111827;
+  margin-right: 6px;
+}
+
+.eval-comment-text {
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: #374151; /* Softer dark gray */
+  display: inline;
+}
+
+/* Instagram-style action row below text */
+.eval-comment-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.65rem;
+  color: #9ca3af; /* Gray-400 */
+  margin-top: 3px;
+  height: 16px;
+}
+
+.eval-comment-action-btn {
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.eval-comment-action-btn:hover {
+  color: #4b5563;
+}
+
+.eval-comment-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+  border-width: 1px;
+  border-style: solid;
+}
+
+/* Color schemes for score categories */
+.style-score {
+  background-color: #f3e8ff;
+  color: #6b21a8;
+  border-color: #d8b4fe;
+}
+
+.details-score {
+  background-color: #fdf2f8;
+  color: #9d174d;
+  border-color: #fbcfe8;
+}
+
+.fans-score {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+
+.eval-like-btn.liked {
+  color: #ec4899; /* Pink-500 */
+  font-weight: 700;
+  animation: heartBeat 0.3s ease-in-out;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.15); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+  70% { transform: scale(1); }
+}
+
+.emoji-picker-tooltip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 9999px;
+  padding: 6px 12px;
+  z-index: 10000;
+  animation: fadeInUp 0.15s ease-out;
+}
+
+.emoji-option {
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  user-select: none;
+}
+
+.emoji-option:hover {
+  transform: scale(1.25);
+}
+
+.emoji-option-clear {
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #ef4444;
+  margin-left: 4px;
+  transition: transform 0.1s ease;
+  user-select: none;
+}
+
+.emoji-option-clear:hover {
+  transform: scale(1.2);
+}
+
+.eval-reply-btn.has-reaction {
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Block-level organization inside right column */
+.social-results-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+/* Post stats row on black background */
+.social-stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #e5e7eb;
+  padding: 4px 0;
+  margin-top: 4px;
+  width: 100%;
+}
+.social-stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Softened follower gain section (The main emotional center card) */
+.score-total-row-new {
+  background: rgba(168, 85, 247, 0.02);
+  border: 1px solid rgba(168, 85, 247, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.score-reach-row {
+  font-size: 0.72rem;
+  color: #6b7280; /* Gray-500 */
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.score-reach-row .reach-text {
+  font-weight: 700;
+}
+
+.score-reach-row .reach-text.reach-viral { color: #f59e0b; }
+.score-reach-row .reach-text.reach-high { color: #10b981; }
+.score-reach-row .reach-text.reach-medium { color: #3b82f6; }
+.score-reach-row .reach-text.reach-low { color: #ef4444; }
+
+.score-total-value {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #111827; /* Dark and solid */
+  letter-spacing: -0.5px;
+  margin: 4px 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.score-total-plus {
+  color: #a855f7; /* Violet plus accent */
+  font-size: 1.6rem;
+}
+
+.score-total-unit {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4b5563; /* Gray-600 */
+}
+
+.score-reward-row {
+  font-size: 0.76rem;
+  color: #4b5563;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.score-reward-row #score-reward-value {
+  color: #d97706; /* Golden-amber star text */
+  font-weight: 700;
+}
+
+/* Collapsible Details Spoiler */
+.score-details-spoiler-wrapper {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  text-align: center;
+  width: 100%;
+}
+
+.details-toggle-btn {
+  background: none;
+  border: none;
+  color: #9ca3af; /* Soft Gray-400 */
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s, background-color 0.15s;
+  border-radius: 20px;
+}
+
+.details-toggle-btn:hover {
+  color: var(--purple);
+  background-color: rgba(168, 85, 247, 0.05);
+}
+
+.score-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.score-details-content.hidden-details {
+  display: none;
+}
+
+/* Sub Action Buttons - Styled as clean outline buttons to avoid clutter */
+.score-actions-row-sub {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.score-actions-row-sub .score-btn {
+  flex: 1;
+  font-size: 0.72rem;
+  padding: 8px 12px;
+  height: 38px;
+  border-radius: 8px;
+}
+
+.btn-share-outfit {
+  background: transparent !important;
+  border: 1.5px solid rgba(168, 85, 247, 0.3) !important;
+  color: var(--purple) !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transition: background-color 0.15s, border-color 0.15s !important;
+}
+
+.btn-share-outfit:hover {
+  background: rgba(168, 85, 247, 0.05) !important;
+  border-color: var(--purple) !important;
+}
+
+.btn-double-reward {
+  background: transparent !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+  color: #d97706 !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transition: background-color 0.15s, border-color 0.15s !important;
+}
+
+.btn-double-reward:hover {
+  background: rgba(245, 158, 11, 0.05) !important;
+  border-color: #d97706 !important;
+}
+
+/* Horizontal detailed evaluation styling */
+.score-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+  width: 100%;
+}
+.breakdown-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.08);
+  padding: 6px 4px;
+  border-radius: 8px;
+  text-align: center;
+  min-height: 44px;
+}
+.breakdown-item .breakdown-label {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  width: auto;
+  flex-shrink: 1;
+}
+.breakdown-item .breakdown-pts {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--purple);
+  width: auto;
+  text-align: center;
+}
+
+/* Social comments link styling */
+.social-comments-more {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-align: left;
+  margin-top: 4px;
+  cursor: pointer;
+}
+.social-comments-more:hover {
+  color: var(--purple);
+}
+
+
+/* Calmer secondary buttons styling to avoid visual competition */
+.score-actions-row-sub .btn-double-reward {
+  background: rgba(245, 158, 11, 0.08) !important;
+  color: #d97706 !important;
+  border: 1px dashed rgba(245, 158, 11, 0.35) !important;
+  box-shadow: none !important;
+  font-size: 0.74rem !important;
+  padding: 0.42rem 0.8rem !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  animation: none !important;
+}
+.score-actions-row-sub .btn-double-reward:hover {
+  background: rgba(245, 158, 11, 0.14) !important;
+  border-color: rgba(245, 158, 11, 0.5) !important;
+}
+
+.score-actions-row-sub .btn-share-outfit {
+  background: rgba(14, 165, 233, 0.08) !important;
+  color: #0ea5e9 !important;
+  border: 1.5px solid rgba(14, 165, 233, 0.35) !important;
+  box-shadow: none !important;
+  font-size: 0.74rem !important;
+  padding: 0.42rem 0.8rem !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+.score-actions-row-sub .btn-share-outfit:hover {
+  background: rgba(14, 165, 233, 0.14) !important;
+  border-color: rgba(14, 165, 233, 0.5) !important;
+}
+
+/* Actions buttons row */
+.score-actions-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.score-actions-row-sub {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+.score-actions-row-sub > * {
+  flex: 1 !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+.score-actions-row .score-btn {
+  width: 100%;
+  padding: 0.58rem 1rem;
+  font-size: 0.82rem;
+  margin: 0;
+  border-radius: 99px;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+
+/* Flash effect */
+.camera-flash-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 999999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.05s ease-in, opacity 0.35s ease-out;
+}
+.camera-flash-overlay.active {
+  opacity: 1;
+}
+
+/* Адаптивность для мобильных (вертикальный вид с двухцветным фоном) */
+@media (max-width: 650px) {
+  .score-box {
+    flex-direction: column;
+    max-width: 400px;
+    max-height: 92vh;
+    overflow-y: auto;
+    gap: 0;
+    padding: 0;
+  }
+  .score-left-col {
+    width: 100%;
+    padding: 1rem;
+    background: #000000;
+  }
+  .social-post-image-container {
+    max-width: 180px;
+    margin-bottom: 0;
+  }
+  .score-right-col {
+    width: 100%;
+    overflow-y: visible;
+    padding: 1.2rem 1rem;
+    background: var(--white);
+  }
+  .social-eval-cards {
+    gap: 6px;
+  }
+  .eval-card {
+    padding: 6px 4px;
+  }
+  .eval-nick {
+    font-size: 0.52rem;
+  }
+  .eval-score {
+    font-size: 0.82rem;
+  }
+  .eval-text {
+    font-size: 0.58rem;
+    -webkit-line-clamp: 4;
+  }
+  .score-actions-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* Comment overlay on top of the post photo */
+.score-comment-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 10;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  min-height: 84px;
+  font-family: inherit;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.score-comment-arrow {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 2.2rem;
+  cursor: pointer;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, transform 0.1s;
+  user-select: none;
+}
+
+.score-comment-arrow:hover {
+  color: #ffffff;
+  transform: scale(1.15);
+}
+
+.score-comment-arrow:active {
+  transform: scale(0.9);
+}
+
+.score-comment-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 0 4px;
+}
+
+.score-comment-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.score-comment-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.score-comment-text-block {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.74rem;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.score-comment-nick {
+  font-weight: 700;
+  color: #fbbf24;
+  margin-right: 5px;
+}
+
+.score-comment-text {
+  color: #f3f4f6;
+  word-break: break-word;
+}
+
+.score-comment-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.65rem;
+  color: #9ca3af;
+  margin-left: 36px;
+  text-align: left;
+}
+
+.score-comment-action-btn {
+  cursor: pointer;
+  font-weight: 600;
+  color: #d1d5db;
+  transition: color 0.15s;
+  user-select: none;
+}
+
+.score-comment-action-btn:hover {
+  color: #ffffff;
+}
+
+.score-comment-action-btn.liked {
+  color: #ef4444 !important;
+}
+
+.score-comment-action-btn.has-reaction {
+  color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.15);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Comment slide animation classes and keyframes */
+.comment-slide-next-out {
+  animation: slideNextOut 0.2s forwards cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.comment-slide-next-in {
+  animation: slideNextIn 0.2s forwards cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.comment-slide-prev-out {
+  animation: slidePrevOut 0.2s forwards cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.comment-slide-prev-in {
+  animation: slidePrevIn 0.2s forwards cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideNextOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+}
+
+@keyframes slideNextIn {
+  0% {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slidePrevOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+}
+
+@keyframes slidePrevIn {
+  0% {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Star rating styles for half-stars support */
+.star-item {
+  display: inline-block;
+  position: relative;
+  line-height: 1;
+  color: inherit;
+}
+.star-item.half {
+  color: inherit;
+}
+.star-item.half::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: inherit;
+}
+
+

@@ -78,14 +78,12 @@
 </section>
 <!-- LEFT: category selector -->
 <aside id="category-panel">
-<p class="panel-label">Category</p>
 <div id="category-list"></div>
 <!-- Camera/Share button moved here, to sit at the bottom in desktop -->
 <button id="btn-share-stage" class="btn-share-stage">📸</button>
 </aside>
 <!-- RIGHT: items grid -->
 <aside id="items-panel">
-<p class="panel-label" id="items-panel-title">Items</p>
 <div id="items-grid"></div>
 </aside>
 </main>
@@ -112,37 +110,74 @@
 <!-- ===== SCORE MODAL ===== -->
 <div id="score-modal" class="modal-overlay hidden">
 <div class="modal-box score-box">
-<div class="score-header">
-<div id="score-assignment-title"></div>
-<div id="score-tag-info"></div>
-</div>
-<div id="judge-cards"></div>
-<div class="score-breakdown">
-<div class="breakdown-row">
-<span class="breakdown-label" id="breakdown-tag-label">Tag Match</span>
-<div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-tags"></div></div>
-<span class="breakdown-pts" id="pts-tags"></span>
-</div>
-<div class="breakdown-row">
-<span class="breakdown-label" id="breakdown-complete-label">Completeness</span>
-<div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-complete"></div></div>
-<span class="breakdown-pts" id="pts-complete"></span>
-</div>
-<div class="breakdown-row">
-<span class="breakdown-label" id="breakdown-judge-label">Judge Bonus</span>
-<div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-judges"></div></div>
-<span class="breakdown-pts" id="pts-judges"></span>
-</div>
-</div>
-<div class="score-total-row">
-<span class="score-total-label" id="score-lesson-label">Lesson Score</span>
-<span class="score-total-num" id="score-total-num">0</span>
-<span class="score-total-max">/100</span>
-</div>
-<button id="btn-double-reward" class="btn btn-double-reward score-btn hidden"></button>
-<button id="btn-retry-lesson" class="btn btn-retry-lesson score-btn hidden"></button>
-<button id="btn-next-lesson" class="btn btn-purple score-btn"></button>
-<button id="btn-share-score" class="btn btn-share-outfit">📸 <span id="btn-share-score-label">Share Outfit</span></button>
+  <!-- Left column: image container -->
+  <div class="score-left-col">
+    <div class="social-post-image-container" id="score-post-image-container"></div>
+    <div class="social-stats-row">
+      <span class="social-stat-item">❤️ <span id="stat-likes">0</span></span>
+      <span class="social-stat-item">💬 <span id="stat-comments-count">0</span></span>
+      <span class="social-stat-item">🔄 <span id="stat-shares">0</span></span>
+    </div>
+  </div>
+  
+  <!-- Right column: text content & results -->
+  <div class="score-right-col">
+    <!-- Block: Post Details -->
+    <div class="score-header">
+      <div class="social-post-header">
+        <div class="social-avatar">
+          <svg viewBox="0 0 100 100" width="100%" height="100%" style="display: block;">
+            <defs>
+              <linearGradient id="avatar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff7eb9" />
+                <stop offset="100%" stop-color="#a18cd1" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="50" fill="url(#avatar-grad)" />
+            <polygon points="50,15 61,38 86,40 67,57 73,82 50,68 27,82 33,57 14,40 39,38" fill="#00d8ff" transform="translate(1, 2) scale(0.9) translate(5, 5)" />
+            <polygon points="50,15 61,38 86,40 67,57 73,82 50,68 27,82 33,57 14,40 39,38" fill="#ffe600" stroke="#000" stroke-width="5" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="social-meta">
+          <div class="social-author" id="score-author-name">@my_kpop_group</div>
+        </div>
+      </div>
+      <div id="score-post-text" class="social-post-text"></div>
+      <div id="score-tag-info"></div>
+    </div>
+    
+
+    
+    <!-- Block: Publication Results -->
+    <div class="social-results-block" id="social-results-block">
+      <div class="score-total-row-new">
+        <div class="score-total-value" style="font-size: 2.2rem; color: #fbbf24; line-height: 1; margin: 2px 0;">
+          <span id="score-total-num">★★★★★</span>
+        </div>
+        <div id="followers-gain-title" style="font-size: 0.72rem; color: #6b7280; font-weight: 500; margin-top: 4px;">Прирост фанатов</div>
+        <div class="score-followers-gained-value" style="font-size: 1.6rem; font-weight: 900; color: #111827; display: flex; align-items: baseline; justify-content: center; gap: 4px; margin-bottom: 4px;">
+          <span class="score-total-plus" id="score-total-plus">+</span><span id="score-followers-gained">0</span><span class="score-total-unit" id="score-total-unit"> тыс. фанатов</span>
+        </div>
+        <div class="score-reward-row" id="score-reward-row">
+          <span id="score-reward-label">Награда:</span>
+          <span id="score-reward-value" class="reward-badge">+19 ⭐</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Block: Action Buttons -->
+    <div class="score-actions-row">
+      <!-- Main action button is full-width at the top -->
+      <button id="btn-next-lesson" class="btn btn-purple score-btn"></button>
+      <button id="btn-retry-lesson" class="btn btn-retry-lesson score-btn hidden"></button>
+      
+      <!-- Secondary action buttons are 50/50 at the bottom -->
+      <div class="score-actions-row-sub">
+        <button id="btn-double-reward" class="btn btn-double-reward score-btn hidden"></button>
+        <button id="btn-share-score" class="btn btn-share-outfit score-btn">📸 <span id="btn-share-score-label">Share Outfit</span></button>
+      </div>
+    </div>
+  </div>
 </div>
 </div>
 <!-- ===== DAILY SUMMARY MODAL ===== -->
@@ -232,6 +267,15 @@
   </div>
 </div>
 <button id="dev-panel-trigger" class="dev-panel-trigger" title="Панель разработчика">🛠️</button>
+<div id="emoji-picker" class="emoji-picker-tooltip hidden">
+  <span class="emoji-option" data-emoji="🔥">🔥</span>
+  <span class="emoji-option" data-emoji="🙌">🙌</span>
+  <span class="emoji-option" data-emoji="🤔">🤔</span>
+  <span class="emoji-option" data-emoji="😮">😮</span>
+  <span class="emoji-option-clear" title="Убрать реакцию">❌</span>
+</div>
+
+<div id="camera-flash" class="camera-flash-overlay hidden"></div>
 
 <!-- Yandex Games SDK — обязательно до game.js -->
 <script src="/sdk.js"></script>

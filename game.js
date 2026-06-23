@@ -39,7 +39,7 @@ const T = {
     btnSaved:      '✅ Saved!',
     btnSchool:     '🌟 Promo',
     btnSchoolOn:   '🌟 Promo ON',
-    btnRunway:     '🌟 Show Stage!',
+    btnRunway:     '📱 Publish Post',
     // Panels
     categoryLabel: 'Category',
     itemsLabel:    'Items',
@@ -50,21 +50,20 @@ const T = {
     catSocks:      'Socks',
     catAcc:        'Acc.',
     // Banner
-    bannerDayLesson: 'Week {d} · Day {l}/5',
+    bannerDayLesson: 'Promo Tour {d} · Day {l}/5',
     // Score screen
-    scoreResults:    '{title} Results',
-    scoreRequired:   'Required style: {tags} · Matched {m}/{r}',
-    scoreTagMatch:   'Style Match',
-    scoreComplete:   'Completeness',
-    scoreJudgeBonus: 'Judge Bonus',
-    scoreLessonPts:  'Activity Rating',
-    btnNextClass:    '➡ Next Day',
-    btnSeeResults:   '🌟 Week Results!',
+    scoreResults:    '📍 {title}',
+    scoreRequired:   'Outfit: {f}/{t} slots · Trend: {tags} ({m}/{r})',
+    scoreRepeat:     'Same outfit? Fans noticed! 👀',
+    scoreNaked:      'Forgot to get dressed? 😮',
+    scoreFreePost:   'Free Style Day! Dress however you like! 💕',
+    btnNextClass:    '➡ Next Post',
+    btnSeeResults:   '🌟 Day Results!',
     // Summary
-    summaryTitle:    'Week {d} Complete!',
-    summaryDayScore: 'Fandom Growth: +{s} / 500 тыс.',
-    summaryRankLine: '{rank}  ·  Total: {pts} тыс.',
-    summaryNextRank: 'Next rank: {name} at {at} тыс.',
+    summaryTitle:    'Promo Tour {d} Complete!',
+    summaryDayScore: 'New followers: +{s}',
+    summaryRankLine: '{rank}  ·  {pts} followers',
+    summaryNextRank: 'Next: {name} at {at}',
     summaryMaxRank:  '👑 Maximum rank achieved! K-Pop Legends!',
     btnNewDay:       '☀️ Next Promo Tour',
     btnExitSchool:   '🎨 Free Style Mode',
@@ -89,7 +88,7 @@ const T = {
     btnSaved:      '✅ Сохранено!',
     btnSchool:     '🌟 Промо',
     btnSchoolOn:   '🌟 Промо ВКЛ',
-    btnRunway:     '🌟 На сцену!',
+    btnRunway:     '📱 Опубликовать',
     // Panels
     categoryLabel: 'Категория',
     itemsLabel:    'Вещи',
@@ -100,22 +99,21 @@ const T = {
     catSocks:      'Носки',
     catAcc:        'Акс.',
     // Banner
-    bannerDayLesson: 'Неделя {d} · День {l}/5',
+    bannerDayLesson: 'Промо-тур {d} · День {l}/5',
     // Score screen
-    scoreResults:    'Итоги: {title}',
-    scoreRequired:   'Стиль задания: {tags} · Совпало {m}/{r}',
-    scoreTagMatch:   'Стиль образа',
-    scoreComplete:   'Полнота образа',
-    scoreJudgeBonus: 'Бонус судьи',
-    scoreLessonPts:  'Рейтинг активности',
-    btnNextClass:    '➡ Следующий день',
-    btnSeeResults:   '🌟 Итоги недели!',
+    scoreResults:    '📍 {title}',
+    scoreRequired:   'Образ: {f}/{t} слотов · Тренд: {tags} ({m}/{r})',
+    scoreRepeat:     'Тот же наряд? Фанаты заметили! 👀',
+    scoreNaked:      'Забыла одеться? 😮',
+    scoreFreePost:   'День свободного стиля! Одевайся как хочешь! 💕',
+    btnNextClass:    '➡ Следующий пост',
+    btnSeeResults:   '🌟 Итоги дня!',
     // Summary
-    summaryTitle:    'Неделя {d} завершена!',
-    summaryDayScore: 'Прирост фанатов: +{s} / 500 тыс.',
-    summaryRankLine: '{rank}  ·  Всего: {pts} тыс.',
-    summaryNextRank: 'Следующий ранг: {name} с {at} тыс.',
-    summaryMaxRank:  '👑 Максимальный ранг! Легенды K-Pop!',
+    summaryTitle:    'Промо-тур {d} завершен!',
+    summaryDayScore: 'Новые подписчики: +{s}',
+    summaryRankLine: '{rank}  ·  {pts} подписчиков',
+    summaryNextRank: 'Далее: {name} с {at}',
+    summaryMaxRank:  '👑 Максимальный ранг достигнут! Легенды K-Pop!',
     btnNewDay:       '☀️ Следующий промо-тур',
     btnExitSchool:   '🎨 Свободный стиль',
     // Ranks
@@ -134,6 +132,12 @@ function tf(key, vars) {
   let s = t(key);
   if (vars) Object.keys(vars).forEach(k => { s = s.replaceAll('{' + k + '}', vars[k]); });
   return s;
+}
+
+function formatFollowers(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return String(n);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -415,7 +419,6 @@ const clothes = {
 
   // ── HAIR ──────────────────────────────────────────────────
   hair: [
-    { id:'hair_none', name:'None', name_ru:'Нет', src:null, pos:null, tags:[] },
     { id:'blunt_bob_pink_headband', name:'Pink Headband Bob', name_ru:'Каре с розовым ободком', src:'Items/Hair/blunt_bob_pink_headband.png', pos:{left:0,top:0,width:100}, tags:['cute','pastel','kpop'] },
     { id:'boxer_braids', name:'Boxer Braids', name_ru:'Боксерские косички', src:'Items/Hair/boxer_braids.png', pos:{left:0,top:0,width:100}, tags:['sporty','bold','kpop'] },
     { id:'double_space_buns_pastel_lavender', name:'Lavender Buns', name_ru:'Лавандовые пучки', src:'Items/Hair/double_space_buns_pastel_lavender.png', pos:{left:0,top:0,width:100}, tags:['cute','pastel','kpop'] },
@@ -576,7 +579,6 @@ const clothes = {
 // ────────────────────────────────────────────────────────────
 
 const FREE_ITEMS = new Set([
-  'hair_none',
   'blunt_bob_pink_headband',
   'wavy_side_braids',
   'kpop_double_pigtails',
@@ -1429,226 +1431,120 @@ function translateTags(tags) {
   return tags.map(t => TAG_NAMES_RU[t] || t);
 }
 
+function getStarsHTML(starsNum) {
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    if (starsNum >= i) {
+      html += '<span class="star-item filled">★</span>';
+    } else if (starsNum >= i - 0.5) {
+      html += '<span class="star-item half">☆</span>';
+    } else {
+      html += '<span class="star-item empty">☆</span>';
+    }
+  }
+  return html;
+}
+
 const PROMO_ACTIVITIES = [
   { id:'recording',     judge:'kim',
     title:'🎙️ Recording Session',     title_ru:'🎙️ Запись трека',
-    desc: 'Producer Song wants pure charisma and bold vibe for the title track!',
-    desc_ru:'Продюсер Сон хочет чистую харизму и дерзкий вайб для заглавного трека!',
-    requiredTags:['kpop','bold'],    bonusTags:['pastel','cute'] },
+    desc: 'Fans want pure charisma and bold vibe for the title track!',
+    desc_ru:'Фанаты хотят чистую харизму и дерзкий вайб от заглавного трека!',
+    requiredTags:['kpop','bold'],    bonusTags:['cute'] },
   { id:'fitness',       judge:'lee',
     title:'🧘 Fitness & Stretching',  title_ru:'🧘 Фитнес и растяжка',
-    desc: 'Choreographer Min expects comfortable, sporty outfit. Keep moving!',
-    desc_ru:'Хореограф Мин ждет удобный спортивный лук. Двигайся свободно!',
+    desc: 'Fans expect a comfortable, sporty outfit for stretching!',
+    desc_ru:'Фанаты ждут удобный спортивный лук на растяжке!',
     requiredTags:['sporty','casual'],bonusTags:['kpop'] },
   { id:'photoshoot',    judge:'park',
     title:'📸 Album Photoshoot',      title_ru:'📸 Фотосессия для альбома',
-    desc: 'Stylist Yuri wants an elegant, concept-driven outfit for the album book.',
-    desc_ru:'Стилист Юри требует элегантный концептуальный образ для буклета альбома.',
-    requiredTags:['kpop','elegant'], bonusTags:['pastel','cute'] },
+    desc: 'Fans expect an elegant, concept-driven outfit for the album book.',
+    desc_ru:'Фанаты ждут элегантный концептуальный образ для буклета альбома.',
+    requiredTags:['kpop','elegant'], bonusTags:['pastel'] },
   { id:'fansign',       judge:'park',
     title:'🤝 Fansign Event',         title_ru:'🤝 Автограф-сессия',
-    desc: 'Meet your fans! Stylist Yuri demands elegant and neat appearance.',
-    desc_ru:'Встреться с фанатами! Стилист Юри требует элегантный и аккуратный вид.',
+    desc: 'Meet your fans! They demand an elegant and neat appearance.',
+    desc_ru:'Встреться с фанатами! Они ждут элегантный и аккуратный вид.',
     requiredTags:['school','formal'],bonusTags:['elegant'] },
   { id:'variety_show',  judge:'kim',
     title:'📺 Variety Show',          title_ru:'📺 Развлекательное шоу',
-    desc: 'Producer Song wants cute, eye-catching look for the television screen!',
-    desc_ru:'Продюсер Сон хочет милый, выделяющийся образ для экранов ТВ!',
-    requiredTags:['kpop','cute'],    bonusTags:['pastel','bold'] },
+    desc: 'Show a cute, eye-catching look for the television screen! Fans are watching!',
+    desc_ru:'Покажи милый, выделяющийся образ для экранов ТВ! Фанаты ждут его!',
+    requiredTags:['kpop','cute'],    bonusTags:['bold'] },
   { id:'dance_practice',judge:'lee',
     title:'💃 Choreography Practice', title_ru:'💃 Репетиция хореографии',
-    desc: 'Choreographer Min wants style AND movement. Ready to dance?',
-    desc_ru:'Хореограф Мин хочет стиль И свободу движений. Готова танцевать?',
-    requiredTags:['sporty','kpop'],  bonusTags:['bold','casual'] },
+    desc: 'Show style AND movement. Fans want to see you ready to dance!',
+    desc_ru:'Покажи стиль И свободу движений. Фанаты ждут твоей готовности к танцу!',
+    requiredTags:['sporty','kpop'],  bonusTags:['casual'] },
   { id:'vlog',          judge:'kim', // Продюсер Сон отвечает за видео-контент
     title:'🧋 Vlog Recording',        title_ru:'🧋 Запись влога',
-    desc: 'Producer Song wants to show your casual everyday style behind-the-scenes!',
-    desc_ru:'Продюсер Сон хочет показать твой естественный повседневный стиль за кулисами!',
-    requiredTags:['casual','cute'],  bonusTags:['kpop','school'] },
+    desc: 'Show your casual everyday style behind-the-scenes to your fans!',
+    desc_ru:'Покажи фанатам свой естественный повседневный стиль за кулисами!',
+    requiredTags:['casual','cute'],  bonusTags:['kpop'] },
   { id:'fans_qa',       judge:'park',
     title:'📱 Live with Fans',        title_ru:'📱 Эфир с фанатами',
-    desc: 'Live stream time! Stylist Yuri expects neat and casual dress for the broadcast with fans.',
-    desc_ru:'Время прямого эфира! Стилист Юри ждет опрятный и повседневный наряд для трансляции с фанатами.',
-    requiredTags:['school','casual'],bonusTags:['elegant','formal'] },
+    desc: 'Live stream time! Fans expect a neat and casual dress for the broadcast.',
+    desc_ru:'Время прямого эфира! Фанаты ждут опрятный и повседневный наряд для трансляции.',
+    requiredTags:['school','casual'],bonusTags:['elegant'] },
   { id:'dance_challenge', judge:'kim',
     title:'🎵 Viral Dance Challenge', title_ru:'🎵 Вирусный танец',
-    desc: 'Record a viral dance! Producer Song wants a bright, trendy look for social media!',
-    desc_ru:'Запиши вирусный танец! Продюсер Сон ждет яркий, трендовый образ для соцсетей!',
-    requiredTags:['cute','bold'],    bonusTags:['gothic','pastel'] }
+    desc: 'Record a viral dance! Fans want a bright, trendy look for social media!',
+    desc_ru:'Запиши вирусный танец! Фанаты ждут яркий, трендовый образ для соцсетей!',
+    requiredTags:['cute','bold'],    bonusTags:['pastel'] }
 ];
 
 const FINAL_STAGES = [
   { id:'live_stage',    judge:'kim',
     title:'🎤 Inkigayo Live Stage',    title_ru:'🎤 Выступление на Inkigayo',
-    desc: 'Your debut performance! Producer Song is watching your bold stage style!',
-    desc_ru:'Твое дебютное выступление! Продюсер Сон оценивает дерзкий сценический стиль!',
-    requiredTags:['kpop','bold'],    bonusTags:['cute','gothic'] },
+    desc: 'Your debut performance! Fans are watching your bold stage style!',
+    desc_ru:'Твое дебютное выступление! Фанаты ждут дерзкий сценический стиль!',
+    requiredTags:['kpop','bold'],    bonusTags:['cute'] },
   { id:'grand_concert', judge:'park',
     title:'🏆 Rookie Awards Stage',   title_ru:'🏆 Сцена премии Rookie Awards',
-    desc: 'The biggest event! Stylist Yuri expects maximum elegance and perfection.',
-    desc_ru:'Главное событие! Стилист Юри ждет максимальную элегантность и совершенство.',
-    requiredTags:['formal','elegant'],bonusTags:['school','cute'] }
+    desc: 'The biggest event! Fans expect maximum elegance and perfection.',
+    desc_ru:'Главное событие! Фанаты ждут максимальную элегантность и совершенство.',
+    requiredTags:['formal','elegant'],bonusTags:['cute'] }
 ];
 
-const ASSIGNMENTS = [...PROMO_ACTIVITIES, ...FINAL_STAGES];
+const FREE_POST = {
+  id:'free_style', judge:'none',
+  title:'📷 Free Style Post',     title_ru:'📷 Пост в свободном стиле',
+  desc: 'Post whatever you like! Your fans love your personal style!',
+  desc_ru:'Публикуй что хочешь! Фанаты обожают твой личный стиль!',
+  requiredTags:[], bonusTags:[], isFree: true
+};
+
+const ASSIGNMENTS = [...PROMO_ACTIVITIES, ...FINAL_STAGES, FREE_POST];
 
 function assignmentTitle(a) { return lang === 'ru' ? a.title_ru : a.title; }
 function assignmentDesc(a)  { return lang === 'ru' ? a.desc_ru  : a.desc;  }
 
 // ────────────────────────────────────────────────────────────
-// SCHOOL MODE — JUDGES
-// ────────────────────────────────────────────────────────────
-
-const JUDGES = {
-  park: {
-    name:'Stylist Yuri',   name_ru:'Стилист Юри',
-    title:'Trend Queen', title_ru:'Королева Трендов',
-    emoji:'👗',
-    favoredTags:  ['school','formal','elegant','pastel'],
-    dislikedTags: ['gothic','bold'],
-    comments: {
-      excellent: [
-        'Simply impeccable, my dear! 💫',
-        'Outstanding! This is what high fashion looks like!',
-        'Excellent! You would make any agency proud!',
-      ],
-      good: [
-        'Acceptable. A little more trendiness next time, perhaps.',
-        'Not bad! But we can always be more refined. A bit more effort!',
-        'I see the effort! Keep it elegant and neat. Keep improving!',
-      ],
-      poor: [
-        'Absolutely not! This is a high fashion event, not a casual rehearsal!',
-        'I expected better. Please dress properly next time.',
-        'Disappointing. Show more respect for the fans with your attire.',
-      ],
-    },
-    comments_ru: {
-      excellent: [
-        'Просто безупречно, дорогая! 💫',
-        'Великолепно! Вот как выглядит высокая мода!',
-        'Отлично! Любое агентство гордилось бы тобой!',
-      ],
-      good: [
-        'Приемлемо. В следующий раз — чуть больше чувства стиля, пожалуйста.',
-        'Неплохо! Но можно быть более утончённой. Чуть больше усилий!',
-        'Вижу старание! Держи стиль элегантным и аккуратным. Продолжай расти!',
-      ],
-      poor: [
-        'Недопустимо! Это показ высокой моды, а не обычная репетиция!',
-        'Я ожидала большего. Оденься прилично в следующий раз.',
-        'Я разочарована. Уважай наших фанатов своим внешним видом.',
-      ],
-    },
-  },
-  kim: {
-    name:'Producer Song', name_ru:'Продюсер Сон',
-    title:'K-Pop Visionary', title_ru:'K-Pop Визионер',
-    emoji:'🎤',
-    favoredTags:  ['kpop','bold','cute','pastel'],
-    dislikedTags: ['formal','casual'],
-    comments: {
-      excellent: [
-        'OMOOOO! Total idol energy! You were BORN for this! ⭐',
-        'You are an idol! I see a future K-Pop star standing before me!',
-        'INCREDIBLE!! This is the look the whole world needs to see! 🌟',
-      ],
-      good: [
-        'Good vibes! Just push it a little further — fight for it!',
-        'I feel the K-Pop spirit brewing! Keep experimenting!',
-        'Nice style! Add more boldness next time. Go bolder!',
-      ],
-      poor: [
-        'Where is it... The idol energy? Where did it go?!',
-        'This looks too plain for a future star. Be bold! More flair!',
-        'Try again! A K-Pop idol would never step on stage like this!',
-      ],
-    },
-    comments_ru: {
-      excellent: [
-        'ОМООО! Настоящая энергия идола! Ты рождена для этого! ⭐',
-        'Ты идол! Я вижу перед собой будущую K-Pop звезду!',
-        'НЕВЕРОЯТНО!! Весь мир должен увидеть этот образ! 🌟',
-      ],
-      good: [
-        'Хорошие вибрации! Просто добавь чуть больше — борись за это!',
-        'Чувствую K-Pop дух! Продолжай экспериментировать!',
-        'Классный стиль! В следующий раз — больше смелости. Будь смелее!',
-      ],
-      poor: [
-        'Где же она... Энергия идола? Куда она пропала?!',
-        'Это слишком просто для будущей звезды. Будь смелее! Больше блеска!',
-        'Заново! Ни один K-Pop идол не вышел бы на сцену в этом!',
-      ],
-    },
-  },
-  lee: {
-    name:'Choreographer Min',  name_ru:'Хореограф Мин',
-    title:'Dance Champion', title_ru:'Мастер Танца',
-    emoji:'🕺',
-    favoredTags:  ['sporty','casual','kpop'],
-    dislikedTags: ['elegant','formal','gothic'],
-    comments: {
-      excellent: [
-        'LETS GO! Perfect athletic spirit! Champion! 🏆',
-        'Now THAT is a winning look! Ready to rock the dancefloor!',
-        'Energy! Power! Style! You have it ALL today! Amazing!',
-      ],
-      good: [
-        'Decent! But can you actually dance in that?',
-        'Good effort! I want to see more dance energy next time!',
-        'Nice! Keep that active spirit alive! Keep going! 💪',
-      ],
-      poor: [
-        'Seriously?! How are you supposed to dance in that?!',
-        'This is dance practice! Where are the practical clothes?!',
-        'Come on... those shoes worry me. You need sneakers!',
-      ],
-    },
-    comments_ru: {
-      excellent: [
-        'ДАВАЙ! Идеальный спортивный дух! Чемпион! 🏆',
-        'ВОТ это победный образ! Готова зажечь танцпол!',
-        'Энергия! Сила! Стиль! У тебя есть ВСЁ сегодня! Потрясающе!',
-      ],
-      good: [
-        'Неплохо! Но ты точно сможешь в этом танцевать?',
-        'Хороший результат! В следующий раз — больше танцевальной энергии!',
-        'Молодец! Сохраняй этот активный дух! Продолжай! 💪',
-      ],
-      poor: [
-        'Серьёзно?! Как ты вообще собираешься танцевать в этом?!',
-        'Это репетиция танца! Где практичная одежда?!',
-        'Ну как так... эта обувь меня беспокоит. Нужны кроссовки!',
-      ],
-    },
-  },
-};
-
-function judgeName(jKey)  { const j = JUDGES[jKey]; return lang === 'ru' ? j.name_ru : j.name; }
-function judgeTitle(jKey) { const j = JUDGES[jKey]; return lang === 'ru' ? j.title_ru : j.title; }
-
-function pickJudgeComment(jKey, score) {
-  const j    = JUDGES[jKey];
-  const pool = lang === 'ru' ? j.comments_ru : j.comments;
-  const arr  = score >= 8 ? pool.excellent : score >= 5 ? pool.good : pool.poor;
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-// ────────────────────────────────────────────────────────────
 // PROGRESSION RANKS
 // ────────────────────────────────────────────────────────────
 
+// Rewards: stars → % of max followers
+const STAR_FOLLOWER_PCT = [0.30, 0.40, 0.55, 0.70, 0.85, 1.00]; // index = stars
+
+// Likes = followers × random(min..max)
+const LIKE_MULTIPLIER = [6, 10];
+
+// Growing reach: max followers per post = postNumber × this
+const FOLLOWERS_PER_POST_MULTIPLIER = 150;
+
+// Ranks by total followers
 const RANKS = [
-  { key:'trainee', minScore:0,    nextAt:300,  nameKey:'rankTrainee', emoji:'🌱' },
-  { key:'debut',   minScore:300,  nextAt:700,  nameKey:'rankDebut',   emoji:'⭐' },
-  { key:'idol',    minScore:700,  nextAt:1400, nameKey:'rankIdol',    emoji:'🌟' },
-  { key:'star',    minScore:1400, nextAt:null, nameKey:'rankStar',    emoji:'👑' },
+  { key:'trainee', minFollowers:0,       nextAt:1500,    nameKey:'rankTrainee', emoji:'🌱' },
+  { key:'debut',   minFollowers:1500,    nextAt:25000,   nameKey:'rankDebut',   emoji:'⭐' },
+  { key:'idol',    minFollowers:25000,   nextAt:150000,  nameKey:'rankIdol',    emoji:'🌟' },
+  { key:'star',    minFollowers:150000,  nextAt:1000000, nameKey:'rankStar',    emoji:'👑' },
 ];
 
-function getRank(total) {
+const GOAL_FOLLOWERS = 1000000; // 1M = game finale
+
+function getRank(totalFollowers) {
   for (let i = RANKS.length - 1; i >= 0; i--)
-    if (total >= RANKS[i].minScore) return RANKS[i];
+    if (totalFollowers >= RANKS[i].minFollowers) return RANKS[i];
   return RANKS[0];
 }
 
@@ -1656,7 +1552,7 @@ function getRank(total) {
 // GAME STATE
 // ────────────────────────────────────────────────────────────
 
-const equipped = { hair:'hair_none', tops:'top_dress_new_1', bottoms:'bot_none', shoes:'shoe_none', socks:'sock_none', accessories:'acc_none' };
+const equipped = { hair:'blunt_bob_pink_headband', tops:'top_dress_new_1', bottoms:'bot_none', shoes:'shoe_none', socks:'sock_none', accessories:'acc_none' };
 let activeCategory    = 'hair';
 // Подкатегории для категорий с разделением
 const CATEGORY_SUBS = {
@@ -1676,12 +1572,14 @@ const activeSub = { tops:'blouses', bottoms:'pants' };
 function subLabel(sub) { return lang === 'ru' ? sub.label_ru : sub.label; }
 
 const school = {
-  active:       false,
-  day:          1,
-  lessonIndex:  0,
-  schedule:     [],
-  lessonScores: [],
-  totalScore:   0,
+  active:             false,
+  day:                1,
+  lessonIndex:        0,
+  schedule:           [],
+  lessonScores:       [],    // stars per lesson (0-5)
+  totalFollowers:     0,     // total followers (gained across posts)
+  totalPosts:         0,     // total published posts
+  dayFollowersGained: 0,     // followers gained during current day
 };
 
 // ────────────────────────────────────────────────────────────
@@ -1973,10 +1871,6 @@ function applyTranslations() {
   const rl = $('btn-runway-label');
   if (rl) rl.textContent = t('btnRunway').replace('🌟 ', '');
 
-  // Panel labels
-  document.querySelector('#category-panel .panel-label').textContent = t('categoryLabel');
-  $('items-panel-title').textContent = t('itemsLabel');
-
   // Rebuild translated lists
   buildCategoryPanel();
   buildItemsGrid(activeCategory);
@@ -2007,8 +1901,6 @@ function selectCategory(key) {
   document.querySelectorAll('.cat-btn').forEach(btn =>
     btn.classList.toggle('active', btn.dataset.key === key)
   );
-  const cat = getCategories().find(c => c.key === key);
-  $('items-panel-title').textContent = cat ? `${cat.icon} ${cat.label}` : t('itemsLabel');
   buildItemsGrid(key);
 }
 
@@ -2270,6 +2162,8 @@ function randomOutfit() {
       pick = items.find(i => i.id === 'bot_none') || items[0];
     } else if (cat === 'accessories' && Math.random() < 0.5) {
       pick = items.find(i => i.id === 'acc_none') || items[0];
+    } else if (cat === 'hair') {
+      pick = items[Math.floor(Math.random() * items.length)];
     } else {
       pick = items[1 + Math.floor(Math.random() * (items.length - 1))];
     }
@@ -2336,7 +2230,13 @@ function loadImageForCanvas(src) {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload  = () => resolve(img);
-    img.onerror = () => resolve(null);
+    img.onerror = () => {
+      // CORS fallback: retry without crossOrigin if anonymous fails
+      const retryImg = new Image();
+      retryImg.onload  = () => resolve(retryImg);
+      retryImg.onerror = () => resolve(null);
+      retryImg.src = src;
+    };
     img.src = src;
   });
 }
@@ -2510,12 +2410,25 @@ async function shareOutfit() {
 }
 
 function saveSchoolProgress() {
-  try { localStorage.setItem(SCHOOL_SAVE_KEY, JSON.stringify({ day:school.day, totalScore:school.totalScore })); } catch(e) {}
+  try {
+    localStorage.setItem(SCHOOL_SAVE_KEY, JSON.stringify({
+      day: school.day,
+      totalFollowers: school.totalFollowers,
+      totalPosts: school.totalPosts,
+      dayFollowersGained: school.dayFollowersGained,
+    }));
+  } catch(e) {}
 }
 function loadSchoolProgress() {
   try {
     const r = localStorage.getItem(SCHOOL_SAVE_KEY);
-    if (r) { const s = JSON.parse(r); school.day = s.day || 1; school.totalScore = s.totalScore || 0; }
+    if (r) {
+      const s = JSON.parse(r);
+      school.day = s.day || 1;
+      school.totalFollowers = s.totalFollowers || s.totalScore || 0;
+      school.totalPosts = s.totalPosts || 0;
+      school.dayFollowersGained = s.dayFollowersGained || 0;
+    }
   } catch(e) {}
 }
 
@@ -2533,30 +2446,63 @@ function getEquippedTags() {
 }
 
 function countFilledSlots() {
-  return Object.keys(equipped).filter(cat => { const i = findItem(cat, equipped[cat]); return i && i.src; }).length;
+  let filled = Object.keys(equipped).filter(cat => { const i = findItem(cat, equipped[cat]); return i && i.src; }).length;
+  const topItem = findItem('tops', equipped.tops);
+  if (topItem && topItem.sub === 'dresses' && topItem.src) {
+    const bottomItem = findItem('bottoms', equipped.bottoms);
+    if (!bottomItem || !bottomItem.src) {
+      filled = Math.min(filled + 1, 6);
+    }
+  }
+  return filled;
 }
 
 function scoreOutfit(assignment) {
-  const tags    = getEquippedTags();
-  const filled  = countFilledSlots();
+  const tags   = getEquippedTags();
+  const filled = countFilledSlots();
+  const totalSlots = 6;
+
+  // ── Smart naked check ──
+  const topItem = findItem('tops', equipped.tops);
+  const hasDress = topItem && topItem.sub === 'dresses' && topItem.src;
+  const hasTop = topItem && topItem.sub !== 'dresses' && topItem.src;
+  const bottomItem = findItem('bottoms', equipped.bottoms);
+  const hasBottom = bottomItem && bottomItem.src;
+  const isNaked = !hasDress && !(hasTop && hasBottom);
+
+  if (isNaked) {
+    return { stars:0, score:0, matched:0, filled, totalSlots,
+             req:assignment.requiredTags,
+             isNaked:true, isRepeat:false, isFreePost:false };
+  }
+
+  // ── Free post: stars scaled by fullness (all slots = 5★) ──
+  if (assignment.isFree) {
+    let freeStars = Math.round((filled / totalSlots) * 5 * 2) / 2;
+    if (freeStars === 5 && filled < totalSlots) {
+      freeStars = 4.5;
+    }
+    return { stars:freeStars, score:freeStars * 20, matched:0, filled, totalSlots,
+             req:[], isNaked:false, isRepeat:false, isFreePost:true };
+  }
+
+  // ── Fullness: up to 3★ ──
+  const fullnessStars = (filled / totalSlots) * 3;
+
+  // ── Theme match: up to 2★ ──
   const req     = assignment.requiredTags;
   const matched = req.filter(t => tags.includes(t)).length;
-  const tagScore         = Math.round((matched / Math.max(req.length, 1)) * 50);
-  const completenessScore= Math.min(20, Math.round((filled / 5) * 20));
-  const judgeScores = {};
-  Object.keys(JUDGES).forEach(jKey => {
-    if (jKey === assignment.judge) {
-      const j = JUDGES[jKey];
-      const fav  = j.favoredTags.filter(t => tags.includes(t)).length;
-      const bad  = j.dislikedTags.filter(t => tags.includes(t)).length;
-      judgeScores[jKey] = Math.max(0, Math.min(10, 3 + fav * 2 - bad * 2));
-    } else {
-      judgeScores[jKey] = 0;
-    }
-  });
-  const judgeTotal = judgeScores[assignment.judge] * 3;
-  const total = Math.min(100, tagScore + completenessScore + judgeTotal);
-  return { tagScore, completenessScore, judgeScores, judgeTotal, total, matched, req };
+  const themeStars = (matched / Math.max(req.length, 1)) * 2;
+
+  // ── Total: 0-5, rounded with strict 5★ requirement ──
+  let stars = Math.round((fullnessStars + themeStars) * 2) / 2;
+  if (stars === 5 && (filled < totalSlots || matched < req.length)) {
+    stars = 4.5;
+  }
+
+  const score = stars * 20;
+  return { stars, score, matched, filled, totalSlots, req,
+           isNaked:false, isRepeat:false, isFreePost:false };
 }
 
 // ────────────────────────────────────────────────────────────
@@ -2564,9 +2510,10 @@ function scoreOutfit(assignment) {
 // ────────────────────────────────────────────────────────────
 
 function buildDaySchedule() {
-  const promos = [...PROMO_ACTIVITIES].sort(() => Math.random() - 0.5).slice(0, 4);
+  const promos = [...PROMO_ACTIVITIES].sort(() => Math.random() - 0.5).slice(0, 3);
   const finalStage = FINAL_STAGES[Math.floor(Math.random() * FINAL_STAGES.length)];
-  school.schedule = [...promos, finalStage];
+  // 3 promos + 1 free + 1 final = 5 lessons
+  school.schedule = [...promos, FREE_POST, finalStage];
 }
 
 function startSchoolMode() {
@@ -2667,20 +2614,20 @@ function showAssignmentBanner() {
 
 const CATWALK_PHRASES = {
   en: [
-    'Let\'s go! 💜',
-    'Fighting spirit! ⭐',
-    'Incredible! ✨',
-    'Idol style! 🌟',
-    'Superstar! 👑',
-    'Perfect! 💫',
+    'Uploading photo... 📸',
+    'Writing post caption... ✍️',
+    'Selecting hashtags... #️⃣',
+    'Analyzing style trends... 📊',
+    'Notifying subscribers... 🔔',
+    'Going viral... 🚀',
   ],
   ru: [
-    'Поехали! 💜',
-    'Боевой дух! ⭐',
-    'Невероятно! ✨',
-    'Стиль идола! 🌟',
-    'Суперзвезда! 👑',
-    'Совершенно! 💫',
+    'Загрузка фото... 📸',
+    'Пишем текст поста... ✍️',
+    'Подбираем хэштеги... #️⃣',
+    'Анализируем тренды... 📊',
+    'Оповещаем подписчиков... 🔔',
+    'Выходим в тренды... 🚀',
   ],
 };
 
@@ -2734,94 +2681,896 @@ function animateBar(el, pct, delay = 0) {
   setTimeout(() => { el.style.width = pct + '%'; }, delay);
 }
 
-function animateCounter(el, target, duration = 800) {
-  const start = Date.now();
-  const tick = () => {
-    const p = Math.min((Date.now() - start) / duration, 1);
-    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
-    if (p < 1) requestAnimationFrame(tick);
-  };
-  tick();
+// Smoothly count up raw numbers (e.g. total score)
+function animateCounter(el, target, duration = 1000) {
+  if (!el) return;
+  const start = 0;
+  const startTime = (window.performance && window.performance.now) ? performance.now() : Date.now();
+  
+  function update() {
+    const now = (window.performance && window.performance.now) ? performance.now() : Date.now();
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    // Easing out quad
+    const easeProgress = progress * (2 - progress);
+    const currentValue = Math.floor(start + easeProgress * (target - start));
+    
+    el.textContent = currentValue;
+    
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = target;
+    }
+  }
+  
+  requestAnimationFrame(update);
 }
 
-function showScoreScreen(assignment, result, earned) {
-  $('score-assignment-title').textContent = tf('scoreResults', { title: assignmentTitle(assignment) });
-  $('score-tag-info').textContent = tf('scoreRequired', {
-    tags: translateTags(assignment.requiredTags).join(', '),
-    m: result.matched,
-    r: result.req.length,
-  });
-
-  // Judge cards
-  const judgesContainer = $('judge-cards');
-  judgesContainer.innerHTML = '';
-  let delay = 200;
-  Object.keys(JUDGES).forEach(jKey => {
-    if (assignment.judge !== jKey) return; // ONLY RENDER THE MAIN JUDGE CARD!
-    const score   = result.judgeScores[jKey];
-    const comment = pickJudgeComment(jKey, score);
-    const card = document.createElement('div');
-    card.className = 'judge-card judge-high';
-    card.innerHTML = `
-      <div class="judge-emoji">${JUDGES[jKey].emoji}</div>
-      <div class="judge-name">${judgeName(jKey)}</div>
-      <div class="judge-score-num" data-target="${score}">0</div>
-      <div class="judge-score-bar-wrap"><div class="judge-score-bar" style="width:0"></div></div>
-      <div class="judge-comment">"${comment}"</div>
-    `;
-    judgesContainer.appendChild(card);
-    animateBar(card.querySelector('.judge-score-bar'), score * 10, delay);
-    setTimeout(() => animateCounter(card.querySelector('.judge-score-num'), score, 700), delay);
-    delay += 150;
-  });
-
-  // Breakdown
-  $('breakdown-tag-label').textContent      = t('scoreTagMatch');
-  $('breakdown-complete-label').textContent = t('scoreComplete');
-  $('breakdown-judge-label').textContent    = t('scoreJudgeBonus');
-  $('score-lesson-label').textContent       = t('scoreLessonPts');
-
-  animateBar($('bar-tags'),     (result.tagScore / 50) * 100,       400);
-  animateBar($('bar-complete'), (result.completenessScore / 20)*100, 550);
-  animateBar($('bar-judges'),   (result.judgeTotal / 30) * 100,      700);
-  $('pts-tags').textContent     = `${result.tagScore}/50`;
-  $('pts-complete').textContent = `${result.completenessScore}/20`;
-  $('pts-judges').textContent   = `${result.judgeTotal}/30`;
-
-  const totalEl = $('score-total-num');
-  totalEl.textContent = '0';
-  setTimeout(() => animateCounter(totalEl, result.total, 900), 800);
-
-  const isLast = school.lessonIndex >= 4;
-  $('btn-next-lesson').textContent = isLast ? t('btnSeeResults') : t('btnNextClass');
-  $('btn-next-lesson').onclick = () => {
-    $('score-modal').classList.add('hidden');
-    // п. 4.2 — fullscreen-реклама на логической паузе (между уроками / после дня)
-    showFullscreenAd(() => {
-      if (isLast) {
-        showDailySummary();
-        $('btn-runway').disabled = false; // re-enable for next day
+// Smoothly count up stats, supporting "K" formatting for thousands of likes
+function animateStatsCounter(el, targetVal, isLikes = false) {
+  if (!el) return;
+  const duration = 1200; // 1.2 seconds
+  const startTime = (window.performance && window.performance.now) ? performance.now() : Date.now();
+  
+  function update() {
+    const now = (window.performance && window.performance.now) ? performance.now() : Date.now();
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const easeProgress = progress * (2 - progress); // ease out quad
+    
+    const current = Math.floor(easeProgress * targetVal);
+    
+    if (isLikes && targetVal >= 1000) {
+      el.textContent = (current / 1000).toFixed(1) + 'K';
+    } else {
+      el.textContent = current;
+    }
+    
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      if (isLikes && targetVal >= 1000) {
+        el.textContent = (targetVal / 1000).toFixed(1) + 'K';
       } else {
-        school.lessonIndex++;
-        showAssignmentBanner();
-        resetOutfit();
-        $('btn-runway').disabled = false; // re-enable only after next lesson is set up
+        el.textContent = targetVal;
       }
+    }
+  }
+  
+  requestAnimationFrame(update);
+}
+
+// Generate a stream of floating live-stream style hearts from the likes count icon
+function spawnFloatingHearts() {
+  const leftCol = document.querySelector('.score-left-col');
+  const likesStat = $('stat-likes');
+  if (!leftCol || !likesStat) return;
+  
+  const rect = likesStat.getBoundingClientRect();
+  const parentRect = leftCol.getBoundingClientRect();
+  
+  // Calculate spawning position relative to leftCol
+  const spawnX = rect.left - parentRect.left + rect.width / 2;
+  const spawnY = rect.top - parentRect.top;
+  
+  const heartEmojis = ['❤️', '💖', '💝', '💕', '💗'];
+  
+  let heartCount = 18;
+  let interval = setInterval(() => {
+    if (heartCount <= 0) {
+      clearInterval(interval);
+      return;
+    }
+    heartCount--;
+    
+    const heart = document.createElement('div');
+    heart.className = 'floating-heart';
+    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    
+    // Random scale, rotation, duration, horizontal drift
+    const scale = Math.random() * 0.4 + 0.7; // 0.7 to 1.1
+    const rot = Math.random() * 40 - 20; // -20deg to 20deg
+    const duration = Math.random() * 1000 + 1200; // 1.2s to 2.2s
+    const drift = Math.random() * 80 - 40; // -40px to 40px
+    
+    heart.style.cssText = `
+      position: absolute;
+      left: ${spawnX}px;
+      top: ${spawnY}px;
+      font-size: 1.2rem;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%) scale(${scale}) rotate(${rot}deg);
+      opacity: 0.9;
+      transition: transform ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity ${duration}ms ease-out;
+    `;
+    
+    leftCol.appendChild(heart);
+    
+    // Trigger transition next frame
+    requestAnimationFrame(() => {
+      heart.style.transform = `translate(calc(-50% + ${drift}px), -150px) scale(${scale * 1.3}) rotate(${rot * 2}deg)`;
+      heart.style.opacity = '0';
     });
+    
+    // Remove after transition
+    setTimeout(() => {
+      heart.remove();
+    }, duration);
+  }, 100);
+}
+
+// Synthesize a camera shutter click sound using Web Audio API
+function sfxCameraClick() {
+  if (!soundOn) return;
+  try {
+    const ctx = _actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (!ctx) return;
+    
+    // Resume audio context if suspended (needed for user interactions in browsers)
+    if (ctx.state === 'suspended') ctx.resume();
+
+    // Create white noise buffer
+    const bufferSize = ctx.sampleRate * 0.12; // 120ms
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    
+    // Filter to simulate mechanical sound
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1200;
+    filter.Q.value = 1.5;
+    
+    // Volume envelope
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.7, ctx.currentTime + 0.008); // Sharp click
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09); // Quick decay
+    
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    
+    noise.start();
+  } catch(e) {
+    console.warn("Failed to play camera click sfx:", e);
+  }
+}
+
+// Visual screen flash overlay and click audio effect
+function triggerCameraFlash(onDone) {
+  const flash = $('camera-flash');
+  if (!flash) {
+    onDone();
+    return;
+  }
+  
+  // Play camera click audio
+  sfxCameraClick();
+  
+  // Show white overlay instantly
+  flash.classList.remove('hidden');
+  flash.style.transition = 'none';
+  flash.style.opacity = '1';
+  
+  // Force reflow
+  void flash.offsetWidth;
+  
+  // Fade out
+  setTimeout(() => {
+    flash.style.transition = 'opacity 0.35s ease-out';
+    flash.style.opacity = '0';
+    
+    // Hide completely after transition completes
+    setTimeout(() => {
+      flash.classList.add('hidden');
+    }, 350);
+    
+    // Callback triggers early during fade-out for snappy feel
+    onDone();
+  }, 60);
+}
+
+// Render the outfit on canvas with the current studio background (clean without game brandings)
+async function captureOutfitImage() {
+  try {
+    const stageEl = $('stage');
+    const stageRect = stageEl.getBoundingClientRect();
+    const srcW = stageRect.width  || 300;
+    const srcH = stageRect.height || 500;
+
+    const SHARE_W = 420;
+    const SHARE_H = Math.round(srcH / srcW * SHARE_W);
+    const TOP_PAD = Math.round(0.05 * SHARE_H); // 5% padding for high-sitting hair items
+    const CANVAS_H = SHARE_H + TOP_PAD;
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = SHARE_W;
+    canvas.height = CANVAS_H;
+    const ctx = canvas.getContext('2d');
+
+    // 1. Draw base gradient background
+    const grad = ctx.createLinearGradient(0, 0, SHARE_W, CANVAS_H);
+    grad.addColorStop(0, '#ffd6ec');
+    grad.addColorStop(0.5, '#ede9fe');
+    grad.addColorStop(1, '#ccfbf1');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, SHARE_W, CANVAS_H);
+
+    // 2. Draw current background image with opacity
+    const bgImg = await loadImageForCanvas(BACKGROUNDS[currentBackgroundIndex]);
+    if (bgImg) {
+      ctx.globalAlpha = 0.45;
+      ctx.drawImage(bgImg, 0, 0, SHARE_W, CANVAS_H);
+      ctx.globalAlpha = 1;
+    }
+
+    // 3. Draw character shadow oval
+    ctx.save();
+    const cx = SHARE_W * 0.52;
+    const cy = TOP_PAD + SHARE_H * 0.95;
+    const rx = SHARE_W * 0.3;
+    const ry = SHARE_H * 0.0225;
+    
+    ctx.translate(cx, cy);
+    ctx.scale(1, ry / rx);
+    const shadowGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+    shadowGrad.addColorStop(0, 'rgba(0, 0, 0, 0.45)');
+    shadowGrad.addColorStop(0.84, 'rgba(0, 0, 0, 0.15)');
+    shadowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = shadowGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, rx, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // 4. Draw character body
+    const bodyImg = await loadImageForCanvas('Items/body/body_new.png');
+    if (bodyImg) ctx.drawImage(bodyImg, 0, TOP_PAD, SHARE_W, SHARE_H);
+
+    // 5. Draw clothes in z-order
+    const sortedLayers = LAYER_ORDER
+      .filter(l => l.key !== 'body')
+      .map(layer => {
+        const itemId = equipped[layer.key];
+        const item   = itemId ? findItem(layer.key, itemId) : null;
+        const effectiveZ = (item && item.z !== undefined) ? item.z : layer.zIndex;
+        const domOrder   = LAYER_ORDER.findIndex(l => l.key === layer.key);
+        return { layer, item, effectiveZ, domOrder };
+      })
+      .sort((a, b) => a.effectiveZ !== b.effectiveZ
+        ? a.effectiveZ - b.effectiveZ
+        : a.domOrder  - b.domOrder);
+
+    for (const { item } of sortedLayers) {
+      if (!item || !item.src || !item.pos) continue;
+      const img = await loadImageForCanvas(item.src);
+      if (!img) continue;
+
+      const { left, top, width } = item.pos;
+      const x = left  / 100 * SHARE_W;
+      const y = top   / 100 * SHARE_H + TOP_PAD;
+      const w = width / 100 * SHARE_W;
+      const h = w * (img.naturalHeight / img.naturalWidth);
+
+      if (item.filter) {
+        ctx.save();
+        ctx.filter = item.filter;
+        ctx.drawImage(img, x, y, w, h);
+        ctx.restore();
+      } else {
+        ctx.drawImage(img, x, y, w, h);
+      }
+    }
+
+    return canvas.toDataURL('image/png');
+  } catch (e) {
+    console.error("Failed to capture outfit image:", e);
+    return '';
+  }
+}
+
+// Get a stylized post caption based on the activity type
+function getPostTextForActivity(activityId) {
+  const ruTexts = {
+    recording: 'Записываем новый трек на студии! 🎙️ Дерзкий вайб и крутой звук обеспечены. Как вам наш лук сегодня? ✨ #kpop #bold',
+    fitness: 'Утренняя тренировка и растяжка перед камбэком! 🧘 Главное — удобство и стиль. Заряжаемся энергией! 👟 #sporty #casual',
+    photoshoot: 'Снимаем концепт-фото для нового альбома! 📸 Как вам этот элегантный образ? Будет жарко! 💫 #kpop #elegant',
+    fansign: 'Наконец-то встретились с нашими любимыми фанатами на автограф-сессии! 🤝 Спасибо за поддержку и подарки! 💖 #school #formal',
+    variety_show: 'Приняли участие в развлекательном шоу! 📺 Было очень весело, ждите эфир! Оцените наш милый стиль 🎀 #kpop #cute',
+    dance_practice: 'Отрабатываем хореографию в зале до идеала! 💃 Стиль и свобода движений — наш девиз сегодня! 🎵 #sporty #kpop',
+    vlog: 'Снимаем новый влог для вас! 🧋 Покажем наши повседневные будни за кадром. Ждете? 😉 #casual #cute',
+    fans_qa: 'Провели уютный прямой эфир и ответили на ваши вопросы! 📱 Вы лучшие, обожаем вас! 💕 #school #casual',
+    dance_challenge: 'Записали новый танцевальный челлендж! 🎵 Залетайте в тренды, повторяйте движения! 🌟 #cute #bold',
+    live_stage: 'Наше дебютное выступление на Inkigayo! 🎤 Сцена горела, зал кричал, это было незабываемо! 🔥 #kpop #bold',
+    grand_concert: 'Выступили на премии Rookie Awards! 🏆 Мы невероятно счастливы и элегантны. Спасибо, наш фандом! 👑 #formal #elegant'
   };
 
-  $('btn-share-score-label').textContent = lang === 'ru' ? 'Поделиться образом' : 'Share Outfit';
+  const enTexts = {
+    recording: 'Recording a new hit in the studio! 🎙️ Charisma and bold vibe guaranteed. How do you like our look today? ✨ #kpop #bold',
+    fitness: 'Morning stretching and fitness before the comeback! 🧘 Comfort and style is key. Getting energized! 👟 #sporty #casual',
+    photoshoot: 'Shooting concept photos for our new album! 📸 How do you like this elegant look? It\'s going to be hot! 💫 #kpop #elegant',
+    fansign: 'Finally met our lovely fans at the fansign event! 🤝 Thank you for the support and gifts! 💖 #school #formal',
+    variety_show: 'Guest starred on a variety show! 📺 It was super fun, watch out for the broadcast! Rate our cute style 🎀 #kpop #cute',
+    dance_practice: 'Practicing our choreography to perfection! 💃 Style and movement are our motto today! 🎵 #sporty #kpop',
+    vlog: 'Shooting a new vlog for you! 🧋 Showing our daily life behind the scenes. Are you excited? 😉 #casual #cute',
+    fans_qa: 'Had a cozy live stream and answered your questions! 📱 You are the best, love you all! 💕 #school #casual',
+    dance_challenge: 'Recorded a new dance challenge! 🎵 Jump into the trends, duplicate the moves! 🌟 #cute #bold',
+    live_stage: 'Our debut performance on Inkigayo! 🎤 The stage was on fire, the crowd was loud, unforgettable! 🔥 #kpop #bold',
+    grand_concert: 'Performed at the Rookie Awards stage! 🏆 We are incredibly happy and elegant. Thank you, our fandom! 👑 #formal #elegant'
+  };
 
-  // ── Удвой награду (только если score >= 50) ───────────────
+  const pool = lang === 'ru' ? ruTexts : enTexts;
+  return pool[activityId] || (lang === 'ru' ? 'Новый пост! ✨ Оцените наш образ для сегодняшней активности!' : 'New post! ✨ Check out our look for today\'s activity!');
+}
+
+// Generate three comments from virtual fans based on the scoring results
+function generateSocialComments(result, assignment) {
+  const nicknames = [
+    '@kpop_star_fan', '@yuri_bias_forever', '@kpop_lover_xx', '@idol_vibe',
+    '@knetizen_99', '@kpop_queen', '@fandom_leader', '@bias_wrecker',
+    '@kpop_dance_crew', '@starlight_kpop', '@weverse_enjoyer', '@multifan_life',
+    '@kpop_aesthetic', '@hallyu_wave', '@blink_army', '@midzy_once'
+  ];
+  const emojis = ['🐼', '🦊', '🐰', '🐱', '🐻', '🐨', '🐯', '🦄', '💖', '✨', '🎵'];
+
+  const commentsData = result ? [
+    { type: 'style', val: result.matched, max: result.req.length },
+    { type: 'rating', val: result.stars, max: 5 },
+    { type: 'special' }
+  ] : [
+    { type: 'style', val: 0, max: 0, isFreeMode: true },
+    { type: 'rating', val: 4, max: 5, isFreeMode: true },
+    { type: 'special', isFreeMode: true }
+  ];
+
+  return commentsData.map(c => {
+    const nick = nicknames[Math.floor(Math.random() * nicknames.length)];
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    let text = '';
+
+    if (c.type === 'style') {
+      if (c.isFreeMode || (result && result.isFreePost)) {
+        text = lang === 'ru'
+          ? 'Свободный день — свободный стиль! Выглядит отлично! 💕'
+          : 'Free style day! Looks great! 💕';
+      } else if (result && result.isNaked) {
+        text = lang === 'ru'
+          ? 'Разве тренды разрешают ходить раздетой? 😮'
+          : 'Do trends allow going naked? 😮';
+      } else {
+        const ratio = c.val / Math.max(c.max, 1);
+        const poolRu = ratio >= 0.8
+          ? ['Этот образ идеально подходит под тренды! 😍', 'Стиль передан на 100% круто! 🔥', 'Трендовый лук, прямо в точку! 🔥']
+          : ratio >= 0.5
+          ? ['Миленько, но хотелось бы больше вещей в тему.', 'Образ аккуратный, но не хватает яркого трендового акцента.']
+          : ['Совсем не попали в стиль события... 😢', 'Странный выбор вещей, концепт провален.', 'Она точно знала, куда одевается?'];
+        const poolEn = ratio >= 0.8
+          ? ['This outfit is absolutely perfect for the trends! 😍', 'The style is captured perfectly! 🔥', 'Super trendy look, right on target! 🔥']
+          : ratio >= 0.5
+          ? ['Cute, but I wanted more matching vibes.', 'The outfit is neat, but lacks a bright trend accent.']
+          : ['This outfit doesn\'t suit the event at all... 😢', 'Strange choice of items, concept missed.', 'Did she know where she was going?'];
+
+        const pool = lang === 'ru' ? poolRu : poolEn;
+        text = pool[Math.floor(Math.random() * pool.length)];
+      }
+    } else if (c.type === 'rating') {
+      if (result && result.isNaked) {
+        text = lang === 'ru' ? 'Ужасно, где одежда? 😢' : 'Terrible, where is the clothing? 😢';
+      } else {
+        const stars = c.val;
+        const poolRu = stars === 5
+          ? ['🔥 Лучший образ за всю историю! Вирусный хит!', 'Шедевр! Фанаты сходят с ума! 😍✨', 'Просто разрыв! Мой биас прекрасен! 💖']
+          : stars === 4
+          ? ['✨ Очень красивый и стильный образ! Лайк!', 'Фанаты в восторге, образ получился супер!', 'Хороший пост, делюсь со всеми друзьями! 🥰']
+          : stars === 3
+          ? ['Вполне неплохой наряд, фанаты одобряют 👍', 'Хороший лук, мне нравится!', 'Симпатично! Лайк от меня. 🥰']
+          : stars === 2
+          ? ['Нормально, но бывало и лучше 😕', 'Обычный образ, ничего особенного.', 'Пойдет, но можно было постараться сильнее.']
+          : ['Что-то не то... Ждем исправлений 😢', 'Слабый образ в этот раз.', 'Надеюсь, следующий пост будет интереснее.'];
+        const poolEn = stars === 5
+          ? ['🔥 Best look ever! Absolute viral hit!', 'Masterpiece! Fans are going crazy! 😍✨', 'Absolute perfection! My bias is gorgeous! 💖']
+          : stars === 4
+          ? ['✨ Very beautiful and stylish outfit! Liked!', 'Fans love it, the outfit is super cool!', 'Nice post, sharing with all my friends! 🥰']
+          : stars === 3
+          ? ['Quite a decent outfit, fans approve 👍', 'Good look, I like it!', 'Cute! Liked. 🥰']
+          : stars === 2
+          ? ['It\'s okay, but could be better 😕', 'Ordinary look, nothing special.', 'Fine, but could be much better.']
+          : ['Something is wrong... waiting for updates 😢', 'Weak look this time.', 'Hope the next post is more interesting.'];
+
+        const pool = lang === 'ru' ? poolRu : poolEn;
+        text = pool[Math.floor(Math.random() * pool.length)];
+      }
+    } else if (c.type === 'special') {
+      if (c.isFreeMode) {
+        text = lang === 'ru' ? 'Очень эстетично выглядит! ✨' : 'Looks very aesthetic! ✨';
+      } else if (result && result.isNaked) {
+        const poolRu = ['Забыла одеться? Кто-нибудь, дайте ей пальто! 😮', 'Эм... почему наряд такой пустой? Мы голые? 😮', 'Где юбка/брюки? Образ абсолютно не завершен.'];
+        const poolEn = ['Forgot to get dressed? Someone give her a coat! 😮', 'Um... why so empty? Are we naked? 😮', 'Where is the skirt/pants? Cohesion is missing.'];
+        const pool = lang === 'ru' ? poolRu : poolEn;
+        text = pool[Math.floor(Math.random() * pool.length)];
+      } else if (result && result.isRepeat) {
+        const poolRu = ['Этот образ мы уже видели! Повторяешься 👀', 'Опять то же самое? Фанаты заметили! 👀', 'Нужно больше разнообразия, не пости одно и то же!'];
+        const poolEn = ['We have already seen this outfit! Repeating yourself 👀', 'Same outfit again? Fans noticed! 👀', 'Need more variety, don\'t post the same look twice!'];
+        const pool = lang === 'ru' ? poolRu : poolEn;
+        text = pool[Math.floor(Math.random() * pool.length)];
+      } else if (result && result.isFreePost) {
+        const poolRu = ['Люблю, когда она сама выбирает одежду! 💕', 'Свободный стиль ей так идет! 🥰', 'Самый естественный и милый пост! 💕'];
+        const poolEn = ['Love it when she chooses her own clothes! 💕', 'Free style suits her so well! 🥰', 'The most natural and cute post! 💕'];
+        const pool = lang === 'ru' ? poolRu : poolEn;
+        text = pool[Math.floor(Math.random() * pool.length)];
+      } else {
+        if (result && result.filled >= result.totalSlots) {
+          const poolRu = ['Полный образ! Всё продумано до мелочей! 🌟', 'Вау, каждый слот заполнен — идеально! 🔥', 'Собрала полный лук, вот это старание! ✨'];
+          const poolEn = ['Full outfit! Every detail is perfect! 🌟', 'Wow, every slot is filled — perfection! 🔥', 'Complete look, that\'s dedication! ✨'];
+          const pool = lang === 'ru' ? poolRu : poolEn;
+          text = pool[Math.floor(Math.random() * pool.length)];
+        } else {
+          const poolRu = ['Приятный пост, лайк от меня!', 'Прикольно, жду новые посты!', 'Очень эстетично выглядит. ✨'];
+          const poolEn = ['Nice post, liked!', 'Cool, waiting for new posts!', 'Looks very aesthetic. ✨'];
+          const pool = lang === 'ru' ? poolRu : poolEn;
+          text = pool[Math.floor(Math.random() * pool.length)];
+        }
+      }
+    }
+
+    return { nick, emoji, text, scoreHtml: '' };
+  });
+}
+
+function showScoreScreen(assignment, result, earned, socialStats) {
+  const picker = $('emoji-picker');
+  const isFree = !assignment || !result;
+  const authorName = '@my_kpop_group';
+  $('score-author-name').textContent = authorName;
+
+  // Clone stage for post preview
+  const container = $('score-post-image-container');
+  if (container) {
+    container.innerHTML = '';
+    const originalStage = $('stage');
+    if (originalStage) {
+      const clonedStage = originalStage.cloneNode(true);
+      clonedStage.id = 'cloned-stage';
+      
+      // Clean up cloned stage IDs to avoid duplicate ID issues
+      const charLayers = clonedStage.querySelector('#character-layers');
+      if (charLayers) {
+        charLayers.id = 'cloned-character-layers';
+        charLayers.classList.add('cloned-character-layers');
+      }
+      
+      const layerBody = clonedStage.querySelector('#layer-body');
+      if (layerBody) {
+        layerBody.id = 'cloned-layer-body';
+        layerBody.classList.add('cloned-layer-body');
+      }
+      
+      // Prefix all other IDs in the cloned element to prevent duplicates
+      clonedStage.querySelectorAll('[id]').forEach(el => {
+        if (el.id !== 'cloned-stage' && el.id !== 'cloned-character-layers' && el.id !== 'cloned-layer-body') {
+          el.id = 'cloned-' + el.id;
+        }
+      });
+      
+      // Strip the layer-animate class to make sure images are not stuck at opacity 0
+      clonedStage.querySelectorAll('.layer-animate').forEach(img => {
+        img.classList.remove('layer-animate');
+      });
+      
+      // Remove sparkles from the post picture (they are animated and might look weird static)
+      const sparkles = clonedStage.querySelector('#cloned-sparkles');
+      if (sparkles) {
+        sparkles.remove();
+      }
+      
+      // Reset styling rules to lock aspect ratio and prevent squishing
+      clonedStage.style.height = '100%';
+      clonedStage.style.width = 'auto';
+      clonedStage.style.aspectRatio = '768 / 1376';
+      clonedStage.style.position = 'absolute';
+      clonedStage.style.top = '50%';
+      clonedStage.style.left = '50%';
+      clonedStage.style.transform = 'translate(-50%, -50%)';
+      clonedStage.style.display = 'block';
+      clonedStage.style.maxWidth = 'none';
+      clonedStage.style.maxHeight = 'none';
+      
+      // Set background image on both container and clonedStage to be absolutely sure it renders
+      const bgUrl = BACKGROUNDS[currentBackgroundIndex];
+      container.style.backgroundImage = `url('${bgUrl}')`;
+      container.style.backgroundSize = 'cover';
+      container.style.backgroundPosition = 'center';
+      
+      clonedStage.style.backgroundImage = `url('${bgUrl}')`;
+      clonedStage.style.backgroundSize = 'cover';
+      clonedStage.style.backgroundPosition = 'center';
+      
+      container.appendChild(clonedStage);
+    }
+  }
+
+  // Handle Free vs School mode layout
+  const resultsBlock = document.querySelector('.social-results-block');
+  const tagInfo = $('score-tag-info');
+  
+  // Set titles and block headers based on language
+  const commentsTitle = $('comments-title-text');
+  if (commentsTitle) {
+    commentsTitle.textContent = lang === 'ru' ? 'Комментарии фанатов' : 'Fan Comments';
+  }
+  const resultsTitle = $('results-title-text');
+  if (resultsTitle) {
+    resultsTitle.textContent = lang === 'ru' ? 'Результаты публикации' : 'Publication Results';
+  }
+  const followersGainTitle = $('followers-gain-title');
+  if (followersGainTitle) {
+    followersGainTitle.textContent = lang === 'ru' ? 'Прирост фанатов' : 'Followers Gained';
+  }
+
+  // Calculate and display dynamic social media stats (likes, comments, shares)
+  const likesEl = $('stat-likes');
+  const commentsCountEl = $('stat-comments-count');
+  const sharesEl = $('stat-shares');
+  let commentsCount = 0;
+  if (likesEl && commentsCountEl && sharesEl) {
+    let likes = 0;
+    if (isFree) {
+      likes = Math.floor(Math.random() * 4000) + 3000;
+    } else {
+      likes = socialStats ? socialStats.likes : 0;
+    }
+    commentsCount = Math.floor(likes * 0.024) + 3;
+    const shares = Math.floor(likes * 0.007);
+    
+    // Set to 0 initially
+    likesEl.textContent = '0';
+    commentsCountEl.textContent = '0';
+    sharesEl.textContent = '0';
+    
+    // Animate stats counting up and trigger floating hearts
+    setTimeout(() => {
+      animateStatsCounter(likesEl, likes, true);
+      animateStatsCounter(commentsCountEl, commentsCount, false);
+      animateStatsCounter(sharesEl, shares, false);
+    }, 400);
+    
+    setTimeout(() => {
+      spawnFloatingHearts();
+    }, 500);
+  }
+
+  const assignTitleEl = $('score-assignment-title');
+  if (isFree) {
+    if (assignTitleEl) {
+      assignTitleEl.textContent = lang === 'ru' ? '📍 Свободная фотосессия' : '📍 Free Photoshoot';
+    }
+    $('score-post-text').textContent = lang === 'ru' 
+      ? 'Мой новый образ в свободном стиле! Как вам такое сочетание? 💫 #kpop #freestyle' 
+      : 'My new outfit in free style! Do you like this combination? 💫 #kpop #freestyle';
+    
+    if (tagInfo) tagInfo.style.display = 'none';
+    if (resultsBlock) resultsBlock.style.display = 'none';
+  } else {
+    if (assignTitleEl) {
+      assignTitleEl.textContent = tf('scoreResults', { title: assignmentTitle(assignment) });
+    }
+    $('score-post-text').textContent = getPostTextForActivity(assignment.id);
+    
+    if (tagInfo) {
+      tagInfo.style.display = 'block';
+      tagInfo.textContent = tf('scoreRequired', {
+        tags: translateTags(assignment.requiredTags).join(', '),
+        m: result.matched,
+        r: result.req.length,
+        f: result.filled,
+        t: result.totalSlots,
+      });
+    }
+    if (resultsBlock) resultsBlock.style.display = 'block';
+  }
+
+  // Set unit text next to total followers gained
+  $('score-total-unit').textContent = lang === 'ru' ? ' фанатов' : ' fans';
+
+  const socialComments = generateSocialComments(result, assignment);
+  
+  // Handle rewards display (show in school/promo mode, hide in free mode)
+  const rewardRow = $('score-reward-row');
+  if (rewardRow) {
+    if (isFree) {
+      rewardRow.style.display = 'none';
+    } else {
+      rewardRow.style.display = 'flex';
+      $('score-reward-label').textContent = lang === 'ru' ? 'Награда:' : 'Reward:';
+      $('score-reward-value').textContent = `+${earned || 0} ⭐`;
+    }
+  }
+
+  if (!isFree) {
+    // Dynamic reach badge
+    const reachVal = $('score-reach-value');
+    if (reachVal) {
+      reachVal.className = 'reach-text'; // reset
+      if (result.stars >= 4.5) {
+        reachVal.textContent = (lang === 'ru' ? 'вирусный' : 'viral') + ' 🔥';
+        reachVal.classList.add('reach-viral');
+      } else if (result.stars >= 3.5) {
+        reachVal.textContent = (lang === 'ru' ? 'высокий' : 'high') + ' ✨';
+        reachVal.classList.add('reach-high');
+      } else if (result.stars >= 2.5) {
+        reachVal.textContent = lang === 'ru' ? 'средний' : 'medium';
+        reachVal.classList.add('reach-medium');
+      } else {
+        reachVal.textContent = lang === 'ru' ? 'низкий' : 'low';
+        reachVal.classList.add('reach-low');
+      }
+    }
+
+    const totalEl = $('score-total-num');
+    if (totalEl) {
+      totalEl.innerHTML = getStarsHTML(result.stars);
+    }
+
+    const gainedEl = $('score-followers-gained');
+    if (gainedEl) {
+      gainedEl.textContent = '0';
+      const followersVal = socialStats ? socialStats.followers : 0;
+      setTimeout(() => animateCounter(gainedEl, followersVal, 900), 800);
+    }
+  }
+
+  // Comments slider overlay state
+  let activeCommentIndex = 0;
+  let isAnimating = false;
+  const commentStates = [
+    { liked: false, reaction: null },
+    { liked: false, reaction: null },
+    { liked: false, reaction: null }
+  ];
+  const commentTimes = [
+    lang === 'ru' ? '2м' : '2m',
+    lang === 'ru' ? '5м' : '5m',
+    lang === 'ru' ? '10м' : '10m'
+  ];
+
+  // Inject comments overlay into the image container
+  const imgContainer = $('score-post-image-container');
+  if (imgContainer && socialComments && socialComments.length > 0) {
+    // Remove any existing overlay first to prevent duplicates
+    const oldOverlay = $('score-comment-overlay');
+    if (oldOverlay) oldOverlay.remove();
+
+    imgContainer.insertAdjacentHTML('beforeend', `
+      <div id="score-comment-overlay" class="score-comment-overlay">
+        <button class="score-comment-arrow prev-btn" id="overlay-comment-prev" type="button">&lsaquo;</button>
+        <div class="score-comment-content">
+          <div class="score-comment-main">
+            <div class="score-comment-avatar" id="overlay-avatar"></div>
+            <div class="score-comment-text-block">
+              <span class="score-comment-nick" id="overlay-nick"></span>
+              <span class="score-comment-text" id="overlay-comment-text"></span>
+            </div>
+          </div>
+          <div class="score-comment-actions-row">
+            <span class="score-comment-time" id="overlay-time"></span>
+            <span class="score-comment-action-btn score-like-btn" id="overlay-like-btn"></span>
+            <span class="score-comment-action-btn score-reply-btn" id="overlay-reply-btn"></span>
+          </div>
+        </div>
+        <button class="score-comment-arrow next-btn" id="overlay-comment-next" type="button">&rsaquo;</button>
+      </div>
+    `);
+
+    const updateActiveComment = () => {
+      const comment = socialComments[activeCommentIndex];
+      if (!comment) return;
+
+      const avatarEl = $('overlay-avatar');
+      const nickEl = $('overlay-nick');
+      const textEl = $('overlay-comment-text');
+      const timeEl = $('overlay-time');
+      const likeBtn = $('overlay-like-btn');
+      const replyBtn = $('overlay-reply-btn');
+
+      if (avatarEl) avatarEl.textContent = comment.emoji;
+      if (nickEl) nickEl.textContent = comment.nick;
+      if (textEl) textEl.textContent = `"${comment.text}"`;
+      if (timeEl) timeEl.textContent = commentTimes[activeCommentIndex] || '2m';
+
+      const state = commentStates[activeCommentIndex];
+
+      if (likeBtn) {
+        if (state.liked) {
+          likeBtn.textContent = '❤️';
+          likeBtn.classList.add('liked');
+        } else {
+          likeBtn.textContent = lang === 'ru' ? 'Нравится' : 'Like';
+          likeBtn.classList.remove('liked');
+        }
+      }
+
+      if (replyBtn) {
+        if (state.reaction) {
+          replyBtn.textContent = state.reaction;
+          replyBtn.classList.add('has-reaction');
+        } else {
+          replyBtn.textContent = lang === 'ru' ? 'Ответить' : 'Reply';
+          replyBtn.classList.remove('has-reaction');
+        }
+      }
+    };
+
+    // Initialize first comment
+    updateActiveComment();
+
+    // Arrows event listeners
+    const prevBtn = $('overlay-comment-prev');
+    const nextBtn = $('overlay-comment-next');
+
+    if (prevBtn) {
+      prevBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (isAnimating) return;
+        if (picker) picker.classList.add('hidden');
+
+        const contentEl = imgContainer.querySelector('.score-comment-content');
+        if (contentEl) {
+          isAnimating = true;
+          contentEl.classList.remove('comment-slide-next-in', 'comment-slide-next-out', 'comment-slide-prev-in', 'comment-slide-prev-out');
+          contentEl.classList.add('comment-slide-prev-out');
+
+          setTimeout(() => {
+            activeCommentIndex = (activeCommentIndex - 1 + socialComments.length) % socialComments.length;
+            updateActiveComment();
+            contentEl.classList.remove('comment-slide-prev-out');
+            contentEl.classList.add('comment-slide-prev-in');
+            isAnimating = false;
+          }, 200);
+        } else {
+          activeCommentIndex = (activeCommentIndex - 1 + socialComments.length) % socialComments.length;
+          updateActiveComment();
+        }
+      };
+    }
+
+    if (nextBtn) {
+      nextBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (isAnimating) return;
+        if (picker) picker.classList.add('hidden');
+
+        const contentEl = imgContainer.querySelector('.score-comment-content');
+        if (contentEl) {
+          isAnimating = true;
+          contentEl.classList.remove('comment-slide-next-in', 'comment-slide-next-out', 'comment-slide-prev-in', 'comment-slide-prev-out');
+          contentEl.classList.add('comment-slide-next-out');
+
+          setTimeout(() => {
+            activeCommentIndex = (activeCommentIndex + 1) % socialComments.length;
+            updateActiveComment();
+            contentEl.classList.remove('comment-slide-next-out');
+            contentEl.classList.add('comment-slide-next-in');
+            isAnimating = false;
+          }, 200);
+        } else {
+          activeCommentIndex = (activeCommentIndex + 1) % socialComments.length;
+          updateActiveComment();
+        }
+      };
+    }
+
+    // Interactive actions event listeners
+    const likeBtn = $('overlay-like-btn');
+    if (likeBtn) {
+      likeBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (picker) picker.classList.add('hidden');
+        commentStates[activeCommentIndex].liked = !commentStates[activeCommentIndex].liked;
+        updateActiveComment();
+      };
+    }
+
+    const replyBtn = $('overlay-reply-btn');
+    if (replyBtn && picker) {
+      replyBtn.onclick = (e) => {
+        e.stopPropagation();
+        picker.classList.remove('hidden');
+        picker.style.visibility = 'hidden';
+        const pickerHeight = picker.offsetHeight;
+        const pickerWidth = picker.offsetWidth;
+        picker.style.visibility = 'visible';
+
+        const rect = replyBtn.getBoundingClientRect();
+        picker.style.top = `${rect.top - pickerHeight - 8 + window.scrollY}px`;
+        picker.style.left = `${rect.left + (rect.width - pickerWidth) / 2 + window.scrollX}px`;
+
+        const closeHandler = (evt) => {
+          if (picker && !picker.contains(evt.target)) {
+            picker.classList.add('hidden');
+            document.removeEventListener('click', closeHandler);
+          }
+        };
+        setTimeout(() => {
+          document.addEventListener('click', closeHandler);
+        }, 50);
+      };
+
+      const emojiOptions = picker.querySelectorAll('.emoji-option');
+      emojiOptions.forEach(opt => {
+        opt.onclick = (e) => {
+          e.stopPropagation();
+          commentStates[activeCommentIndex].reaction = opt.dataset.emoji;
+          updateActiveComment();
+          picker.classList.add('hidden');
+        };
+      });
+
+      const clearOpt = picker.querySelector('.emoji-option-clear');
+      if (clearOpt) {
+        clearOpt.onclick = (e) => {
+          e.stopPropagation();
+          commentStates[activeCommentIndex].reaction = null;
+          updateActiveComment();
+          picker.classList.add('hidden');
+        };
+      }
+    }
+  }
+
+  // Next / Close button handler
+  if (isFree) {
+    $('btn-next-lesson').textContent = lang === 'ru' ? 'Закрыть' : 'Close';
+    $('btn-next-lesson').onclick = () => {
+      if (picker) picker.classList.add('hidden');
+      $('score-modal').classList.add('hidden');
+    };
+  } else {
+    const isLast = school.lessonIndex >= 4;
+    $('btn-next-lesson').textContent = isLast ? t('btnSeeResults') : t('btnNextClass');
+    $('btn-next-lesson').onclick = () => {
+      if (picker) picker.classList.add('hidden');
+      $('score-modal').classList.add('hidden');
+      showFullscreenAd(() => {
+        if (isLast) {
+          showDailySummary();
+          $('btn-runway').disabled = false;
+        } else {
+          school.lessonIndex++;
+          showAssignmentBanner();
+          resetOutfit();
+          $('btn-runway').disabled = false;
+        }
+      });
+    };
+  }
+
+  $('btn-share-score-label').textContent = lang === 'ru' ? 'Сохранить фото' : 'Save Photo';
+  
+  // Custom click for sharing/downloading the post image in high res
+  $('btn-share-score').onclick = () => {
+    // If download is needed, we can trigger the standard save flow
+    shareOutfit();
+  };
+
+  // ── Удвой награду (только если score >= 50 и не свободный режим) ───────────────
   const dblBtn  = $('btn-double-reward');
   const retryBtn = $('btn-retry-lesson');
   retryBtn.classList.add('hidden');
 
   earned = earned || 0;
-  if (result.total >= 50) {
+  if (!isFree && result.stars >= 3) {
     let doubled = false;
     dblBtn.textContent = lang === 'ru'
-      ? `📺 Удвой награду (+${earned} ⭐)`
+      ? `📺 Удвоить награду (+${earned} ⭐)`
       : `📺 Double reward (+${earned} ⭐)`;
     dblBtn.classList.remove('hidden');
     dblBtn.onclick = () => {
@@ -2854,7 +3603,7 @@ function showScoreScreen(assignment, result, earned) {
           },
         });
       } else {
-        onRewarded(); // dev-режим
+        onRewarded();
       }
     };
   } else {
@@ -2869,40 +3618,47 @@ function showScoreScreen(assignment, result, earned) {
 // ────────────────────────────────────────────────────────────
 
 function showDailySummary() {
-  const dayTotal = school.lessonScores.reduce((a, b) => a + b, 0);
-  school.totalScore += dayTotal;
+  const starsTotal = school.lessonScores.reduce((a, b) => a + b, 0);
   saveSchoolProgress();
 
-  const rank     = getRank(school.totalScore);
+  const rank     = getRank(school.totalFollowers);
   const nextRank = RANKS[RANKS.indexOf(rank) + 1] || null;
-  const pct      = dayTotal / 500;
+  const pct      = starsTotal / 25;
   const gradeEmoji = pct >= 0.9 ? '👑' : pct >= 0.75 ? '🌟' : pct >= 0.55 ? '⭐' : pct >= 0.35 ? '💜' : '🌱';
 
   $('summary-emoji-big').textContent = gradeEmoji;
   $('summary-title').textContent     = tf('summaryTitle',    { d: school.day });
-  $('summary-day-score').textContent = tf('summaryDayScore', { s: dayTotal });
+  $('summary-day-score').textContent = tf('summaryDayScore', { s: formatFollowers(school.dayFollowersGained) });
 
   const list = $('summary-lessons-list');
   list.innerHTML = '';
   school.schedule.forEach((a, i) => {
     const row = document.createElement('div');
     row.className = 'summary-lesson-row';
+    const starsNum = school.lessonScores[i] || 0;
     row.innerHTML = `
       <span class="summary-lesson-name">${assignmentTitle(a)}</span>
-      <span class="summary-lesson-score">${school.lessonScores[i] || 0}/100</span>
+      <span class="summary-lesson-score">${getStarsHTML(starsNum)}</span>
     `;
     list.appendChild(row);
   });
 
   $('summary-rank-badge').textContent = tf('summaryRankLine', {
     rank: t(rank.nameKey),
-    pts:  school.totalScore,
+    pts:  formatFollowers(school.totalFollowers),
   });
 
-  if (nextRank) {
-    const progress = (school.totalScore - rank.minScore) / (nextRank.minScore - rank.minScore);
+  if (school.totalFollowers >= GOAL_FOLLOWERS) {
+    $('summary-emoji-big').textContent = '🏆';
+    $('summary-rank-bar').style.width = '100%';
+    const congradText = lang === 'ru' 
+      ? '🎉 1 МИЛЛИОН ФАНАТОВ! 🎉<br>Вы стали легендами K-Pop!' 
+      : '🎉 1 MILLION FANS! 🎉<br>You are now ultimate K-Pop Legends!';
+    $('summary-rank-next').innerHTML = `<span style="color: #d97706; font-weight: 800; font-size: 1.1rem;">${congradText}</span>`;
+  } else if (nextRank) {
+    const progress = (school.totalFollowers - rank.minFollowers) / (nextRank.minFollowers - rank.minFollowers);
     setTimeout(() => { $('summary-rank-bar').style.width = Math.min(progress * 100, 100) + '%'; }, 400);
-    $('summary-rank-next').textContent = tf('summaryNextRank', { name: t(nextRank.nameKey), at: nextRank.minScore });
+    $('summary-rank-next').textContent = tf('summaryNextRank', { name: t(nextRank.nameKey), at: formatFollowers(nextRank.minFollowers) });
   } else {
     $('summary-rank-bar').style.width = '100%';
     $('summary-rank-next').textContent = t('summaryMaxRank');
@@ -2919,28 +3675,66 @@ function showDailySummary() {
 
 function onRunwayClick() {
   if (!school.active) {
-    // Свободный режим — просто показываем подиум без оценки
+    // Free mode — snap photo, trigger flash and open post overlay
     hideCtxHint();
     prog.runwayCount = (prog.runwayCount || 0) + 1;
     saveProgress();
     checkAchievements();
-    sfxRunway();
-    showCatwalk(null, () => {});
+    
+    // Play shutter sound, trigger visual flash, and clone DOM stage instantly
+    $('btn-runway').disabled = true;
+    triggerCameraFlash(() => {
+      showScoreScreen(null, null, 0);
+      $('btn-runway').disabled = false;
+    });
     return;
   }
   const assignment = school.schedule[school.lessonIndex];
   if (!assignment) return; // guard: schedule not ready yet
   hideCtxHint();
   $('btn-runway').disabled = true;
-  const result     = scoreOutfit(assignment);
-  school.lessonScores.push(result.total);
+  
+  const result = scoreOutfit(assignment);
+  school.lessonScores.push(result.stars); // Store stars (0-5)
 
-  // Award stars for this lesson
-  const earned = result.total >= 50 ? 8 + Math.floor(result.total / 8) : 0;
+  // ── Growing reach: max followers = postNumber × 150 ──
+  school.totalPosts++;
+  const maxFollowers = school.totalPosts * FOLLOWERS_PER_POST_MULTIPLIER;
+
+  // ── Followers earned ──
+  let followers;
+  if (result.isNaked) {
+    followers = Math.floor(Math.random() * 10) + 1;
+  } else {
+    let pct;
+    const floorStars = Math.floor(result.stars);
+    const ceilStars = Math.ceil(result.stars);
+    if (floorStars === ceilStars) {
+      pct = STAR_FOLLOWER_PCT[floorStars];
+    } else {
+      const pctFloor = STAR_FOLLOWER_PCT[floorStars] || 0.30;
+      const pctCeil  = STAR_FOLLOWER_PCT[ceilStars] || 1.00;
+      pct = pctFloor + (result.stars - floorStars) * (pctCeil - pctFloor);
+    }
+    followers = Math.round(maxFollowers * pct * (1 + Math.random() * 0.05));
+  }
+
+  school.totalFollowers += followers;
+  school.dayFollowersGained += followers;
+
+  // ── Likes ──
+  const [lMin, lMax] = LIKE_MULTIPLIER;
+  const likes = followers * (Math.floor(Math.random() * (lMax - lMin + 1)) + lMin);
+
+  // ── Stars (currency) reward ──
+  const earned = result.stars >= 2 ? Math.round(6 + result.stars * 3) : 0;
+  // 0★=0, 1★=0, 2★=12, 3★=15, 4★=18, 5★=21
+
   prog.totalLessons++;
   prog.runwayCount = (prog.runwayCount || 0) + 1;
-  if (result.total > prog.highScore) prog.highScore = result.total;
-  if (result.total >= 100) prog.perfectCount = (prog.perfectCount || 0) + 1;
+  if (result.score > prog.highScore) prog.highScore = result.score;
+  if (result.stars >= 5) prog.perfectCount = (prog.perfectCount || 0) + 1;
+
   // Bonus for daily challenge
   const isDaily = assignment.id === prog.dailyTaskId && !prog.dailyTaskDone;
   if (isDaily) {
@@ -2951,11 +3745,12 @@ function onRunwayClick() {
   const dailyBonus = isDaily ? 15 : 0;
   addStars(earned + dailyBonus);
   checkAchievements();
+  saveSchoolProgress();
 
-  sfxRunway();
-  showCatwalk(assignment, () => {
-    showScoreScreen(assignment, result, earned + dailyBonus);
-    sfxScore(result.total);
+  // Instant shutter click + flash -> show post and results using stage cloning
+  triggerCameraFlash(() => {
+    showScoreScreen(assignment, result, earned + dailyBonus, { followers, likes, maxFollowers });
+    sfxScore(result.score);
   });
 }
 
@@ -3171,6 +3966,7 @@ async function init() {
     school.day++;
     school.lessonIndex  = 0;
     school.lessonScores = [];
+    school.dayFollowersGained = 0;
     buildDaySchedule();
     showAssignmentBanner();
     resetOutfit();
@@ -3246,7 +4042,7 @@ function buildIntroCharacter() {
 
   // Default intro outfit: hair + shirt + jeans + sneakers
   const introOutfit = [
-    { cat: 'hair',       id: 'hair_none'  },
+    { cat: 'hair',       id: 'blunt_bob_pink_headband'  },
     { cat: 'tops',       id: 'top_dress_new_1'  },
     { cat: 'bottoms',    id: 'bot_none'   },
     { cat: 'shoes',      id: 'shoe_none'      },
