@@ -69,7 +69,7 @@ const T = {
     btnExitSchool:   '🎨 Free Style Mode',
     // Ranks
     rankTrainee:     '🌱 Nugu (Rookies)',
-    rankDebut:       '⭐ Rising Stars',
+    rankDebut:       '💖 Rising Stars',
     rankIdol:        '🌟 Chart Toppers',
     rankStar:        '👑 K-Pop Legends',
     // Outfit names (free mode)
@@ -118,7 +118,7 @@ const T = {
     btnExitSchool:   '🎨 Свободный стиль',
     // Ranks
     rankTrainee:     '🌱 Nugu (Новички)',
-    rankDebut:       '⭐ Восходящие звёзды',
+    rankDebut:       '💖 Восходящие звёзды',
     rankIdol:        '🌟 Лидеры чартов',
     rankStar:        '👑 K-Pop Легенды',
     // Outfit names (free mode)
@@ -247,12 +247,12 @@ function showFullscreenAd(onDone) {
 let _payments = null;
 let _catalog  = []; // реальные данные о товарах из каталога Яндекса
 
-// Пакеты звёзд. id должны совпадать с продуктами в консоли Яндекс Игр.
+// Пакеты звёзд (теперь дают лайки). id должны совпадать с продуктами в консоли Яндекс Игр.
 const STAR_PACKAGES = [
-  { id: 'stars_30',  stars:  30, bonus: 0,   icon: '⭐' },
-  { id: 'stars_150', stars: 150, bonus: 0,   icon: '🌟' },
-  { id: 'stars_300', stars: 300, bonus: 30,  icon: '💫', popular: true },
-  { id: 'stars_600', stars: 600, bonus: 100, icon: '✨' },
+  { id: 'stars_30',  likes:  3000, bonus: 0,     icon: '❤️' },
+  { id: 'stars_150', likes: 15000, bonus: 0,     icon: '💖' },
+  { id: 'stars_300', likes: 30000, bonus: 3000,  icon: '💝', popular: true },
+  { id: 'stars_600', likes: 60000, bonus: 10000, icon: '💕' },
 ];
 
 async function initPayments() {
@@ -278,7 +278,7 @@ async function restorePurchases() {
     const purchases = await _payments.getPurchases();
     for (const p of purchases) {
       const pkg = STAR_PACKAGES.find(pk => pk.id === p.productID);
-      if (pkg) addStars(pkg.stars + pkg.bonus);
+      if (pkg) addLikes(pkg.likes + pkg.bonus);
       // Консумируем все покупки, даже неизвестные (п. 1.13.1)
       await _payments.consumePurchase(p.purchaseToken);
     }
@@ -317,14 +317,14 @@ async function buyStarPackage(pkg, cardEl) {
 }
 
 function grantStarPackage(pkg) {
-  const total = pkg.stars + pkg.bonus;
-  addStars(total);
+  const total = pkg.likes + pkg.bonus;
+  addLikes(total);
   buildItemsGrid(activeCategory);
   spawnSparkles(14);
   sfxUnlock();
   const msg = pkg.bonus > 0
-    ? (lang === 'ru' ? `+${pkg.stars} ⭐ и +${pkg.bonus} бонус!` : `+${pkg.stars} ⭐ + ${pkg.bonus} bonus!`)
-    : `+${pkg.stars} ⭐`;
+    ? (lang === 'ru' ? `+${formatLikes(pkg.likes)} ❤️ и +${formatLikes(pkg.bonus)} бонус!` : `+${formatLikes(pkg.likes)} ❤️ + ${formatLikes(pkg.bonus)} bonus!`)
+    : `+${formatLikes(pkg.likes)} ❤️`;
   showToast(msg);
 }
 
@@ -335,16 +335,16 @@ function showShopModal() {
 
   const titleEl = $('shop-title');
   const subtitleEl = $('shop-subtitle');
-  if (titleEl) titleEl.textContent = lang === 'ru' ? 'Магазин звёзд' : 'Star Shop';
-  if (subtitleEl) subtitleEl.textContent = lang === 'ru' ? 'Покупай звёзды и открывай новые вещи!' : 'Buy stars and unlock new items!';
+  if (titleEl) titleEl.textContent = lang === 'ru' ? 'Магазин лайков' : 'Like Shop';
+  if (subtitleEl) subtitleEl.textContent = lang === 'ru' ? 'Набирай популярность и открывай новые вещи!' : 'Grow your popularity and unlock new items!';
 
-  // ── Кнопка "10 звёзд за рекламу" (во всю ширину, сверху) ──
+  // ── Кнопка "1000 лайков за рекламу" (во всю ширину, сверху) ──
   const adCard = document.createElement('div');
   adCard.className = 'shop-ad-card';
   adCard.innerHTML = `
     <span class="shop-ad-icon">📺</span>
     <span class="shop-ad-text">
-      <b>+10 ⭐</b> — ${lang === 'ru' ? 'за просмотр рекламы' : 'watch an ad'}
+      <b>+1 000 ❤️</b> — ${lang === 'ru' ? 'за просмотр рекламы' : 'watch an ad'}
     </span>
     <span class="shop-ad-btn">${lang === 'ru' ? 'Смотреть' : 'Watch'}</span>`;
   adCard.addEventListener('click', () => {
@@ -362,7 +362,7 @@ function showShopModal() {
             _adShowing = false;
             adCard.classList.remove('loading');
             if (_actx && soundOn) _actx.resume(); resumeBGM();
-            if (_rewarded) { addStars(10); spawnSparkles(8); showToast('+10 ⭐'); }
+            if (_rewarded) { addLikes(1000); spawnSparkles(8); showToast('+1 000 ❤️'); }
           },
           onError: () => {
             _adShowing = false;
@@ -373,13 +373,13 @@ function showShopModal() {
         },
       });
     } else {
-      addStars(10); spawnSparkles(8); showToast('+10 ⭐ (dev)');
+      addLikes(1000); spawnSparkles(8); showToast('+1 000 ❤️ (dev)');
       adCard.classList.remove('loading');
     }
   });
   container.appendChild(adCard);
 
-  // ── Пакеты звёзд (сетка 2×2) ──
+  // ── Пакеты лайков (сетка 2×2) ──
   const grid = document.createElement('div');
   grid.className = 'shop-grid';
 
@@ -388,7 +388,7 @@ function showShopModal() {
     card.className = 'shop-card' + (pkg.popular ? ' popular' : '');
 
     const bonusLine = pkg.bonus > 0
-      ? `<div class="shop-card-bonus">+${pkg.bonus} ${lang === 'ru' ? 'бонус!' : 'bonus!'}</div>`
+      ? `<div class="shop-card-bonus">+${formatLikes(pkg.bonus)} ${lang === 'ru' ? 'бонус!' : 'bonus!'}</div>`
       : `<div class="shop-card-bonus"></div>`;
 
     const badgeHtml = pkg.popular
@@ -398,7 +398,7 @@ function showShopModal() {
     card.innerHTML = `
       ${badgeHtml}
       <div class="shop-card-icon">${pkg.icon}</div>
-      <div class="shop-card-stars">${pkg.stars + pkg.bonus} ⭐</div>
+      <div class="shop-card-stars">${formatLikes(pkg.likes + pkg.bonus)} ❤️</div>
       ${bonusLine}
       <div class="shop-card-price">${(_catalog.find(c=>c.id===pkg.id)||{}).price||"—"}</div>`;
 
@@ -725,6 +725,7 @@ const REVIEW_ITEM = null; // Black Mesh Cocktail
 const PROG_KEY = 'kpop_progress_v1';
 
 let prog = {
+  likes: 12000, likesEarned: 12000,
   stars: 120, starsEarned: 120,
   unlocked: [],
   achievements: {},
@@ -749,6 +750,16 @@ async function loadProgress() {
       }
     } catch(e) { console.warn('[Player] getData error:', e); }
   }
+  // Миграция: если у игрока старые сохранения со звёздами, переводим их в лайки (1 звезда = 100 лайков)
+  if (prog.likes === undefined) {
+    if (prog.stars !== undefined) {
+      prog.likes = prog.stars * 100;
+      prog.likesEarned = (prog.starsEarned || prog.stars) * 100;
+    } else {
+      prog.likes = 12000;
+      prog.likesEarned = 12000;
+    }
+  }
 }
 function saveProgress() {
   try { localStorage.setItem(PROG_KEY, JSON.stringify(prog)); } catch(e) {}
@@ -764,26 +775,35 @@ function isUnlocked(itemId) {
   return FREE_ITEMS.has(itemId) || prog.unlocked.includes(itemId);
 }
 function itemCost(itemId) { return ITEM_COSTS[itemId] ?? 0; }
+function itemLikesCost(itemId) { return (ITEM_COSTS[itemId] ?? 0) * 100; }
+
+function formatLikes(n) {
+  return n.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US');
+}
 
 // ────────────────────────────────────────────────────────────
-// PROGRESSION — STARS
+// PROGRESSION — LIKES
 // ────────────────────────────────────────────────────────────
 
-function addStars(n) {
-  prog.stars      += n;
-  prog.starsEarned = (prog.starsEarned || 0) + n;
+function addLikes(n) {
+  prog.likes = (prog.likes || 0) + n;
+  prog.likesEarned = (prog.likesEarned || 0) + n;
   saveProgress();
-  updateStarsDisplay();
+  updateLikesDisplay();
   const gain = document.createElement('div');
   gain.className = 'stars-gain-toast';
-  gain.textContent = '+' + n + ' ⭐';
+  gain.textContent = '+' + formatLikes(n) + ' ❤️';
   document.body.appendChild(gain);
   setTimeout(() => gain.remove(), 1800);
 }
 
-function updateStarsDisplay() {
+// Legacy aliases to prevent errors
+function addStars(n) { addLikes(n * 100); }
+function updateStarsDisplay() { updateLikesDisplay(); }
+
+function updateLikesDisplay() {
   const el = $('stars-count');
-  if (el) el.textContent = prog.stars;
+  if (el) el.textContent = formatLikes(prog.likes);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -809,7 +829,7 @@ function tryEquipOrBuy(category, itemId) {
     return;
   }
 
-  const cost = getDailyDealCost(itemId);
+  const cost = getDailyDealLikesCost(itemId);
   _buyPending = itemId;
   showBuyBar(category, itemId, cost);
 }
@@ -823,7 +843,7 @@ function showBuyBar(category, itemId, cost) {
   }
   const item = findItem(category, itemId);
   const isDeal = itemId === getDailyDealId();
-  const origCost = itemCost(itemId);
+  const origCost = itemLikesCost(itemId);
   const isAd = AD_ITEMS.has(itemId);
   const isReview = itemId === REVIEW_ITEM;
 
@@ -858,18 +878,18 @@ function showBuyBar(category, itemId, cost) {
       e.stopPropagation(); showReviewForItem(category, itemId);
     };
   } else {
-    const canBuy = prog.stars >= cost;
+    const canBuy = prog.likes >= cost;
     const shopHint = !canBuy
       ? `<button class="buy-bar-gem-hint" id="buy-bar-shop">
-           💎 ${lang === 'ru' ? 'Купить звёзды' : 'Buy stars'}
+           💖 ${lang === 'ru' ? 'Купить лайки' : 'Buy Likes'}
          </button>`
       : '';
     bar.innerHTML = `
       <div class="buy-bar-name">${iName(item)}${isDeal ? ' 🔥' : ''}</div>
-      ${isDeal ? `<div class="buy-bar-deal">${origCost}⭐ → <b>${cost}⭐</b></div>` : ''}
+      ${isDeal ? `<div class="buy-bar-deal">${formatLikes(origCost)} ❤️ → <b>${formatLikes(cost)} ❤️</b></div>` : ''}
       <div class="buy-bar-row">
         <button class="buy-bar-btn buy-confirm${canBuy ? '' : ' cant-buy'}" id="buy-bar-yes">
-          ${canBuy ? (lang === 'ru' ? `Купить ${cost}⭐` : `Buy ${cost}⭐`) : (lang === 'ru' ? `Нужно ${cost}⭐` : `Need ${cost}⭐`)}
+          ${canBuy ? (lang === 'ru' ? `Купить ${formatLikes(cost)} ❤️` : `Buy ${formatLikes(cost)} ❤️`) : (lang === 'ru' ? `Нужно ${formatLikes(cost)} ❤️` : `Need ${formatLikes(cost)} ❤️`)}
         </button>
         <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
       </div>
@@ -879,9 +899,9 @@ function showBuyBar(category, itemId, cost) {
       e.stopPropagation();
       if (!canBuy) return;
       _buyPending = null; hideBuyBar();
-      prog.stars -= cost;
+      prog.likes -= cost;
       prog.unlocked.push(itemId);
-      saveProgress(); updateStarsDisplay();
+      saveProgress(); updateLikesDisplay();
       equipItem(category, itemId);
       buildItemsGrid(activeCategory);
       spawnSparkles(8);
@@ -1017,11 +1037,11 @@ function triggerStarsHint() {
     const hasAdOption = [...AD_ITEMS].some(id => !isUnlocked(id));
     const text = hasAdOption
       ? (lang === 'ru'
-          ? '💡 Нажми <b>⭐</b> чтобы купить звёзды<br>или получи вещи <b>бесплатно</b> за рекламу!'
-          : '💡 Tap <b>⭐</b> to buy stars<br>or get items <b>free</b> by watching ads!')
+          ? '💡 Нажми <b>❤️</b> чтобы купить лайки<br>или получи вещи <b>бесплатно</b> за рекламу!'
+          : '💡 Tap <b>❤️</b> to buy Likes<br>or get items <b>free</b> by watching ads!')
       : (lang === 'ru'
-          ? '💡 Нажми <b>⭐</b> чтобы купить звёзды!'
-          : '💡 Tap <b>⭐</b> to buy more stars!');
+          ? '💡 Нажми <b>❤️</b> чтобы купить лайки!'
+          : '💡 Tap <b>❤️</b> to buy more Likes!');
     showCtxHint('stars-display', text, 5000);
   } else {
     // Повторные разы — мягкое покачивание без тултипа
@@ -1123,6 +1143,10 @@ function getDailyDealCost(itemId) {
   return itemId === getDailyDealId() ? Math.ceil(itemCost(itemId) / 2) : itemCost(itemId);
 }
 
+function getDailyDealLikesCost(itemId) {
+  return itemId === getDailyDealId() ? Math.ceil(itemLikesCost(itemId) / 2) : itemLikesCost(itemId);
+}
+
 function refreshDailyTask(today) {
   if (prog.dailyTaskDate === today) return;
   prog.dailyTaskId   = ASSIGNMENTS[dateHash(today) % ASSIGNMENTS.length].id;
@@ -1144,8 +1168,8 @@ function checkDailyLogin() {
     ? prog.loginStreak + 1 : 1;
   prog.lastLoginDate = today;
   saveProgress();
-  const reward = 10 + Math.min((prog.loginStreak - 1) * 3, 15);
-  addStars(reward);
+  const reward = (10 + Math.min((prog.loginStreak - 1) * 3, 15)) * 100;
+  addLikes(reward);
   checkAchievements();
   showDailyLoginPopup(reward);
 }
@@ -1154,10 +1178,10 @@ function showDailyLoginPopup(reward) {
   const popup = $('daily-login-popup');
   if (!popup) return;
   const titleEl = popup.querySelector('.daily-title');
-  if (titleEl) titleEl.textContent = lang === 'ru' ? '🌟 Ежедневный бонус!' : '🌟 Daily Bonus!';
+  if (titleEl) titleEl.textContent = lang === 'ru' ? '❤️ Ежедневный бонус!' : '❤️ Daily Bonus!';
   const collectBtn = $('daily-collect-btn');
   if (collectBtn) collectBtn.textContent = lang === 'ru' ? '✨ Забрать!' : '✨ Collect!';
-  $('daily-stars-reward').textContent = '+' + reward + ' ⭐';
+  $('daily-stars-reward').textContent = '+' + formatLikes(reward) + ' ❤️';
   $('daily-streak-text').textContent  = lang === 'ru'
     ? `День ${prog.loginStreak} подряд 🔥`
     : `Day ${prog.loginStreak} streak 🔥`;
@@ -1172,148 +1196,148 @@ function showDailyLoginPopup(reward) {
 
 const ACHIEVEMENTS = [
   // ── Первые шаги ──────────────────────────────────────────
-  { id:'first_look',    icon:'👗', reward:15,
+  { id:'first_look',    icon:'👗', reward:1500,
     name:'First Look',         name_ru:'Первый образ',
     desc:'Wear something in every slot',      desc_ru:'Надень что-нибудь в каждую категорию',
     check:() => Object.keys(clothes).every(cat => equipped[cat] !== clothes[cat][0].id) },
-  { id:'first_unlock',  icon:'🛒', reward:10,
+  { id:'first_unlock',  icon:'🛒', reward:1000,
     name:'First Purchase',     name_ru:'Первая покупка',
     desc:'Unlock your first item',            desc_ru:'Купи первую вещь',
     check:() => prog.unlocked.length >= 1 },
-  { id:'school_start',  icon:'📚', reward:20,
+  { id:'school_start',  icon:'📚', reward:2000,
     name:"School's In",        name_ru:'Первый звонок',
     desc:'Complete your first lesson',        desc_ru:'Пройди первый урок',
     check:() => prog.totalLessons >= 1 },
-  { id:'runway_debut',  icon:'🌟', reward:20,
+  { id:'runway_debut',  icon:'🌟', reward:2000,
     name:'Runway Debut',       name_ru:'Дебют на подиуме',
     desc:'Walk the runway for the first time',desc_ru:'Выйди на подиум в первый раз',
     check:() => (prog.runwayCount || 0) >= 1 },
 
   // ── Оценки ───────────────────────────────────────────────
-  { id:'grade_b',       icon:'📝', reward:20,
+  { id:'grade_b',       icon:'📝', reward:2000,
     name:'Honor Roll',         name_ru:'Хорошистка',
-    desc:'Score 60+ in a lesson',             desc_ru:'Набери 60+ за урок',
-    check:() => prog.highScore >= 60 },
-  { id:'grade_a',       icon:'⭐', reward:30,
-    name:'A-Student',          name_ru:'Отличница',
-    desc:'Score 80+ in a lesson',             desc_ru:'Набери 80+ за урок',
+    desc:'Earn 80+ points in a post',          desc_ru:'Набери 80+ очков за пост',
     check:() => prog.highScore >= 80 },
-  { id:'perfect',       icon:'💯', reward:50,
+  { id:'grade_a',       icon:'⭐', reward:3000,
+    name:'A-Student',          name_ru:'Отличница',
+    desc:'Earn 150+ points in a post',         desc_ru:'Набери 150+ очков за пост',
+    check:() => prog.highScore >= 150 },
+  { id:'perfect',       icon:'💯', reward:5000,
     name:'Perfection!',        name_ru:'Совершенство!',
-    desc:'Score 100 in a lesson',             desc_ru:'Набери 100 за урок',
-    check:() => prog.highScore >= 100 },
-  { id:'perfect_3',     icon:'🏅', reward:60,
+    desc:'Earn 300+ points in a post',         desc_ru:'Набери 300+ очков за пост',
+    check:() => prog.highScore >= 300 },
+  { id:'perfect_3',     icon:'🏅', reward:6000,
     name:'Triple Perfect',     name_ru:'Три идеала',
-    desc:'Score 100 three times',             desc_ru:'Набери 100 за урок три раза',
-    check:() => (prog.perfectCount || 0) >= 3 },
+    desc:'Earn 300+ points three times',       desc_ru:'Набери 300+ очков за пост три раза',
+    check:() => prog.highScore >= 300 },
 
   // ── Уроки ────────────────────────────────────────────────
-  { id:'fashionista',   icon:'👑', reward:40,
+  { id:'fashionista',   icon:'👑', reward:4000,
     name:'Fashionista',        name_ru:'Фэшионистка',
     desc:'Complete 5 lessons',                desc_ru:'Пройди 5 уроков',
     check:() => prog.totalLessons >= 5 },
-  { id:'lessons_10',    icon:'📖', reward:50,
+  { id:'lessons_10',    icon:'📖', reward:5000,
     name:'Dedicated Student',  name_ru:'Прилежная студентка',
     desc:'Complete 10 lessons',               desc_ru:'Пройди 10 уроков',
     check:() => prog.totalLessons >= 10 },
-  { id:'lessons_25',    icon:'🎓', reward:80,
+  { id:'lessons_25',    icon:'🎓', reward:8000,
     name:'Class President',    name_ru:'Президент класса',
     desc:'Complete 25 lessons',               desc_ru:'Пройди 25 уроков',
     check:() => prog.totalLessons >= 25 },
-  { id:'lessons_50',    icon:'🏆', reward:80,
+  { id:'lessons_50',    icon:'🏆', reward:8000,
     name:'School Legend',      name_ru:'Легенда школы',
     desc:'Complete 50 lessons',               desc_ru:'Пройди 50 уроков',
     check:() => prog.totalLessons >= 50 },
-  { id:'lessons_100',   icon:'👸', reward:120,
+  { id:'lessons_100',   icon:'👸', reward:12000,
     name:'K-Pop Icon',         name_ru:'K-Pop Икона',
     desc:'Complete 100 lessons',              desc_ru:'Пройди 100 уроков',
     check:() => prog.totalLessons >= 100 },
 
   // ── Подиум ───────────────────────────────────────────────
-  { id:'runway_5',      icon:'✨', reward:40,
+  { id:'runway_5',      icon:'✨', reward:4000,
     name:'Runway Regular',     name_ru:'Завсегдатай подиума',
     desc:'Walk the runway 5 times',           desc_ru:'Выйди на подиум 5 раз',
     check:() => (prog.runwayCount || 0) >= 5 },
-  { id:'runway_10',     icon:'💫', reward:60,
+  { id:'runway_10',     icon:'💫', reward:6000,
     name:'Catwalk Queen',      name_ru:'Королева подиума',
     desc:'Walk the runway 10 times',          desc_ru:'Выйди на подиум 10 раз',
     check:() => (prog.runwayCount || 0) >= 10 },
-  { id:'runway_25',     icon:'🦋', reward:60,
+  { id:'runway_25',     icon:'🦋', reward:6000,
     name:'Supermodel',         name_ru:'Супермодель',
     desc:'Walk the runway 25 times',          desc_ru:'Выйди на подиум 25 раз',
     check:() => (prog.runwayCount || 0) >= 25 },
 
   // ── Гардероб ─────────────────────────────────────────────
-  { id:'shopper',       icon:'🛍️', reward:35,
+  { id:'shopper',       icon:'🛍️', reward:3500,
     name:'Shopaholic',         name_ru:'Шопоголик',
     desc:'Unlock 5 items',                    desc_ru:'Купи 5 вещей',
     check:() => prog.unlocked.length >= 5 },
-  { id:'wardrobe_10',   icon:'👚', reward:50,
+  { id:'wardrobe_10',   icon:'👚', reward:5000,
     name:'Fashion Lover',      name_ru:'Любительница моды',
     desc:'Unlock 10 items',                   desc_ru:'Купи 10 вещей',
     check:() => prog.unlocked.length >= 10 },
-  { id:'wardrobe_20',   icon:'🧥', reward:55,
+  { id:'wardrobe_20',   icon:'🧥', reward:5500,
     name:'Style Expert',       name_ru:'Эксперт стиля',
     desc:'Unlock 20 items',                   desc_ru:'Купи 20 вещей',
     check:() => prog.unlocked.length >= 20 },
-  { id:'wardrobe_35',   icon:'💎', reward:70,
+  { id:'wardrobe_35',   icon:'💎', reward:7000,
     name:'Closet Legend',      name_ru:'Легенда гардероба',
     desc:'Unlock 35 items',                   desc_ru:'Купи 35 вещей',
     check:() => prog.unlocked.length >= 35 },
 
   // ── Серия дней ───────────────────────────────────────────
-  { id:'streak_3',      icon:'🔥', reward:30,
+  { id:'streak_3',      icon:'🔥', reward:3000,
     name:'3-Day Streak',       name_ru:'3 дня подряд',
     desc:'Play 3 days in a row',              desc_ru:'Заходи 3 дня подряд',
     check:() => prog.loginStreak >= 3 },
-  { id:'streak_7',      icon:'🌟', reward:60,
+  { id:'streak_7',      icon:'🌟', reward:6000,
     name:'Week Warrior',       name_ru:'Неделя без пропусков',
     desc:'Play 7 days in a row',              desc_ru:'Заходи 7 дней подряд',
     check:() => prog.loginStreak >= 7 },
-  { id:'streak_14',     icon:'💖', reward:60,
+  { id:'streak_14',     icon:'💖', reward:6000,
     name:'Fortnight Fan',      name_ru:'Две недели подряд',
     desc:'Play 14 days in a row',             desc_ru:'Заходи 14 дней подряд',
     check:() => prog.loginStreak >= 14 },
-  { id:'streak_30',     icon:'👑', reward:100,
+  { id:'streak_30',     icon:'👑', reward:10000,
     name:'Idol Dedication',    name_ru:'Преданность идола',
     desc:'Play 30 days in a row',             desc_ru:'Заходи 30 дней подряд',
     check:() => prog.loginStreak >= 30 },
 
   // ── Ежедневные задания ───────────────────────────────────
-  { id:'daily_done',    icon:'📅', reward:20,
+  { id:'daily_done',    icon:'📅', reward:2000,
     name:'Daily Devotee',      name_ru:'Первое задание',
     desc:'Complete a daily challenge',        desc_ru:'Выполни первое ежедневное задание',
     check:() => (prog.dailyTasksCompleted || 0) >= 1 },
-  { id:'daily_5',       icon:'📆', reward:40,
+  { id:'daily_5',       icon:'📆', reward:4000,
     name:'Routine Builder',    name_ru:'Привычка — вторая натура',
     desc:'Complete 5 daily challenges',       desc_ru:'Выполни 5 ежедневных заданий',
     check:() => (prog.dailyTasksCompleted || 0) >= 5 },
-  { id:'daily_10',      icon:'🗓️', reward:60,
+  { id:'daily_10',      icon:'🗓️', reward:6000,
     name:'Daily Champion',     name_ru:'Чемпион дня',
     desc:'Complete 10 daily challenges',      desc_ru:'Выполни 10 ежедневных заданий',
     check:() => (prog.dailyTasksCompleted || 0) >= 10 },
-  { id:'daily_30',      icon:'🏅', reward:100,
+  { id:'daily_30',      icon:'🏅', reward:10000,
     name:'Monthly Master',     name_ru:'Мастер месяца',
     desc:'Complete 30 daily challenges',      desc_ru:'Выполни 30 ежедневных заданий',
     check:() => (prog.dailyTasksCompleted || 0) >= 30 },
 
-  // ── Звёзды ───────────────────────────────────────────────
-  { id:'star200',       icon:'💫', reward:25,
-    name:'Star Collector',     name_ru:'Коллекционер звёзд',
-    desc:'Earn 200 stars total',              desc_ru:'Заработай 200 звёзд суммарно',
-    check:() => (prog.starsEarned || 0) >= 200 },
-  { id:'star500',       icon:'🌠', reward:50,
-    name:'Rising Star',        name_ru:'Восходящая звезда',
-    desc:'Earn 500 stars total',              desc_ru:'Заработай 500 звёзд суммарно',
-    check:() => (prog.starsEarned || 0) >= 500 },
-  { id:'star1000',      icon:'⭐', reward:60,
-    name:'Superstar',          name_ru:'Суперзвезда',
-    desc:'Earn 1000 stars total',             desc_ru:'Заработай 1000 звёзд суммарно',
-    check:() => (prog.starsEarned || 0) >= 1000 },
+  // ── Лайки (бывшие Звёзды) ───────────────────────────────────────────────
+  { id:'star200',       icon:'💫', reward:2500,
+    name:'Like Collector',     name_ru:'Коллекционер лайков',
+    desc:'Earn 20,000 likes total',           desc_ru:'Заработай 20 000 лайков суммарно',
+    check:() => (prog.likesEarned || 0) >= 20000 },
+  { id:'star500',       icon:'🌠', reward:5000,
+    name:'Rising Popularity',   name_ru:'Популярная группа',
+    desc:'Earn 50,000 likes total',           desc_ru:'Заработай 50 000 лайков суммарно',
+    check:() => (prog.likesEarned || 0) >= 50000 },
+  { id:'star1000',      icon:'⭐', reward:6000,
+    name:'Crowd Pleaser',      name_ru:'Любимцы публики',
+    desc:'Earn 100,000 likes total',          desc_ru:'Заработай 100 000 лайков суммарно',
+    check:() => (prog.likesEarned || 0) >= 100000 },
   { id:'star2500',      icon:'🌟', reward:0,
-    name:'K-Pop Legend',       name_ru:'Легенда K-Pop',
-    desc:'Earn 2500 stars total',             desc_ru:'Заработай 2500 звёзд суммарно',
-    check:() => (prog.starsEarned || 0) >= 2500 },
+    name:'Global Idols',       name_ru:'Мировые кумиры',
+    desc:'Earn 250,000 likes total',          desc_ru:'Заработай 250 000 лайков суммарно',
+    check:() => (prog.likesEarned || 0) >= 250000 },
 ];
 
 function checkAchievements() {
@@ -1321,7 +1345,7 @@ function checkAchievements() {
     if (prog.achievements[ach.id] || !ach.check()) return;
     prog.achievements[ach.id] = true;
     saveProgress();
-    if (ach.reward > 0) addStars(ach.reward);
+    if (ach.reward > 0) addLikes(ach.reward);
     showAchievementToast(ach);
   });
 }
@@ -1347,7 +1371,7 @@ function showAchievementToast(ach) {
   el.innerHTML = `<span class="ach-icon">${ach.icon}</span>
     <div><div class="ach-label">${lang === 'ru' ? 'Достижение!' : 'Achievement!'}</div>
     <div class="ach-name">${name}</div>
-    ${ach.reward > 0 ? `<div class="ach-reward">+${ach.reward} ⭐</div>` : ''}</div>`;
+    ${ach.reward > 0 ? `<div class="ach-reward">+${formatLikes(ach.reward)} ❤️</div>` : ''}</div>`;
   document.body.appendChild(el);
   sfxAchievement();
   setTimeout(() => el.classList.add('ach-out'), 2800);
@@ -1377,7 +1401,7 @@ function showAchievementsModal() {
         <div class="ach-row-name">${lang === 'ru' ? ach.name_ru : ach.name}</div>
         <div class="ach-row-desc">${desc}</div>
       </div>
-      ${ach.reward > 0 ? `<div class="ach-row-reward">${done ? '✓' : '+' + ach.reward} ⭐</div>` : ''}`;
+      ${ach.reward > 0 ? `<div class="ach-row-reward">${done ? '✓' : '+' + formatLikes(ach.reward)} ❤️</div>` : ''}`;
     list.appendChild(row);
   });
   modal.classList.remove('hidden');
@@ -1429,6 +1453,20 @@ const TAG_NAMES_RU = {
 function translateTags(tags) {
   if (lang !== 'ru') return tags;
   return tags.map(t => TAG_NAMES_RU[t] || t);
+}
+
+function buildHashtagsHTML(assignment, result) {
+  if (!assignment || !result) return '';
+  const equippedTags = getEquippedTags();
+  const req = assignment.requiredTags || [];
+  
+  return req.map(t => {
+    const matched = equippedTags.includes(t);
+    const label = lang === 'ru' ? (TAG_NAMES_RU[t] || t) : t;
+    const icon = matched ? '✅' : '❌';
+    const tagClass = matched ? 'tag-matched' : 'tag-unmatched';
+    return `<span class="hashtag-badge ${tagClass}">#${label} ${icon}</span>`;
+  }).join(' ');
 }
 
 function getStarsHTML(starsNum) {
@@ -1523,14 +1561,8 @@ function assignmentDesc(a)  { return lang === 'ru' ? a.desc_ru  : a.desc;  }
 // PROGRESSION RANKS
 // ────────────────────────────────────────────────────────────
 
-// Rewards: stars → % of max followers
-const STAR_FOLLOWER_PCT = [0.30, 0.40, 0.55, 0.70, 0.85, 1.00]; // index = stars
-
 // Likes = followers × random(min..max)
 const LIKE_MULTIPLIER = [6, 10];
-
-// Growing reach: max followers per post = postNumber × this
-const FOLLOWERS_PER_POST_MULTIPLIER = 150;
 
 // Ranks by total followers
 const RANKS = [
@@ -1719,9 +1751,9 @@ function sfxRunway() {
   o.connect(g); g.connect(_masterGain);
   o.start(); o.stop(c.currentTime + 0.46);
 }
-function sfxScore(score) {
-  if (score >= 80) sfxAchievement();
-  else if (score >= 50) {
+function sfxScore(trendMultiplier) {
+  if (trendMultiplier >= 1.5) sfxAchievement();
+  else if (trendMultiplier >= 1.3) {
     [[523,.22,.18,0],[659,.22,.18,.09],[784,.22,.28,.18]]
       .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
   } else {
@@ -2070,7 +2102,7 @@ function buildItemsGrid(category) {
   items.forEach(item => {
     const locked = !isUnlocked(item.id);
     const isDeal = locked && item.id === dealId;
-    const cost   = isDeal ? getDailyDealCost(item.id) : itemCost(item.id);
+    const cost   = isDeal ? getDailyDealLikesCost(item.id) : itemLikesCost(item.id);
 
     const card = document.createElement('div');
     card.className = 'item-card'
@@ -2088,13 +2120,13 @@ function buildItemsGrid(category) {
     const isAdItem     = AD_ITEMS.has(item.id);
     const isReviewItem = item.id === REVIEW_ITEM;
     const badge = isDeal
-      ? `<div class="item-deal-badge">🔥 ${cost}⭐</div>`
+      ? `<div class="item-deal-badge">🔥 ${formatLikes(cost)}❤️</div>`
       : locked && isAdItem
         ? `<div class="item-cost-badge item-ad-badge">📺 ${lang === 'ru' ? 'Реклама' : 'Ad'}</div>`
         : locked && isReviewItem
           ? `<div class="item-cost-badge item-review-badge">✍️ ${lang === 'ru' ? 'Отзыв' : 'Review'}</div>`
           : locked && cost > 0
-            ? `<div class="item-cost-badge">${cost}⭐</div>`
+            ? `<div class="item-cost-badge">${formatLikes(cost)}❤️</div>`
             : '';
 
     card.innerHTML = `${thumbHTML}${badge}<span class="item-name">${iName(item)}</span>`;
@@ -2471,37 +2503,30 @@ function scoreOutfit(assignment) {
   const isNaked = !hasDress && !(hasTop && hasBottom);
 
   if (isNaked) {
-    return { stars:0, score:0, matched:0, filled, totalSlots,
-             req:assignment.requiredTags,
+    return { totalPoints:0, rawPoints:0, trendMultiplier:1, trendMatches:0,
+             filled, totalSlots, req:assignment.requiredTags,
              isNaked:true, isRepeat:false, isFreePost:false };
   }
 
-  // ── Free post: stars scaled by fullness (all slots = 5★) ──
+  // ── Base points per slot grow with each post ──
+  const basePerSlot = 10 + Math.floor(school.totalPosts * 0.5);
+  const rawPoints = filled * basePerSlot;
+
+  // ── Free post: no trend multiplier ──
   if (assignment.isFree) {
-    let freeStars = Math.round((filled / totalSlots) * 5 * 2) / 2;
-    if (freeStars === 5 && filled < totalSlots) {
-      freeStars = 4.5;
-    }
-    return { stars:freeStars, score:freeStars * 20, matched:0, filled, totalSlots,
-             req:[], isNaked:false, isRepeat:false, isFreePost:true };
+    return { totalPoints:rawPoints, rawPoints, trendMultiplier:1, trendMatches:0,
+             filled, totalSlots, req:[],
+             isNaked:false, isRepeat:false, isFreePost:true };
   }
 
-  // ── Fullness: up to 3★ ──
-  const fullnessStars = (filled / totalSlots) * 3;
+  // ── Trend multiplier: +0.25 per match, capped at 2.0 ──
+  const req = assignment.requiredTags;
+  const trendMatches = req.filter(t => tags.includes(t)).length;
+  const trendMultiplier = Math.min(1.0 + 0.25 * trendMatches, 2.0);
+  const totalPoints = Math.round(rawPoints * trendMultiplier);
 
-  // ── Theme match: up to 2★ ──
-  const req     = assignment.requiredTags;
-  const matched = req.filter(t => tags.includes(t)).length;
-  const themeStars = (matched / Math.max(req.length, 1)) * 2;
-
-  // ── Total: 0-5, rounded with strict 5★ requirement ──
-  let stars = Math.round((fullnessStars + themeStars) * 2) / 2;
-  if (stars === 5 && (filled < totalSlots || matched < req.length)) {
-    stars = 4.5;
-  }
-
-  const score = stars * 20;
-  return { stars, score, matched, filled, totalSlots, req,
+  return { totalPoints, rawPoints, trendMultiplier, trendMatches,
+           filled, totalSlots, req,
            isNaked:false, isRepeat:false, isFreePost:false };
 }
 
@@ -2681,7 +2706,7 @@ function animateBar(el, pct, delay = 0) {
   setTimeout(() => { el.style.width = pct + '%'; }, delay);
 }
 
-// Smoothly count up raw numbers (e.g. total score)
+// Smoothly count up raw numbers (e.g. total points, followers)
 function animateCounter(el, target, duration = 1000) {
   if (!el) return;
   const start = 0;
@@ -2742,18 +2767,18 @@ function animateStatsCounter(el, targetVal, isLikes = false) {
   requestAnimationFrame(update);
 }
 
-// Generate a stream of floating live-stream style hearts from the likes count icon
+// Generate a stream of floating live-stream style hearts from the post image
 function spawnFloatingHearts() {
   const leftCol = document.querySelector('.score-left-col');
-  const likesStat = $('stat-likes');
-  if (!leftCol || !likesStat) return;
+  const postImage = $('score-post-image-container');
+  if (!leftCol || !postImage) return;
   
-  const rect = likesStat.getBoundingClientRect();
+  const rect = postImage.getBoundingClientRect();
   const parentRect = leftCol.getBoundingClientRect();
   
-  // Calculate spawning position relative to leftCol
+  // Spawn from center-bottom of the post image
   const spawnX = rect.left - parentRect.left + rect.width / 2;
-  const spawnY = rect.top - parentRect.top;
+  const spawnY = rect.top - parentRect.top + rect.height * 0.8;
   
   const heartEmojis = ['❤️', '💖', '💝', '💕', '💗'];
   
@@ -3023,12 +3048,12 @@ function generateSocialComments(result, assignment) {
   const emojis = ['🐼', '🦊', '🐰', '🐱', '🐻', '🐨', '🐯', '🦄', '💖', '✨', '🎵'];
 
   const commentsData = result ? [
-    { type: 'style', val: result.matched, max: result.req.length },
-    { type: 'rating', val: result.stars, max: 5 },
+    { type: 'style', val: result.trendMatches },
+    { type: 'rating', val: result.trendMultiplier },
     { type: 'special' }
   ] : [
-    { type: 'style', val: 0, max: 0, isFreeMode: true },
-    { type: 'rating', val: 4, max: 5, isFreeMode: true },
+    { type: 'style', val: 0, isFreeMode: true },
+    { type: 'rating', val: 1.0, isFreeMode: true },
     { type: 'special', isFreeMode: true }
   ];
 
@@ -3047,15 +3072,15 @@ function generateSocialComments(result, assignment) {
           ? 'Разве тренды разрешают ходить раздетой? 😮'
           : 'Do trends allow going naked? 😮';
       } else {
-        const ratio = c.val / Math.max(c.max, 1);
-        const poolRu = ratio >= 0.8
+        const trendMatches = c.val;
+        const poolRu = trendMatches >= 3
           ? ['Этот образ идеально подходит под тренды! 😍', 'Стиль передан на 100% круто! 🔥', 'Трендовый лук, прямо в точку! 🔥']
-          : ratio >= 0.5
+          : trendMatches >= 1
           ? ['Миленько, но хотелось бы больше вещей в тему.', 'Образ аккуратный, но не хватает яркого трендового акцента.']
           : ['Совсем не попали в стиль события... 😢', 'Странный выбор вещей, концепт провален.', 'Она точно знала, куда одевается?'];
-        const poolEn = ratio >= 0.8
+        const poolEn = trendMatches >= 3
           ? ['This outfit is absolutely perfect for the trends! 😍', 'The style is captured perfectly! 🔥', 'Super trendy look, right on target! 🔥']
-          : ratio >= 0.5
+          : trendMatches >= 1
           ? ['Cute, but I wanted more matching vibes.', 'The outfit is neat, but lacks a bright trend accent.']
           : ['This outfit doesn\'t suit the event at all... 😢', 'Strange choice of items, concept missed.', 'Did she know where she was going?'];
 
@@ -3066,25 +3091,21 @@ function generateSocialComments(result, assignment) {
       if (result && result.isNaked) {
         text = lang === 'ru' ? 'Ужасно, где одежда? 😢' : 'Terrible, where is the clothing? 😢';
       } else {
-        const stars = c.val;
-        const poolRu = stars === 5
+        const mult = c.val;
+        const poolRu = mult >= 2.0
           ? ['🔥 Лучший образ за всю историю! Вирусный хит!', 'Шедевр! Фанаты сходят с ума! 😍✨', 'Просто разрыв! Мой биас прекрасен! 💖']
-          : stars === 4
+          : mult >= 1.5
           ? ['✨ Очень красивый и стильный образ! Лайк!', 'Фанаты в восторге, образ получился супер!', 'Хороший пост, делюсь со всеми друзьями! 🥰']
-          : stars === 3
+          : mult >= 1.3
           ? ['Вполне неплохой наряд, фанаты одобряют 👍', 'Хороший лук, мне нравится!', 'Симпатично! Лайк от меня. 🥰']
-          : stars === 2
-          ? ['Нормально, но бывало и лучше 😕', 'Обычный образ, ничего особенного.', 'Пойдет, но можно было постараться сильнее.']
-          : ['Что-то не то... Ждем исправлений 😢', 'Слабый образ в этот раз.', 'Надеюсь, следующий пост будет интереснее.'];
-        const poolEn = stars === 5
+          : ['Нормально, но бывало и лучше 😕', 'Обычный образ, ничего особенного.', 'Пойдет, но можно было постараться сильнее.'];
+        const poolEn = mult >= 2.0
           ? ['🔥 Best look ever! Absolute viral hit!', 'Masterpiece! Fans are going crazy! 😍✨', 'Absolute perfection! My bias is gorgeous! 💖']
-          : stars === 4
+          : mult >= 1.5
           ? ['✨ Very beautiful and stylish outfit! Liked!', 'Fans love it, the outfit is super cool!', 'Nice post, sharing with all my friends! 🥰']
-          : stars === 3
+          : mult >= 1.3
           ? ['Quite a decent outfit, fans approve 👍', 'Good look, I like it!', 'Cute! Liked. 🥰']
-          : stars === 2
-          ? ['It\'s okay, but could be better 😕', 'Ordinary look, nothing special.', 'Fine, but could be much better.']
-          : ['Something is wrong... waiting for updates 😢', 'Weak look this time.', 'Hope the next post is more interesting.'];
+          : ['It\'s okay, but could be better 😕', 'Ordinary look, nothing special.', 'Fine, but could be much better.'];
 
         const pool = lang === 'ru' ? poolRu : poolEn;
         text = pool[Math.floor(Math.random() * pool.length)];
@@ -3201,52 +3222,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   // Handle Free vs School mode layout
   const resultsBlock = document.querySelector('.social-results-block');
   const tagInfo = $('score-tag-info');
-  
-  // Set titles and block headers based on language
-  const commentsTitle = $('comments-title-text');
-  if (commentsTitle) {
-    commentsTitle.textContent = lang === 'ru' ? 'Комментарии фанатов' : 'Fan Comments';
-  }
-  const resultsTitle = $('results-title-text');
-  if (resultsTitle) {
-    resultsTitle.textContent = lang === 'ru' ? 'Результаты публикации' : 'Publication Results';
-  }
-  const followersGainTitle = $('followers-gain-title');
-  if (followersGainTitle) {
-    followersGainTitle.textContent = lang === 'ru' ? 'Прирост фанатов' : 'Followers Gained';
-  }
 
-  // Calculate and display dynamic social media stats (likes, comments, shares)
-  const likesEl = $('stat-likes');
-  const commentsCountEl = $('stat-comments-count');
-  const sharesEl = $('stat-shares');
-  let commentsCount = 0;
-  if (likesEl && commentsCountEl && sharesEl) {
-    let likes = 0;
-    if (isFree) {
-      likes = Math.floor(Math.random() * 4000) + 3000;
-    } else {
-      likes = socialStats ? socialStats.likes : 0;
-    }
-    commentsCount = Math.floor(likes * 0.024) + 3;
-    const shares = Math.floor(likes * 0.007);
-    
-    // Set to 0 initially
-    likesEl.textContent = '0';
-    commentsCountEl.textContent = '0';
-    sharesEl.textContent = '0';
-    
-    // Animate stats counting up and trigger floating hearts
-    setTimeout(() => {
-      animateStatsCounter(likesEl, likes, true);
-      animateStatsCounter(commentsCountEl, commentsCount, false);
-      animateStatsCounter(sharesEl, shares, false);
-    }, 400);
-    
-    setTimeout(() => {
-      spawnFloatingHearts();
-    }, 500);
-  }
 
   const assignTitleEl = $('score-assignment-title');
   if (isFree) {
@@ -3267,13 +3243,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     
     if (tagInfo) {
       tagInfo.style.display = 'block';
-      tagInfo.textContent = tf('scoreRequired', {
-        tags: translateTags(assignment.requiredTags).join(', '),
-        m: result.matched,
-        r: result.req.length,
-        f: result.filled,
-        t: result.totalSlots,
-      });
+      tagInfo.innerHTML = buildHashtagsHTML(assignment, result);
     }
     if (resultsBlock) resultsBlock.style.display = 'block';
   }
@@ -3290,42 +3260,78 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       rewardRow.style.display = 'none';
     } else {
       rewardRow.style.display = 'flex';
-      $('score-reward-label').textContent = lang === 'ru' ? 'Награда:' : 'Reward:';
-      $('score-reward-value').textContent = `+${earned || 0} ⭐`;
+      $('score-reward-value').textContent = `+${formatLikes(earned || 0)} ❤️`;
     }
   }
 
   if (!isFree) {
-    // Dynamic reach badge
-    const reachVal = $('score-reach-value');
-    if (reachVal) {
-      reachVal.className = 'reach-text'; // reset
-      if (result.stars >= 4.5) {
-        reachVal.textContent = (lang === 'ru' ? 'вирусный' : 'viral') + ' 🔥';
-        reachVal.classList.add('reach-viral');
-      } else if (result.stars >= 3.5) {
-        reachVal.textContent = (lang === 'ru' ? 'высокий' : 'high') + ' ✨';
-        reachVal.classList.add('reach-high');
-      } else if (result.stars >= 2.5) {
-        reachVal.textContent = lang === 'ru' ? 'средний' : 'medium';
-        reachVal.classList.add('reach-medium');
+    // ── Populate breakdown rows ──
+    const itemsLabel = $('score-items-label');
+    const itemsValue = $('score-items-value');
+    const trendLabel = $('score-trend-label');
+    const trendValue = $('score-trend-value');
+    const trendRowEl = $('score-row-trend');
+    const totalPtsEl = $('score-total-points');
+    const totalLabel = $('score-total-label');
+    const breakdownCard = document.querySelector('.score-breakdown');
+
+    if (itemsLabel) {
+      itemsLabel.textContent = lang === 'ru'
+        ? `Образ: ${result.filled}/${result.totalSlots} вещей`
+        : `Outfit: ${result.filled}/${result.totalSlots} items`;
+    }
+    if (itemsValue) {
+      itemsValue.textContent = '0';
+      setTimeout(() => animateCounter(itemsValue, result.rawPoints, 600), 300);
+    }
+
+    // Trend multiplier row — hide if ×1.0
+    if (trendRowEl) {
+      if (result.trendMultiplier > 1.0) {
+        trendRowEl.style.display = 'flex';
+        trendRowEl.classList.add('has-trend');
+        if (trendLabel) {
+          trendLabel.textContent = lang === 'ru'
+            ? `Тренд: ${result.trendMatches} совпад.`
+            : `Trend: ${result.trendMatches} match${result.trendMatches > 1 ? 'es' : ''}`;
+        }
+        if (trendValue) {
+          trendValue.textContent = `×${result.trendMultiplier.toFixed(1)}`;
+        }
       } else {
-        reachVal.textContent = lang === 'ru' ? 'низкий' : 'low';
-        reachVal.classList.add('reach-low');
+        trendRowEl.style.display = 'none';
+        trendRowEl.classList.remove('has-trend');
       }
     }
 
-    const totalEl = $('score-total-num');
-    if (totalEl) {
-      totalEl.innerHTML = getStarsHTML(result.stars);
+    // Total label
+    if (totalLabel) {
+      totalLabel.textContent = lang === 'ru' ? 'Итого' : 'Total';
     }
 
+    // Total points with count-up
+    if (totalPtsEl) {
+      totalPtsEl.textContent = '0';
+      setTimeout(() => animateCounter(totalPtsEl, result.totalPoints, 800), 500);
+    }
+
+    // Viral glow on breakdown card
+    if (breakdownCard) {
+      breakdownCard.classList.toggle('viral-post', result.trendMultiplier >= 2.0);
+    }
+
+    // Followers gained with count-up
     const gainedEl = $('score-followers-gained');
     if (gainedEl) {
       gainedEl.textContent = '0';
       const followersVal = socialStats ? socialStats.followers : 0;
       setTimeout(() => animateCounter(gainedEl, followersVal, 900), 800);
     }
+
+    // Spawn floating hearts for visual flair
+    setTimeout(() => {
+      spawnFloatingHearts();
+    }, 600);
   }
 
   // Comments slider overlay state
@@ -3561,26 +3567,26 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     shareOutfit();
   };
 
-  // ── Удвой награду (только если score >= 50 и не свободный режим) ───────────────
+  // ── Удвой награду (только если trendMultiplier >= 1.3 и не свободный режим) ───────────────
   const dblBtn  = $('btn-double-reward');
   const retryBtn = $('btn-retry-lesson');
   retryBtn.classList.add('hidden');
 
   earned = earned || 0;
-  if (!isFree && result.stars >= 3) {
+  if (!isFree && result.trendMultiplier >= 1.3) {
     let doubled = false;
     dblBtn.textContent = lang === 'ru'
-      ? `📺 Удвоить награду (+${earned} ⭐)`
-      : `📺 Double reward (+${earned} ⭐)`;
+      ? `📺 Удвоить награду (+${formatLikes(earned)} ❤️)`
+      : `📺 Double reward (+${formatLikes(earned)} ❤️)`;
     dblBtn.classList.remove('hidden');
     dblBtn.onclick = () => {
       if (doubled || _adShowing) return;
       const onRewarded = () => {
         doubled = true;
         dblBtn.classList.add('hidden');
-        addStars(earned);
+        addLikes(earned);
         spawnSparkles(12);
-        showToast(`✨ +${earned} ⭐ × 2!`);
+        showToast(`✨ +${formatLikes(earned)} ❤️ × 2!`);
       };
       if (ysdk) {
         _adShowing = true;
@@ -3618,13 +3624,14 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 // ────────────────────────────────────────────────────────────
 
 function showDailySummary() {
-  const starsTotal = school.lessonScores.reduce((a, b) => a + b, 0);
+  const avgScore = school.lessonScores.length > 0 
+    ? Math.round(school.lessonScores.reduce((a, b) => a + b, 0) / school.lessonScores.length)
+    : 0;
   saveSchoolProgress();
 
   const rank     = getRank(school.totalFollowers);
   const nextRank = RANKS[RANKS.indexOf(rank) + 1] || null;
-  const pct      = starsTotal / 25;
-  const gradeEmoji = pct >= 0.9 ? '👑' : pct >= 0.75 ? '🌟' : pct >= 0.55 ? '⭐' : pct >= 0.35 ? '💜' : '🌱';
+  const gradeEmoji = avgScore >= 200 ? '👑' : avgScore >= 100 ? '🌟' : avgScore >= 60 ? '⭐' : avgScore >= 30 ? '💜' : '🌱';
 
   $('summary-emoji-big').textContent = gradeEmoji;
   $('summary-title').textContent     = tf('summaryTitle',    { d: school.day });
@@ -3638,7 +3645,7 @@ function showDailySummary() {
     const starsNum = school.lessonScores[i] || 0;
     row.innerHTML = `
       <span class="summary-lesson-name">${assignmentTitle(a)}</span>
-      <span class="summary-lesson-score">${getStarsHTML(starsNum)}</span>
+      <span class="summary-lesson-score" style="font-weight:700; color:#a855f7;">${starsNum} ${lang === 'ru' ? 'очк.' : 'pts'}</span>
     `;
     list.appendChild(row);
   });
@@ -3695,45 +3702,32 @@ function onRunwayClick() {
   $('btn-runway').disabled = true;
   
   const result = scoreOutfit(assignment);
-  school.lessonScores.push(result.stars); // Store stars (0-5)
+  school.lessonScores.push(result.totalPoints); // Store total points
 
   // ── Growing reach: max followers = postNumber × 150 ──
   school.totalPosts++;
-  const maxFollowers = school.totalPosts * FOLLOWERS_PER_POST_MULTIPLIER;
 
-  // ── Followers earned ──
+  // ── Followers earned = totalPoints directly ──
   let followers;
   if (result.isNaked) {
     followers = Math.floor(Math.random() * 10) + 1;
   } else {
-    let pct;
-    const floorStars = Math.floor(result.stars);
-    const ceilStars = Math.ceil(result.stars);
-    if (floorStars === ceilStars) {
-      pct = STAR_FOLLOWER_PCT[floorStars];
-    } else {
-      const pctFloor = STAR_FOLLOWER_PCT[floorStars] || 0.30;
-      const pctCeil  = STAR_FOLLOWER_PCT[ceilStars] || 1.00;
-      pct = pctFloor + (result.stars - floorStars) * (pctCeil - pctFloor);
-    }
-    followers = Math.round(maxFollowers * pct * (1 + Math.random() * 0.05));
+    followers = result.totalPoints;
   }
 
   school.totalFollowers += followers;
   school.dayFollowersGained += followers;
 
-  // ── Likes ──
+  // ── Social likes (display only, not currency) ──
   const [lMin, lMax] = LIKE_MULTIPLIER;
   const likes = followers * (Math.floor(Math.random() * (lMax - lMin + 1)) + lMin);
 
-  // ── Stars (currency) reward ──
-  const earned = result.stars >= 2 ? Math.round(6 + result.stars * 3) : 0;
-  // 0★=0, 1★=0, 2★=12, 3★=15, 4★=18, 5★=21
+  // ── Likes reward (currency) ──
+  const earned = result.isNaked ? 0 : Math.round(followers * 0.8);
 
   prog.totalLessons++;
   prog.runwayCount = (prog.runwayCount || 0) + 1;
-  if (result.score > prog.highScore) prog.highScore = result.score;
-  if (result.stars >= 5) prog.perfectCount = (prog.perfectCount || 0) + 1;
+  if (result.totalPoints > (prog.highScore || 0)) prog.highScore = result.totalPoints;
 
   // Bonus for daily challenge
   const isDaily = assignment.id === prog.dailyTaskId && !prog.dailyTaskDone;
@@ -3742,15 +3736,15 @@ function onRunwayClick() {
     prog.dailyTasksCompleted = (prog.dailyTasksCompleted || 0) + 1;
   }
   saveProgress();
-  const dailyBonus = isDaily ? 15 : 0;
-  addStars(earned + dailyBonus);
+  const dailyBonus = isDaily ? 1500 : 0;
+  addLikes(earned + dailyBonus);
   checkAchievements();
   saveSchoolProgress();
 
   // Instant shutter click + flash -> show post and results using stage cloning
   triggerCameraFlash(() => {
-    showScoreScreen(assignment, result, earned + dailyBonus, { followers, likes, maxFollowers });
-    sfxScore(result.score);
+    showScoreScreen(assignment, result, earned + dailyBonus, { followers, likes });
+    sfxScore(result.trendMultiplier);
   });
 }
 
@@ -4005,18 +3999,18 @@ async function init() {
 const INTRO_STEPS = {
   ru: [
     { text: 'Привет! Я Ю На! 👋\nТак рада наконец-то познакомиться с тобой!' },
-    { text: 'Мы только что поступили в K-Pop Школу! 🏫✨\nЭто самая крутая школа для будущих идолов!' },
-    { text: 'Наша цель — стать самыми популярными в школе! 👑\nЗдесь всё решает стиль и образ!' },
-    { text: 'Помогай мне подбирать лучшие образы на каждый урок! 💅\nЧем круче образ — тем больше фанатов!' },
-    { text: 'Участвуй в уроках 🏫, выходи на подиум 🌟 и зарабатывай звёзды ⭐\nСтань легендой K-Pop!' },
+    { text: 'Мы только что начали наш K-Pop тур! 🏫✨\nЭто самый захватывающий путь для будущих идолов!' },
+    { text: 'Наша цель — набрать 1 000 000 подписчиков! 👑\nЗдесь всё решает стиль и образ!' },
+    { text: 'Помогай мне подбирать лучшие образы для публикаций! 💅\nЧем круче образ — тем больше фанатов!' },
+    { text: 'Участвуй в промо 🏫, публикуй посты 📱 и собирай лайки ❤️\nСтань легендой K-Pop!' },
     { text: 'Готова? Тогда поехали! Покажем им, кто тут настоящая звезда! 🔥💖', last: true },
   ],
   en: [
     { text: "Hi! I'm Yu Na! 👋\nSo happy to finally meet you!" },
-    { text: "We just enrolled in K-Pop School! 🏫✨\nThe coolest school for future idols!" },
-    { text: "Our goal — become the most popular student! 👑\nHere, style and looks are everything!" },
-    { text: "Help me put together the best outfits for every class! 💅\nBetter looks = more fans!" },
-    { text: "Join classes 🏫, hit the runway 🌟, earn stars ⭐\nBecome a K-Pop legend!" },
+    { text: "We just started our K-Pop tour! 🏫✨\nThe most exciting journey for future idols!" },
+    { text: "Our goal is to reach 1,000,000 subscribers! 👑\nHere, style and looks are everything!" },
+    { text: "Help me put together the best outfits for our posts! 💅\nBetter looks = more fans!" },
+    { text: "Join promos 🏫, publish posts 📱, earn Likes ❤️\nBecome a K-Pop legend!" },
     { text: "Ready? Let's go! Time to show them who the real star is! 🔥💖", last: true },
   ],
 };
@@ -4163,8 +4157,8 @@ function finishIntro() {
     startSchoolMode();
     checkDailyLogin();
     // Small welcome reward
-    addStars(20);
-    showToast(lang === 'ru' ? '🎉 Добро пожаловать! +20 ⭐' : '🎉 Welcome! +20 ⭐');
+    addLikes(2000);
+    showToast(lang === 'ru' ? '🎉 Добро пожаловать! +2 000 ❤️' : '🎉 Welcome! +2,000 ❤️');
   }, { once: true });
 }
 
