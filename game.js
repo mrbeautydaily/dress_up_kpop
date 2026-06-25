@@ -11,6 +11,7 @@
 // ────────────────────────────────────────────────────────────
 
 let lang = detectLangFromBrowser(); // set early; refined after SDK init
+let scoreAutoScrollTimer = null;
 
 function detectLangFromBrowser() {
   // 1. URL-параметр ?lang=ru — Яндекс Игры передают его в URL
@@ -1216,20 +1217,20 @@ const ACHIEVEMENTS = [
   // ── Оценки ───────────────────────────────────────────────
   { id:'grade_b',       icon:'📝', reward:2000,
     name:'Honor Roll',         name_ru:'Хорошистка',
-    desc:'Earn 80+ points in a post',          desc_ru:'Набери 80+ очков за пост',
-    check:() => prog.highScore >= 80 },
+    desc:'Earn 75+ points in a post',          desc_ru:'Набери 75+ очков за пост',
+    check:() => prog.highScore >= 75 },
   { id:'grade_a',       icon:'⭐', reward:3000,
     name:'A-Student',          name_ru:'Отличница',
-    desc:'Earn 150+ points in a post',         desc_ru:'Набери 150+ очков за пост',
-    check:() => prog.highScore >= 150 },
+    desc:'Earn 90+ points in a post',          desc_ru:'Набери 90+ очков за пост',
+    check:() => prog.highScore >= 90 },
   { id:'perfect',       icon:'💯', reward:5000,
     name:'Perfection!',        name_ru:'Совершенство!',
-    desc:'Earn 300+ points in a post',         desc_ru:'Набери 300+ очков за пост',
-    check:() => prog.highScore >= 300 },
+    desc:'Earn 100 points in a post',          desc_ru:'Набери 100 очков за пост',
+    check:() => prog.highScore >= 100 },
   { id:'perfect_3',     icon:'🏅', reward:6000,
     name:'Triple Perfect',     name_ru:'Три идеала',
-    desc:'Earn 300+ points three times',       desc_ru:'Набери 300+ очков за пост три раза',
-    check:() => prog.highScore >= 300 },
+    desc:'Earn 100 points three times',        desc_ru:'Набери 100 очков за пост три раза',
+    check:() => (prog.perfectCount || 0) >= 3 },
 
   // ── Уроки ────────────────────────────────────────────────
   { id:'fashionista',   icon:'👑', reward:4000,
@@ -1751,9 +1752,9 @@ function sfxRunway() {
   o.connect(g); g.connect(_masterGain);
   o.start(); o.stop(c.currentTime + 0.46);
 }
-function sfxScore(trendMultiplier) {
-  if (trendMultiplier >= 1.5) sfxAchievement();
-  else if (trendMultiplier >= 1.3) {
+function sfxScore(trendMatches) {
+  if (trendMatches >= 2) sfxAchievement();
+  else if (trendMatches === 1) {
     [[523,.22,.18,0],[659,.22,.18,.09],[784,.22,.28,.18]]
       .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
   } else {
@@ -2503,31 +2504,35 @@ function scoreOutfit(assignment) {
   const isNaked = !hasDress && !(hasTop && hasBottom);
 
   if (isNaked) {
-    return { totalPoints:0, rawPoints:0, trendMultiplier:1, trendMatches:0,
+    return { totalPoints:0, filledPoints:0, trendPoints:0, trendMatches:0, matchedTrendTags: [],
              filled, totalSlots, req:assignment.requiredTags,
              isNaked:true, isRepeat:false, isFreePost:false };
   }
 
-  // ── Base points per slot grow with each post ──
-  const basePerSlot = 10 + Math.floor(school.totalPosts * 0.5);
-  const rawPoints = filled * basePerSlot;
+  // ── Filled points (up to 50) ──
+  const filledPoints = Math.round((filled / 6) * 50);
 
-  // ── Free post: no trend multiplier ──
+  // ── Trend points (up to 50) ──
+  let trendMatches = 0;
+  let trendPoints = 0;
+  let req = [];
+  let matchedTrendTags = [];
+
   if (assignment.isFree) {
-    return { totalPoints:rawPoints, rawPoints, trendMultiplier:1, trendMatches:0,
-             filled, totalSlots, req:[],
-             isNaked:false, isRepeat:false, isFreePost:true };
+    trendMatches = 2; // Auto-perfect match for free posts
+    trendPoints = 50;
+  } else {
+    req = assignment.requiredTags;
+    matchedTrendTags = req.filter(t => tags.includes(t));
+    trendMatches = matchedTrendTags.length;
+    trendPoints = trendMatches * 25;
   }
 
-  // ── Trend multiplier: +0.25 per match, capped at 2.0 ──
-  const req = assignment.requiredTags;
-  const trendMatches = req.filter(t => tags.includes(t)).length;
-  const trendMultiplier = Math.min(1.0 + 0.25 * trendMatches, 2.0);
-  const totalPoints = Math.round(rawPoints * trendMultiplier);
+  const totalPoints = filledPoints + trendPoints;
 
-  return { totalPoints, rawPoints, trendMultiplier, trendMatches,
+  return { totalPoints, filledPoints, trendPoints, trendMatches, matchedTrendTags,
            filled, totalSlots, req,
-           isNaked:false, isRepeat:false, isFreePost:false };
+           isNaked:false, isRepeat:false, isFreePost:!!assignment.isFree };
 }
 
 // ────────────────────────────────────────────────────────────
@@ -2707,7 +2712,7 @@ function animateBar(el, pct, delay = 0) {
 }
 
 // Smoothly count up raw numbers (e.g. total points, followers)
-function animateCounter(el, target, duration = 1000) {
+function animateCounter(el, target, duration = 1000, prefix = '', suffix = '', format = false) {
   if (!el) return;
   const start = 0;
   const startTime = (window.performance && window.performance.now) ? performance.now() : Date.now();
@@ -2721,12 +2726,14 @@ function animateCounter(el, target, duration = 1000) {
     const easeProgress = progress * (2 - progress);
     const currentValue = Math.floor(start + easeProgress * (target - start));
     
-    el.textContent = currentValue;
+    const displayValue = format ? currentValue.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US') : currentValue;
+    el.textContent = prefix + displayValue + suffix;
     
     if (progress < 1) {
       requestAnimationFrame(update);
     } else {
-      el.textContent = target;
+      const finalValue = format ? target.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US') : target;
+      el.textContent = prefix + finalValue + suffix;
     }
   }
   
@@ -3049,11 +3056,11 @@ function generateSocialComments(result, assignment) {
 
   const commentsData = result ? [
     { type: 'style', val: result.trendMatches },
-    { type: 'rating', val: result.trendMultiplier },
+    { type: 'rating', val: result.totalPoints },
     { type: 'special' }
   ] : [
     { type: 'style', val: 0, isFreeMode: true },
-    { type: 'rating', val: 1.0, isFreeMode: true },
+    { type: 'rating', val: 100, isFreeMode: true },
     { type: 'special', isFreeMode: true }
   ];
 
@@ -3073,12 +3080,12 @@ function generateSocialComments(result, assignment) {
           : 'Do trends allow going naked? 😮';
       } else {
         const trendMatches = c.val;
-        const poolRu = trendMatches >= 3
+        const poolRu = trendMatches >= 2
           ? ['Этот образ идеально подходит под тренды! 😍', 'Стиль передан на 100% круто! 🔥', 'Трендовый лук, прямо в точку! 🔥']
           : trendMatches >= 1
           ? ['Миленько, но хотелось бы больше вещей в тему.', 'Образ аккуратный, но не хватает яркого трендового акцента.']
           : ['Совсем не попали в стиль события... 😢', 'Странный выбор вещей, концепт провален.', 'Она точно знала, куда одевается?'];
-        const poolEn = trendMatches >= 3
+        const poolEn = trendMatches >= 2
           ? ['This outfit is absolutely perfect for the trends! 😍', 'The style is captured perfectly! 🔥', 'Super trendy look, right on target! 🔥']
           : trendMatches >= 1
           ? ['Cute, but I wanted more matching vibes.', 'The outfit is neat, but lacks a bright trend accent.']
@@ -3091,19 +3098,19 @@ function generateSocialComments(result, assignment) {
       if (result && result.isNaked) {
         text = lang === 'ru' ? 'Ужасно, где одежда? 😢' : 'Terrible, where is the clothing? 😢';
       } else {
-        const mult = c.val;
-        const poolRu = mult >= 2.0
+        const score = c.val;
+        const poolRu = score >= 90
           ? ['🔥 Лучший образ за всю историю! Вирусный хит!', 'Шедевр! Фанаты сходят с ума! 😍✨', 'Просто разрыв! Мой биас прекрасен! 💖']
-          : mult >= 1.5
+          : score >= 75
           ? ['✨ Очень красивый и стильный образ! Лайк!', 'Фанаты в восторге, образ получился супер!', 'Хороший пост, делюсь со всеми друзьями! 🥰']
-          : mult >= 1.3
+          : score >= 50
           ? ['Вполне неплохой наряд, фанаты одобряют 👍', 'Хороший лук, мне нравится!', 'Симпатично! Лайк от меня. 🥰']
           : ['Нормально, но бывало и лучше 😕', 'Обычный образ, ничего особенного.', 'Пойдет, но можно было постараться сильнее.'];
-        const poolEn = mult >= 2.0
+        const poolEn = score >= 90
           ? ['🔥 Best look ever! Absolute viral hit!', 'Masterpiece! Fans are going crazy! 😍✨', 'Absolute perfection! My bias is gorgeous! 💖']
-          : mult >= 1.5
+          : score >= 75
           ? ['✨ Very beautiful and stylish outfit! Liked!', 'Fans love it, the outfit is super cool!', 'Nice post, sharing with all my friends! 🥰']
-          : mult >= 1.3
+          : score >= 50
           ? ['Quite a decent outfit, fans approve 👍', 'Good look, I like it!', 'Cute! Liked. 🥰']
           : ['It\'s okay, but could be better 😕', 'Ordinary look, nothing special.', 'Fine, but could be much better.'];
 
@@ -3150,8 +3157,163 @@ function generateSocialComments(result, assignment) {
 function showScoreScreen(assignment, result, earned, socialStats) {
   const picker = $('emoji-picker');
   const isFree = !assignment || !result;
-  const authorName = '@my_kpop_group';
-  $('score-author-name').textContent = authorName;
+  const authorName = 'eclipse';
+
+  // Clear any existing auto-scroll timer on screen load
+  if (scoreAutoScrollTimer) {
+    clearInterval(scoreAutoScrollTimer);
+    scoreAutoScrollTimer = null;
+  }
+
+  const startAutoScroll = () => {
+    if (scoreAutoScrollTimer) clearInterval(scoreAutoScrollTimer);
+    scoreAutoScrollTimer = setInterval(() => {
+      const nextBtn = $('overlay-comment-next');
+      if (nextBtn) {
+        nextBtn.click();
+      }
+    }, 8000); // 8 seconds is optimal for reading short fan comments!
+  };
+
+  const stopAutoScroll = () => {
+    if (scoreAutoScrollTimer) {
+      clearInterval(scoreAutoScrollTimer);
+      scoreAutoScrollTimer = null;
+    }
+  };
+  
+  const authorLeft = $('score-author-name-left');
+  if (authorLeft) authorLeft.textContent = authorName;
+  const authorRight = $('score-author-name');
+  if (authorRight) authorRight.textContent = authorName;
+
+  // Set post time dynamically
+  const timeText = $('score-meta-time-text');
+  if (timeText) {
+    timeText.textContent = lang === 'ru' ? '2ч' : '2h';
+  }
+
+  // Set location in Instagram-like header
+  const locationEl = $('score-location-left');
+  if (locationEl) {
+    if (isFree) {
+      locationEl.textContent = lang === 'ru' ? 'Свободная фотосессия' : 'Free Photoshoot';
+    } else {
+      let locText = 'Seoul, South Korea';
+      if (assignment.id === 'live_stage') {
+        locText = lang === 'ru' ? 'Сцена SBS Inkigayo' : 'SBS Inkigayo Stage';
+      } else if (assignment.id === 'grand_concert') {
+        locText = lang === 'ru' ? 'Премия Rookie Music Awards' : 'Rookie Music Awards';
+      } else if (assignment.id === 'dance_practice') {
+        locText = lang === 'ru' ? 'Танцевальная студия' : 'K-Pop Practice Studio';
+      } else if (assignment.id === 'fansign') {
+        locText = lang === 'ru' ? 'Автограф-сессия в Каннаме' : 'Gangnam Fansign Hall';
+      } else if (assignment.id === 'vlog') {
+        locText = lang === 'ru' ? 'Уютное кафе' : 'Cozy Cafe';
+      } else if (assignment.id === 'fans_qa') {
+        locText = lang === 'ru' ? 'Прямой эфир' : 'Live Broadcast';
+      } else if (assignment.id === 'photoshoot') {
+        locText = lang === 'ru' ? 'Фотостудия в Сеуле' : 'Seoul Photo Studio';
+      }
+      locationEl.textContent = locText;
+    }
+  }
+
+  // Handle likes display next to the like button
+  const likesCountEl = $('instagram-likes-count-new');
+  let currentLikesVal = 0;
+  if (likesCountEl) {
+    if (isFree) {
+      currentLikesVal = Math.floor(Math.random() * 1000) + 250;
+    } else {
+      currentLikesVal = earned || 0;
+    }
+    likesCountEl.textContent = '0';
+    setTimeout(() => animateCounter(likesCountEl, currentLikesVal, 900, '', '', true), 800);
+  }
+
+  // Set shares/reposts count (random number from 15 to 85)
+  let currentSharesVal = isFree ? Math.floor(Math.random() * 20) + 5 : Math.floor(Math.random() * 70) + 15;
+  const sharesCountEl = $('instagram-shares-count-new');
+  if (sharesCountEl) {
+    sharesCountEl.textContent = '0';
+    setTimeout(() => animateCounter(sharesCountEl, currentSharesVal, 900, '', '', true), 800);
+  }
+
+  // Interactive like button for the Instagram post
+  const postLikeBtn = $('instagram-post-like-btn');
+  if (postLikeBtn) {
+    postLikeBtn.classList.remove('liked');
+    const heartSvg = postLikeBtn.querySelector('svg');
+    if (heartSvg) {
+      heartSvg.setAttribute('fill', 'none');
+      heartSvg.setAttribute('stroke', 'currentColor');
+    }
+    
+    let postLiked = false;
+    postLikeBtn.onclick = (e) => {
+      e.stopPropagation();
+      sfxClick();
+      postLiked = !postLiked;
+      if (postLiked) {
+        postLikeBtn.classList.add('liked');
+        if (likesCountEl) {
+          likesCountEl.textContent = formatLikes(currentLikesVal + 1);
+        }
+      } else {
+        postLikeBtn.classList.remove('liked');
+        if (likesCountEl) {
+          likesCountEl.textContent = formatLikes(currentLikesVal);
+        }
+      }
+    };
+  }
+
+  // Interactive bookmark button for the Instagram post
+  const postBookmarkBtn = $('instagram-post-bookmark-btn');
+  if (postBookmarkBtn) {
+    postBookmarkBtn.classList.remove('saved');
+    let postBookmarked = false;
+    postBookmarkBtn.onclick = (e) => {
+      e.stopPropagation();
+      sfxClick();
+      postBookmarked = !postBookmarked;
+      if (postBookmarked) {
+        postBookmarkBtn.classList.add('saved');
+      } else {
+        postBookmarkBtn.classList.remove('saved');
+      }
+    };
+  }
+
+  // Interactive share button for the Instagram post
+  const postShareBtn = $('instagram-post-share-btn');
+  if (postShareBtn) {
+    let postShared = false;
+    postShareBtn.onclick = (e) => {
+      e.stopPropagation();
+      sfxClick();
+      
+      // Trigger fly-away animation
+      postShareBtn.classList.remove('sharing');
+      void postShareBtn.offsetWidth; // Trigger reflow to restart CSS animation
+      postShareBtn.classList.add('sharing');
+      
+      // Clean up sharing class after animation completes
+      setTimeout(() => {
+        postShareBtn.classList.remove('sharing');
+      }, 500);
+
+      // Increment share count only once per view
+      if (!postShared) {
+        postShared = true;
+        currentSharesVal++;
+        if (sharesCountEl) {
+          sharesCountEl.textContent = formatLikes(currentSharesVal);
+        }
+      }
+    };
+  }
 
   // Clone stage for post preview
   const container = $('score-post-image-container');
@@ -3223,15 +3385,17 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   const resultsBlock = document.querySelector('.social-results-block');
   const tagInfo = $('score-tag-info');
 
-
   const assignTitleEl = $('score-assignment-title');
+  const postTextEl = $('score-post-text');
   if (isFree) {
     if (assignTitleEl) {
       assignTitleEl.textContent = lang === 'ru' ? '📍 Свободная фотосессия' : '📍 Free Photoshoot';
     }
-    $('score-post-text').textContent = lang === 'ru' 
-      ? 'Мой новый образ в свободном стиле! Как вам такое сочетание? 💫 #kpop #freestyle' 
-      : 'My new outfit in free style! Do you like this combination? 💫 #kpop #freestyle';
+    if (postTextEl) {
+      postTextEl.textContent = lang === 'ru' 
+        ? 'Мой новый образ в свободном стиле! Как вам такое сочетание? 💫 #kpop #freestyle' 
+        : 'My new outfit in free style! Do you like this combination? 💫 #kpop #freestyle';
+    }
     
     if (tagInfo) tagInfo.style.display = 'none';
     if (resultsBlock) resultsBlock.style.display = 'none';
@@ -3239,10 +3403,12 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     if (assignTitleEl) {
       assignTitleEl.textContent = tf('scoreResults', { title: assignmentTitle(assignment) });
     }
-    $('score-post-text').textContent = getPostTextForActivity(assignment.id);
+    if (postTextEl) {
+      postTextEl.textContent = getPostTextForActivity(assignment.id);
+    }
     
     if (tagInfo) {
-      tagInfo.style.display = 'block';
+      tagInfo.style.display = 'none';
       tagInfo.innerHTML = buildHashtagsHTML(assignment, result);
     }
     if (resultsBlock) resultsBlock.style.display = 'block';
@@ -3253,6 +3419,14 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
   const socialComments = generateSocialComments(result, assignment);
   
+  // Set comments count (which is socialComments.length, usually 3)
+  const commentsCountEl = $('instagram-comments-count-new');
+  if (commentsCountEl) {
+    const commentCount = socialComments ? socialComments.length : 3;
+    commentsCountEl.textContent = '0';
+    setTimeout(() => animateCounter(commentsCountEl, commentCount, 900, '', '', true), 800);
+  }
+  
   // Handle rewards display (show in school/promo mode, hide in free mode)
   const rewardRow = $('score-reward-row');
   if (rewardRow) {
@@ -3260,11 +3434,43 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       rewardRow.style.display = 'none';
     } else {
       rewardRow.style.display = 'flex';
-      $('score-reward-value').textContent = `+${formatLikes(earned || 0)} ❤️`;
+      const rewardValEl = $('score-reward-value');
+      if (rewardValEl) {
+        rewardValEl.textContent = '+0 ❤️';
+        const likesVal = earned || 0;
+        setTimeout(() => animateCounter(rewardValEl, likesVal, 900, '+', ' ❤️'), 800);
+      }
     }
   }
 
   if (!isFree) {
+    // ── Update score status title ──
+    const statusTitleEl = $('score-status-title');
+    if (statusTitleEl) {
+      statusTitleEl.classList.remove('visible');
+      let statusText = '';
+      const pts = result.totalPoints;
+      if (lang === 'ru') {
+        if (pts >= 100) statusText = '👑 Сенсация!';
+        else if (pts >= 80) statusText = '🔥 Невероятно!';
+        else if (pts >= 60) statusText = '✨ Трендово!';
+        else if (pts >= 40) statusText = '👍 Хорошая работа';
+        else statusText = '💜 Начало пути';
+      } else {
+        if (pts >= 100) statusText = '👑 Sensational!';
+        else if (pts >= 80) statusText = '🔥 Incredible!';
+        else if (pts >= 60) statusText = '✨ Trendy!';
+        else if (pts >= 40) statusText = '👍 Good job!';
+        else statusText = '💜 Start of the journey';
+      }
+      statusTitleEl.textContent = statusText;
+      
+      // Show at the end of the counter animation (approx 1700ms)
+      setTimeout(() => {
+        statusTitleEl.classList.add('visible');
+      }, 1700);
+    }
+
     // ── Populate breakdown rows ──
     const itemsLabel = $('score-items-label');
     const itemsValue = $('score-items-value');
@@ -3282,25 +3488,46 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     }
     if (itemsValue) {
       itemsValue.textContent = '0';
-      setTimeout(() => animateCounter(itemsValue, result.rawPoints, 600), 300);
+      setTimeout(() => animateCounter(itemsValue, result.filledPoints, 600), 300);
     }
 
-    // Trend multiplier row — hide if ×1.0
+    // Trend points row — show always in school mode to clarify addition
     if (trendRowEl) {
-      if (result.trendMultiplier > 1.0) {
-        trendRowEl.style.display = 'flex';
+      trendRowEl.style.display = 'flex';
+      if (result.trendMatches > 0) {
         trendRowEl.classList.add('has-trend');
-        if (trendLabel) {
-          trendLabel.textContent = lang === 'ru'
-            ? `Тренд: ${result.trendMatches} совпад.`
-            : `Trend: ${result.trendMatches} match${result.trendMatches > 1 ? 'es' : ''}`;
-        }
-        if (trendValue) {
-          trendValue.textContent = `×${result.trendMultiplier.toFixed(1)}`;
-        }
       } else {
-        trendRowEl.style.display = 'none';
         trendRowEl.classList.remove('has-trend');
+      }
+      if (trendLabel) {
+        trendLabel.style.display = 'inline-flex';
+        trendLabel.style.alignItems = 'center';
+        trendLabel.style.flexWrap = 'wrap';
+
+        if (lang === 'ru') {
+          let html = `<span>Тренд: ${result.trendMatches} совпад.</span>`;
+          if (result.matchedTrendTags && result.matchedTrendTags.length > 0) {
+            const badges = result.matchedTrendTags.map(t => {
+              const label = TAG_NAMES_RU[t] || t;
+              return `<span class="hashtag-badge tag-matched" style="margin-left: 6px; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 4px;">#${label} ✅</span>`;
+            }).join('');
+            html += badges;
+          }
+          trendLabel.innerHTML = html;
+        } else {
+          let html = `<span>Trend: ${result.trendMatches} match${result.trendMatches !== 1 ? 'es' : ''}</span>`;
+          if (result.matchedTrendTags && result.matchedTrendTags.length > 0) {
+            const badges = result.matchedTrendTags.map(t => {
+              return `<span class="hashtag-badge tag-matched" style="margin-left: 6px; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 4px;">#${t} ✅</span>`;
+            }).join('');
+            html += badges;
+          }
+          trendLabel.innerHTML = html;
+        }
+      }
+      if (trendValue) {
+        trendValue.textContent = '0';
+        setTimeout(() => animateCounter(trendValue, result.trendPoints, 600), 300);
       }
     }
 
@@ -3311,13 +3538,13 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
     // Total points with count-up
     if (totalPtsEl) {
-      totalPtsEl.textContent = '0';
-      setTimeout(() => animateCounter(totalPtsEl, result.totalPoints, 800), 500);
+      totalPtsEl.textContent = '0/100';
+      setTimeout(() => animateCounter(totalPtsEl, result.totalPoints, 800, '', '/100'), 500);
     }
 
     // Viral glow on breakdown card
     if (breakdownCard) {
-      breakdownCard.classList.toggle('viral-post', result.trendMultiplier >= 2.0);
+      breakdownCard.classList.toggle('viral-post', result.trendMatches >= 2);
     }
 
     // Followers gained with count-up
@@ -3348,14 +3575,13 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     lang === 'ru' ? '10м' : '10m'
   ];
 
-  // Inject comments overlay into the image container
-  const imgContainer = $('score-post-image-container');
-  if (imgContainer && socialComments && socialComments.length > 0) {
+  // Inject comments overlay into the new comments container in the left column
+  const commentsContainer = $('score-comments-container-left');
+  if (commentsContainer && socialComments && socialComments.length > 0) {
     // Remove any existing overlay first to prevent duplicates
-    const oldOverlay = $('score-comment-overlay');
-    if (oldOverlay) oldOverlay.remove();
+    commentsContainer.innerHTML = '';
 
-    imgContainer.insertAdjacentHTML('beforeend', `
+    commentsContainer.insertAdjacentHTML('beforeend', `
       <div id="score-comment-overlay" class="score-comment-overlay">
         <button class="score-comment-arrow prev-btn" id="overlay-comment-prev" type="button">&lsaquo;</button>
         <div class="score-comment-content">
@@ -3389,7 +3615,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
       if (avatarEl) avatarEl.textContent = comment.emoji;
       if (nickEl) nickEl.textContent = comment.nick;
-      if (textEl) textEl.textContent = `"${comment.text}"`;
+      if (textEl) textEl.textContent = comment.text;
       if (timeEl) timeEl.textContent = commentTimes[activeCommentIndex] || '2m';
 
       const state = commentStates[activeCommentIndex];
@@ -3417,6 +3643,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
     // Initialize first comment
     updateActiveComment();
+    startAutoScroll();
 
     // Arrows event listeners
     const prevBtn = $('overlay-comment-prev');
@@ -3427,8 +3654,9 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         e.stopPropagation();
         if (isAnimating) return;
         if (picker) picker.classList.add('hidden');
+        startAutoScroll(); // Reset auto scroll timer on manual interaction
 
-        const contentEl = imgContainer.querySelector('.score-comment-content');
+        const contentEl = commentsContainer.querySelector('.score-comment-content');
         if (contentEl) {
           isAnimating = true;
           contentEl.classList.remove('comment-slide-next-in', 'comment-slide-next-out', 'comment-slide-prev-in', 'comment-slide-prev-out');
@@ -3453,8 +3681,9 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         e.stopPropagation();
         if (isAnimating) return;
         if (picker) picker.classList.add('hidden');
+        startAutoScroll(); // Reset auto scroll timer on manual interaction
 
-        const contentEl = imgContainer.querySelector('.score-comment-content');
+        const contentEl = commentsContainer.querySelector('.score-comment-content');
         if (contentEl) {
           isAnimating = true;
           contentEl.classList.remove('comment-slide-next-in', 'comment-slide-next-out', 'comment-slide-prev-in', 'comment-slide-prev-out');
@@ -3470,6 +3699,17 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         } else {
           activeCommentIndex = (activeCommentIndex + 1) % socialComments.length;
           updateActiveComment();
+        }
+      };
+    }
+
+    const postCommentBtn = $('instagram-post-comment-btn');
+    if (postCommentBtn) {
+      postCommentBtn.onclick = (e) => {
+        e.stopPropagation();
+        sfxClick();
+        if (nextBtn) {
+          nextBtn.click();
         }
       };
     }
@@ -3536,6 +3776,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   if (isFree) {
     $('btn-next-lesson').textContent = lang === 'ru' ? 'Закрыть' : 'Close';
     $('btn-next-lesson').onclick = () => {
+      stopAutoScroll();
       if (picker) picker.classList.add('hidden');
       $('score-modal').classList.add('hidden');
     };
@@ -3543,6 +3784,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     const isLast = school.lessonIndex >= 4;
     $('btn-next-lesson').textContent = isLast ? t('btnSeeResults') : t('btnNextClass');
     $('btn-next-lesson').onclick = () => {
+      stopAutoScroll();
       if (picker) picker.classList.add('hidden');
       $('score-modal').classList.add('hidden');
       showFullscreenAd(() => {
@@ -3573,7 +3815,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   retryBtn.classList.add('hidden');
 
   earned = earned || 0;
-  if (!isFree && result.trendMultiplier >= 1.3) {
+  if (!isFree && result.trendMatches >= 1) {
     let doubled = false;
     dblBtn.textContent = lang === 'ru'
       ? `📺 Удвоить награду (+${formatLikes(earned)} ❤️)`
@@ -3704,15 +3946,18 @@ function onRunwayClick() {
   const result = scoreOutfit(assignment);
   school.lessonScores.push(result.totalPoints); // Store total points
 
-  // ── Growing reach: max followers = postNumber × 150 ──
+  // ── Growing reach: quadratic progression targeting 1M followers in ~40 posts ──
   school.totalPosts++;
 
-  // ── Followers earned = totalPoints directly ──
+  // ── Followers earned based on score and quadratic growth: 45 * N^2 ──
   let followers;
   if (result.isNaked) {
     followers = Math.floor(Math.random() * 10) + 1;
   } else {
-    followers = result.totalPoints;
+    const postNum = school.totalPosts;
+    const baseFollowers = 45 * postNum * postNum;
+    followers = Math.round((result.totalPoints / 100) * baseFollowers);
+    if (followers < 1) followers = 1;
   }
 
   school.totalFollowers += followers;
@@ -3728,6 +3973,9 @@ function onRunwayClick() {
   prog.totalLessons++;
   prog.runwayCount = (prog.runwayCount || 0) + 1;
   if (result.totalPoints > (prog.highScore || 0)) prog.highScore = result.totalPoints;
+  if (result.totalPoints >= 100) {
+    prog.perfectCount = (prog.perfectCount || 0) + 1;
+  }
 
   // Bonus for daily challenge
   const isDaily = assignment.id === prog.dailyTaskId && !prog.dailyTaskDone;
