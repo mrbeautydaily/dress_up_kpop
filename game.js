@@ -141,6 +141,12 @@ function formatFollowers(n) {
   return String(n);
 }
 
+function formatShortNumber(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(2) + 'K';
+  return String(n);
+}
+
 // ────────────────────────────────────────────────────────────
 // YANDEX GAMES SDK
 // ────────────────────────────────────────────────────────────
@@ -779,7 +785,9 @@ function itemCost(itemId) { return ITEM_COSTS[itemId] ?? 0; }
 function itemLikesCost(itemId) { return (ITEM_COSTS[itemId] ?? 0) * 100; }
 
 function formatLikes(n) {
-  return n.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US');
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return String(n);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -791,11 +799,6 @@ function addLikes(n) {
   prog.likesEarned = (prog.likesEarned || 0) + n;
   saveProgress();
   updateLikesDisplay();
-  const gain = document.createElement('div');
-  gain.className = 'stars-gain-toast';
-  gain.textContent = '+' + formatLikes(n) + ' ❤️';
-  document.body.appendChild(gain);
-  setTimeout(() => gain.remove(), 1800);
 }
 
 // Legacy aliases to prevent errors
@@ -805,6 +808,11 @@ function updateStarsDisplay() { updateLikesDisplay(); }
 function updateLikesDisplay() {
   const el = $('stars-count');
   if (el) el.textContent = formatLikes(prog.likes);
+}
+
+function updateFollowersDisplay() {
+  const el = $('followers-count');
+  if (el) el.textContent = formatFollowers(school.totalFollowers);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -1342,13 +1350,7 @@ const ACHIEVEMENTS = [
 ];
 
 function checkAchievements() {
-  ACHIEVEMENTS.forEach(ach => {
-    if (prog.achievements[ach.id] || !ach.check()) return;
-    prog.achievements[ach.id] = true;
-    saveProgress();
-    if (ach.reward > 0) addLikes(ach.reward);
-    showAchievementToast(ach);
-  });
+  return; // Achievements are disabled
 }
 
 function setAchievementDot(visible) {
@@ -2451,6 +2453,7 @@ function saveSchoolProgress() {
       dayFollowersGained: school.dayFollowersGained,
     }));
   } catch(e) {}
+  updateFollowersDisplay();
 }
 function loadSchoolProgress() {
   try {
@@ -2463,6 +2466,7 @@ function loadSchoolProgress() {
       school.dayFollowersGained = s.dayFollowersGained || 0;
     }
   } catch(e) {}
+  updateFollowersDisplay();
 }
 
 // ────────────────────────────────────────────────────────────
@@ -2726,13 +2730,27 @@ function animateCounter(el, target, duration = 1000, prefix = '', suffix = '', f
     const easeProgress = progress * (2 - progress);
     const currentValue = Math.floor(start + easeProgress * (target - start));
     
-    const displayValue = format ? currentValue.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US') : currentValue;
+    let displayValue;
+    if (format === 'short') {
+      displayValue = formatShortNumber(currentValue);
+    } else if (format) {
+      displayValue = currentValue.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US');
+    } else {
+      displayValue = currentValue;
+    }
     el.textContent = prefix + displayValue + suffix;
     
     if (progress < 1) {
       requestAnimationFrame(update);
     } else {
-      const finalValue = format ? target.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US') : target;
+      let finalValue;
+      if (format === 'short') {
+        finalValue = formatShortNumber(target);
+      } else if (format) {
+        finalValue = target.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US');
+      } else {
+        finalValue = target;
+      }
       el.textContent = prefix + finalValue + suffix;
     }
   }
@@ -3243,14 +3261,9 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   // Interactive like button for the Instagram post
   const postLikeBtn = $('instagram-post-like-btn');
   if (postLikeBtn) {
-    postLikeBtn.classList.remove('liked');
-    const heartSvg = postLikeBtn.querySelector('svg');
-    if (heartSvg) {
-      heartSvg.setAttribute('fill', 'none');
-      heartSvg.setAttribute('stroke', 'currentColor');
-    }
+    postLikeBtn.classList.add('liked');
     
-    let postLiked = false;
+    let postLiked = true;
     postLikeBtn.onclick = (e) => {
       e.stopPropagation();
       sfxClick();
@@ -3258,12 +3271,12 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       if (postLiked) {
         postLikeBtn.classList.add('liked');
         if (likesCountEl) {
-          likesCountEl.textContent = formatLikes(currentLikesVal + 1);
+          likesCountEl.textContent = formatLikes(currentLikesVal);
         }
       } else {
         postLikeBtn.classList.remove('liked');
         if (likesCountEl) {
-          likesCountEl.textContent = formatLikes(currentLikesVal);
+          likesCountEl.textContent = formatLikes(currentLikesVal - 1);
         }
       }
     };
@@ -3415,7 +3428,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   }
 
   // Set unit text next to total followers gained
-  $('score-total-unit').textContent = lang === 'ru' ? ' фанатов' : ' fans';
+  $('score-total-unit').textContent = lang === 'ru' ? ' подписчиков' : ' followers';
 
   const socialComments = generateSocialComments(result, assignment);
   
@@ -3436,14 +3449,22 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       rewardRow.style.display = 'flex';
       const rewardValEl = $('score-reward-value');
       if (rewardValEl) {
-        rewardValEl.textContent = '+0 ❤️';
+        const likesSuffix = lang === 'ru' ? ' лайков' : ' likes';
+        rewardValEl.textContent = '+0' + likesSuffix;
         const likesVal = earned || 0;
-        setTimeout(() => animateCounter(rewardValEl, likesVal, 900, '+', ' ❤️'), 800);
+        setTimeout(() => animateCounter(rewardValEl, likesVal, 900, '+', likesSuffix, 'short'), 800);
       }
     }
   }
 
   if (!isFree) {
+    // ── Reset large score counter ──
+    const largeScoreEl = $('score-large-score');
+    if (largeScoreEl) {
+      largeScoreEl.textContent = '0/100';
+      largeScoreEl.classList.remove('visible');
+    }
+
     // ── Update score status title ──
     const statusTitleEl = $('score-status-title');
     if (statusTitleEl) {
@@ -3477,8 +3498,6 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     const trendLabel = $('score-trend-label');
     const trendValue = $('score-trend-value');
     const trendRowEl = $('score-row-trend');
-    const totalPtsEl = $('score-total-points');
-    const totalLabel = $('score-total-label');
     const breakdownCard = document.querySelector('.score-breakdown');
 
     if (itemsLabel) {
@@ -3531,15 +3550,14 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       }
     }
 
-    // Total label
-    if (totalLabel) {
-      totalLabel.textContent = lang === 'ru' ? 'Итого' : 'Total';
-    }
 
-    // Total points with count-up
-    if (totalPtsEl) {
-      totalPtsEl.textContent = '0/100';
-      setTimeout(() => animateCounter(totalPtsEl, result.totalPoints, 800, '', '/100'), 500);
+
+    // Large score with count-up
+    if (largeScoreEl) {
+      setTimeout(() => {
+        largeScoreEl.classList.add('visible');
+        animateCounter(largeScoreEl, result.totalPoints, 800, '', '/100');
+      }, 500);
     }
 
     // Viral glow on breakdown card
@@ -3552,7 +3570,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     if (gainedEl) {
       gainedEl.textContent = '0';
       const followersVal = socialStats ? socialStats.followers : 0;
-      setTimeout(() => animateCounter(gainedEl, followersVal, 900), 800);
+      setTimeout(() => animateCounter(gainedEl, followersVal, 900, '', '', 'short'), 800);
     }
 
     // Spawn floating hearts for visual flair
@@ -3901,8 +3919,8 @@ function showDailySummary() {
     $('summary-emoji-big').textContent = '🏆';
     $('summary-rank-bar').style.width = '100%';
     const congradText = lang === 'ru' 
-      ? '🎉 1 МИЛЛИОН ФАНАТОВ! 🎉<br>Вы стали легендами K-Pop!' 
-      : '🎉 1 MILLION FANS! 🎉<br>You are now ultimate K-Pop Legends!';
+      ? '🎉 1 МИЛЛИОН ПОДПИСЧИКОВ! 🎉<br>Вы стали легендами K-Pop!' 
+      : '🎉 1 MILLION FOLLOWERS! 🎉<br>You are now ultimate K-Pop Legends!';
     $('summary-rank-next').innerHTML = `<span style="color: #d97706; font-weight: 800; font-size: 1.1rem;">${congradText}</span>`;
   } else if (nextRank) {
     const progress = (school.totalFollowers - rank.minFollowers) / (nextRank.minFollowers - rank.minFollowers);
@@ -4249,7 +4267,7 @@ const INTRO_STEPS = {
     { text: 'Привет! Я Ю На! 👋\nТак рада наконец-то познакомиться с тобой!' },
     { text: 'Мы только что начали наш K-Pop тур! 🏫✨\nЭто самый захватывающий путь для будущих идолов!' },
     { text: 'Наша цель — набрать 1 000 000 подписчиков! 👑\nЗдесь всё решает стиль и образ!' },
-    { text: 'Помогай мне подбирать лучшие образы для публикаций! 💅\nЧем круче образ — тем больше фанатов!' },
+    { text: 'Помогай мне подбирать лучшие образы для публикаций! 💅\nЧем круче образ — тем больше подписчиков!' },
     { text: 'Участвуй в промо 🏫, публикуй посты 📱 и собирай лайки ❤️\nСтань легендой K-Pop!' },
     { text: 'Готова? Тогда поехали! Покажем им, кто тут настоящая звезда! 🔥💖', last: true },
   ],

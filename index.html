@@ -57,10 +57,10 @@
 <!-- Top right controls for stars, achievements, sound -->
 <div id="panel-controls" class="panel-controls">
 <div id="panel-controls-inner" class="panel-controls-inner">
+<button id="followers-display" class="stars-btn followers-btn">👥 <span id="followers-count">0</span></button>
 <button id="stars-display" class="stars-btn">❤️ <span id="stars-count">0</span></button>
 <button id="btn-runway" class="btn btn-runway-main hidden">🌟 <span id="btn-runway-label">Runway!</span></button>
 <button id="btn-achievements" class="btn btn-yellow">🏆</button>
-<button id="btn-sound" class="btn btn-sound">🔊</button>
 </div>
 </div>
 <!-- CENTER: character stage -->
@@ -80,7 +80,8 @@
 <aside id="category-panel">
 <div id="category-list"></div>
 <!-- Camera/Share button moved here, to sit at the bottom in desktop -->
-<button id="btn-share-stage" class="btn-share-stage">📸</button>
+<button id="btn-share-stage" class="btn-share-stage" title="Сделать скриншот">📸</button>
+<button id="btn-sound" class="btn-share-stage" title="Вкл/Выкл звук">🔊</button>
 </aside>
 <!-- RIGHT: items grid -->
 <aside id="items-panel">
@@ -209,6 +210,7 @@
     <!-- Block: Publication Results — Simplified Breakdown -->
     <div class="social-results-block" id="social-results-block">
       <div class="score-status-title" id="score-status-title"></div>
+      <div class="score-large-score" id="score-large-score">0/100</div>
       <div class="score-breakdown">
         <!-- Row: Items equipped -->
         <div class="score-breakdown-row" id="score-row-items">
@@ -222,21 +224,13 @@
           <span class="breakdown-label" id="score-trend-label">Тренд</span>
           <span class="breakdown-value trend-multiplier" id="score-trend-value">+0</span>
         </div>
-        <!-- Divider -->
-        <div class="score-breakdown-divider"></div>
-        <!-- Row: Total points -->
-        <div class="score-breakdown-row total-row">
-          <span class="breakdown-icon">✨</span>
-          <span class="breakdown-label" id="score-total-label">Итого</span>
-          <span class="breakdown-value total-value" id="score-total-points">0</span>
-        </div>
       </div>
 
       <!-- Rewards: followers + likes -->
       <div class="score-rewards-block">
         <div class="score-reward-item" id="score-reward-followers">
           <span class="reward-icon">👥</span>
-          <span class="reward-text"><span class="reward-plus">+</span><span id="score-followers-gained">0</span><span class="reward-unit" id="score-total-unit"> фанатов</span></span>
+          <span class="reward-text"><span class="reward-plus">+</span><span id="score-followers-gained">0</span><span class="reward-unit" id="score-total-unit"> подписчиков</span></span>
         </div>
         <div class="score-reward-item" id="score-reward-row">
           <span class="reward-icon">❤️</span>

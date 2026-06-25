@@ -1757,27 +1757,108 @@ button { cursor: pointer; border: none; font-family: inherit; }
   .modal-overlay { align-items: center; }
 
   /* Score modal — максимально компактно для ландшафта */
-  .score-box     { max-width: 94vw; }
-  #score-assignment-title { font-size: .85rem; }
-  #score-tag-info { font-size: .6rem; }
-  .score-header { margin-bottom: 0; }
-  #judge-cards   { gap: .3rem; }
-  .judge-card    { padding: .3rem .25rem; }
-  .judge-emoji   { font-size: 1rem; }
-  .judge-name    { font-size: .5rem; margin: .05rem 0; }
-  .judge-score-num { font-size: .82rem; }
-  .judge-comment { display: none; }
-  .judge-score-bar-wrap { display: none; }
-  .score-breakdown { gap: .25rem; }
-  .breakdown-row { margin-bottom: 0; }
-  .breakdown-label { font-size: .6rem; width: 70px; }
-  .breakdown-pts { font-size: .65rem; width: 36px; }
-  .score-total-row { margin-top: 0; padding: .4rem; }
-  .score-total-num { font-size: 1.6rem; }
-  .score-total-label { font-size: .68rem; }
-  .score-btn { padding: .42rem .8rem; font-size: .75rem; }
-  .score-btn-sm { font-size: .65rem; padding: .32rem .8rem; }
-  .btn-share-outfit { padding: .32rem .8rem; font-size: .68rem; }
+  .score-box {
+    max-width: 94vw;
+    max-height: 96vh;
+    height: 94vh;
+  }
+  .score-left-col {
+    width: auto !important;
+    flex-shrink: 0 !important;
+    padding: 0.5rem !important;
+    gap: 4px !important;
+  }
+  .instagram-post {
+    height: 86vh !important;
+    max-height: 86vh !important;
+    width: calc(86vh * 768 / 1376) !important;
+    max-width: 100% !important;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .instagram-media-container {
+    height: 100% !important;
+    width: 100% !important;
+  }
+  .social-post-image-container {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+  }
+  .instagram-actions-left-row {
+    display: none !important;
+  }
+  .score-comment-overlay {
+    display: none !important;
+  }
+  .instagram-comments-container-left {
+    display: none !important;
+  }
+
+  .score-right-col {
+    padding: 0.6rem 0.8rem !important;
+    gap: 0.3rem !important;
+    justify-content: center;
+  }
+  .social-results-block {
+    gap: 2px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .score-status-title {
+    font-size: 0.85rem !important;
+    margin: 2px auto 4px auto !important;
+  }
+  .score-large-score {
+    font-size: 1.6rem !important;
+    margin: 0 auto 4px auto !important;
+  }
+  .score-breakdown {
+    padding: 6px 10px !important;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+    gap: 4px !important;
+    border-radius: 8px !important;
+  }
+  .score-breakdown-row {
+    font-size: 0.7rem !important;
+    gap: 6px !important;
+  }
+  .breakdown-icon {
+    font-size: 0.8rem !important;
+    width: 18px !important;
+  }
+  .breakdown-value, #score-items-value {
+    font-size: 0.75rem !important;
+  }
+  .score-rewards-block {
+    gap: 6px !important;
+    margin-bottom: 2px !important;
+  }
+  .score-reward-item {
+    padding: 4px 8px !important;
+    font-size: 0.7rem !important;
+    border-radius: 6px !important;
+    gap: 4px !important;
+  }
+  .reward-icon {
+    font-size: 0.8rem !important;
+  }
+  .score-actions-row {
+    gap: 4px !important;
+  }
+  .score-actions-row-sub {
+    gap: 4px !important;
+  }
+  .score-actions-row .score-btn {
+    padding: 0.35rem 0.6rem !important;
+    font-size: 0.72rem !important;
+  }
+  .btn-share-outfit {
+    padding: 0.35rem 0.6rem !important;
+    font-size: 0.72rem !important;
+  }
 
   /* Summary modal */
   .summary-box  { max-width: 94vw; }
@@ -2242,6 +2323,42 @@ button { cursor: pointer; border: none; font-family: inherit; }
   font-size: 0.88rem !important;
 }
 
+.panel-controls .followers-btn {
+  background: linear-gradient(90deg, #fae8ff, #f3d8ff) !important;
+  border: 2px solid #c084fc !important;
+  color: #6b21a8 !important;
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.35) !important;
+  cursor: default !important;
+  font-size: 0.82rem !important;
+  padding: 0 0.75rem !important;
+  min-height: unset !important;
+  height: 36px !important;
+  border-radius: 99px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  min-width: 65px !important;
+}
+
+.panel-controls .followers-btn:hover {
+  filter: none !important;
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.35) !important;
+}
+
+.panel-controls .followers-btn:active {
+  transform: none !important;
+}
+
+.panel-controls .followers-btn #followers-count {
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+}
+
+.panel-controls #btn-achievements {
+  display: none !important;
+}
+
 .panel-controls .btn-yellow,
 .panel-controls .btn-sound {
   width: 36px !important;
@@ -2309,11 +2426,16 @@ button { cursor: pointer; border: none; font-family: inherit; }
 
 /* Camera button (stays at the bottom of the category panel in landscape) */
 #category-panel .btn-share-stage {
-  margin-top: auto !important;
   position: static !important;
   margin-bottom: 0.4rem !important;
   flex-shrink: 0 !important;
   display: flex !important;
+}
+#category-panel #btn-share-stage {
+  margin-top: auto !important;
+}
+#category-panel #btn-sound {
+  margin-top: 0 !important;
 }
 
 /* Mobile Portrait Mode (< 599px) */
@@ -2366,11 +2488,16 @@ button { cursor: pointer; border: none; font-family: inherit; }
   
   #category-panel .btn-share-stage {
     position: absolute !important;
-    bottom: 16px !important;
     right: 16px !important;
     left: auto !important;
     z-index: 10 !important;
     margin: 0 !important;
+  }
+  #category-panel #btn-share-stage {
+    bottom: 60px !important;
+  }
+  #category-panel #btn-sound {
+    bottom: 16px !important;
   }
 
   .panel-controls .stars-btn {
@@ -3116,6 +3243,33 @@ button { cursor: pointer; border: none; font-family: inherit; }
   }
 }
 
+/* Крупный счетчик баллов под статусом */
+.score-large-score {
+  font-size: 3.25rem;
+  font-weight: 900;
+  text-align: center;
+  color: #a855f7;
+  margin: 2px auto 8px auto;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  display: block;
+  width: fit-content;
+  
+  /* Анимация появления */
+  opacity: 0;
+  transform: scale(0.6) translateY(20px);
+  transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.score-large-score.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
 /* Post stats row — removed, no longer used */
 
 /* ── Score Breakdown Card ── */
@@ -3493,7 +3647,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   }
   .score-left-col {
     width: 100%;
-    padding: 1rem;
+    padding: 0.6rem;
     background: #000000;
   }
   .instagram-post {
@@ -3503,6 +3657,15 @@ button { cursor: pointer; border: none; font-family: inherit; }
   .instagram-post .social-post-image-container {
     max-width: 100% !important;
     margin-bottom: 0;
+  }
+  .instagram-actions-left-row {
+    display: none !important;
+  }
+  .score-comment-overlay {
+    display: none !important;
+  }
+  .instagram-comments-container-left {
+    display: none !important;
   }
   .score-right-col {
     width: 100%;
