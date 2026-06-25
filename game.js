@@ -733,7 +733,6 @@ const PROG_KEY = 'kpop_progress_v1';
 
 let prog = {
   likes: 12000, likesEarned: 12000,
-  stars: 120, starsEarned: 120,
   unlocked: [],
   achievements: {},
   loginStreak: 0, lastLoginDate: '',
@@ -801,9 +800,6 @@ function addLikes(n) {
   updateLikesDisplay();
 }
 
-// Legacy aliases to prevent errors
-function addStars(n) { addLikes(n * 100); }
-function updateStarsDisplay() { updateLikesDisplay(); }
 
 function updateLikesDisplay() {
   const el = $('stars-count');
@@ -1487,72 +1483,72 @@ function getStarsHTML(starsNum) {
 }
 
 const PROMO_ACTIVITIES = [
-  { id:'recording',     judge:'kim',
+  { id:'recording',
     title:'🎙️ Recording Session',     title_ru:'🎙️ Запись трека',
     desc: 'Fans want pure charisma and bold vibe for the title track!',
     desc_ru:'Фанаты хотят чистую харизму и дерзкий вайб от заглавного трека!',
-    requiredTags:['kpop','bold'],    bonusTags:['cute'] },
-  { id:'fitness',       judge:'lee',
+    requiredTags:['kpop','bold'] },
+  { id:'fitness',
     title:'🧘 Fitness & Stretching',  title_ru:'🧘 Фитнес и растяжка',
     desc: 'Fans expect a comfortable, sporty outfit for stretching!',
     desc_ru:'Фанаты ждут удобный спортивный лук на растяжке!',
-    requiredTags:['sporty','casual'],bonusTags:['kpop'] },
-  { id:'photoshoot',    judge:'park',
+    requiredTags:['sporty','casual'] },
+  { id:'photoshoot',
     title:'📸 Album Photoshoot',      title_ru:'📸 Фотосессия для альбома',
     desc: 'Fans expect an elegant, concept-driven outfit for the album book.',
     desc_ru:'Фанаты ждут элегантный концептуальный образ для буклета альбома.',
-    requiredTags:['kpop','elegant'], bonusTags:['pastel'] },
-  { id:'fansign',       judge:'park',
+    requiredTags:['kpop','elegant'] },
+  { id:'fansign',
     title:'🤝 Fansign Event',         title_ru:'🤝 Автограф-сессия',
     desc: 'Meet your fans! They demand an elegant and neat appearance.',
     desc_ru:'Встреться с фанатами! Они ждут элегантный и аккуратный вид.',
-    requiredTags:['school','formal'],bonusTags:['elegant'] },
-  { id:'variety_show',  judge:'kim',
+    requiredTags:['school','formal'] },
+  { id:'variety_show',
     title:'📺 Variety Show',          title_ru:'📺 Развлекательное шоу',
     desc: 'Show a cute, eye-catching look for the television screen! Fans are watching!',
     desc_ru:'Покажи милый, выделяющийся образ для экранов ТВ! Фанаты ждут его!',
-    requiredTags:['kpop','cute'],    bonusTags:['bold'] },
-  { id:'dance_practice',judge:'lee',
+    requiredTags:['kpop','cute'] },
+  { id:'dance_practice',
     title:'💃 Choreography Practice', title_ru:'💃 Репетиция хореографии',
     desc: 'Show style AND movement. Fans want to see you ready to dance!',
     desc_ru:'Покажи стиль И свободу движений. Фанаты ждут твоей готовности к танцу!',
-    requiredTags:['sporty','kpop'],  bonusTags:['casual'] },
-  { id:'vlog',          judge:'kim', // Продюсер Сон отвечает за видео-контент
+    requiredTags:['sporty','kpop'] },
+  { id:'vlog', // Продюсер Сон отвечает за видео-контент
     title:'🧋 Vlog Recording',        title_ru:'🧋 Запись влога',
     desc: 'Show your casual everyday style behind-the-scenes to your fans!',
     desc_ru:'Покажи фанатам свой естественный повседневный стиль за кулисами!',
-    requiredTags:['casual','cute'],  bonusTags:['kpop'] },
-  { id:'fans_qa',       judge:'park',
+    requiredTags:['casual','cute'] },
+  { id:'fans_qa',
     title:'📱 Live with Fans',        title_ru:'📱 Эфир с фанатами',
     desc: 'Live stream time! Fans expect a neat and casual dress for the broadcast.',
     desc_ru:'Время прямого эфира! Фанаты ждут опрятный и повседневный наряд для трансляции.',
-    requiredTags:['school','casual'],bonusTags:['elegant'] },
-  { id:'dance_challenge', judge:'kim',
+    requiredTags:['school','casual'] },
+  { id:'dance_challenge',
     title:'🎵 Viral Dance Challenge', title_ru:'🎵 Вирусный танец',
     desc: 'Record a viral dance! Fans want a bright, trendy look for social media!',
     desc_ru:'Запиши вирусный танец! Фанаты ждут яркий, трендовый образ для соцсетей!',
-    requiredTags:['cute','bold'],    bonusTags:['pastel'] }
+    requiredTags:['cute','bold'] }
 ];
 
 const FINAL_STAGES = [
-  { id:'live_stage',    judge:'kim',
+  { id:'live_stage',
     title:'🎤 Inkigayo Live Stage',    title_ru:'🎤 Выступление на Inkigayo',
     desc: 'Your debut performance! Fans are watching your bold stage style!',
     desc_ru:'Твое дебютное выступление! Фанаты ждут дерзкий сценический стиль!',
-    requiredTags:['kpop','bold'],    bonusTags:['cute'] },
-  { id:'grand_concert', judge:'park',
+    requiredTags:['kpop','bold'] },
+  { id:'grand_concert',
     title:'🏆 Rookie Awards Stage',   title_ru:'🏆 Сцена премии Rookie Awards',
     desc: 'The biggest event! Fans expect maximum elegance and perfection.',
     desc_ru:'Главное событие! Фанаты ждут максимальную элегантность и совершенство.',
-    requiredTags:['formal','elegant'],bonusTags:['cute'] }
+    requiredTags:['formal','elegant'] }
 ];
 
 const FREE_POST = {
-  id:'free_style', judge:'none',
+  id:'free_style',
   title:'📷 Free Style Post',     title_ru:'📷 Пост в свободном стиле',
   desc: 'Post whatever you like! Your fans love your personal style!',
   desc_ru:'Публикуй что хочешь! Фанаты обожают твой личный стиль!',
-  requiredTags:[], bonusTags:[], isFree: true
+  requiredTags:[], isFree: true
 };
 
 const ASSIGNMENTS = [...PROMO_ACTIVITIES, ...FINAL_STAGES, FREE_POST];
@@ -2642,70 +2638,6 @@ function showAssignmentBanner() {
   $('outfit-name-display').textContent = assignmentDesc(a);
 }
 
-// ────────────────────────────────────────────────────────────
-// SCHOOL MODE — CATWALK
-// ────────────────────────────────────────────────────────────
-
-const CATWALK_PHRASES = {
-  en: [
-    'Uploading photo... 📸',
-    'Writing post caption... ✍️',
-    'Selecting hashtags... #️⃣',
-    'Analyzing style trends... 📊',
-    'Notifying subscribers... 🔔',
-    'Going viral... 🚀',
-  ],
-  ru: [
-    'Загрузка фото... 📸',
-    'Пишем текст поста... ✍️',
-    'Подбираем хэштеги... #️⃣',
-    'Анализируем тренды... 📊',
-    'Оповещаем подписчиков... 🔔',
-    'Выходим в тренды... 🚀',
-  ],
-};
-
-function buildCatwalkCharacter() {
-  const stage = $('catwalk-stage');
-  stage.innerHTML = '';
-  const shadowDiv = document.createElement('div');
-  shadowDiv.className = 'character-shadow';
-  stage.appendChild(shadowDiv);
-
-  const bodyDiv = document.createElement('div');
-  bodyDiv.style.cssText = 'position:absolute;inset:0;z-index:0;';
-  const bodyImg = document.createElement('img');
-  bodyImg.src = 'Items/body/body_new.png';
-  bodyImg.style.cssText = 'width:100%;height:100%;object-fit:fill;display:block;pointer-events:none;';
-  bodyDiv.appendChild(bodyImg);
-  stage.appendChild(bodyDiv);
-  LAYER_ORDER.forEach(({ key, zIndex }) => {
-    if (key === 'body') return;
-    const item = findItem(key, equipped[key]);
-    if (!item || !item.src || !item.pos) return;
-    const { left, top, width } = item.pos;
-    const div = document.createElement('div');
-    const z = (item.z !== undefined) ? item.z : zIndex;
-    div.style.cssText = `position:absolute;inset:0;z-index:${z};overflow:visible;`;
-    const img = document.createElement('img');
-    img.src = item.src;
-    img.style.cssText = `position:absolute;left:${left}%;top:${top}%;width:${width}%;height:auto;pointer-events:none;`;
-    if (item.filter) img.style.filter = item.filter;
-    div.appendChild(img);
-    stage.appendChild(div);
-  });
-}
-
-function showCatwalk(assignment, onDone) {
-  buildCatwalkCharacter();
-  const phrases = CATWALK_PHRASES[lang] || CATWALK_PHRASES.en;
-  $('catwalk-phrase').textContent = phrases[Math.floor(Math.random() * phrases.length)];
-  $('catwalk-overlay').classList.remove('hidden');
-  setTimeout(() => {
-    $('catwalk-overlay').classList.add('hidden');
-    onDone();
-  }, 2400);
-}
 
 // ────────────────────────────────────────────────────────────
 // SCHOOL MODE — SCORE SCREEN
@@ -4219,7 +4151,7 @@ async function init() {
   // Also hook into window resize just in case fonts load later and change inner width
   window.addEventListener('resize', fitPanelControls);
   $('btn-next-bg').addEventListener('click', () => { sfxClick(); changeBackground(1); });
-  updateStarsDisplay();
+  updateLikesDisplay();
   initAudio();
   $('btn-new-day').addEventListener('click', () => {
     $('summary-modal').classList.add('hidden');

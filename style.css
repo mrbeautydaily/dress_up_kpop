@@ -540,84 +540,6 @@ button { cursor: pointer; border: none; font-family: inherit; }
 }
 .item-card.selected .item-name { color: var(--pink); }
 
-/* ============================================================
-   CATWALK OVERLAY
-   ============================================================ */
-#catwalk-overlay {
-  position: fixed; inset: 0; z-index: 500;
-  display: flex; align-items: center; justify-content: center;
-}
-.catwalk-bg {
-  width: 100%; height: 100%;
-  background: linear-gradient(160deg, #1a0533 0%, #3b0764 40%, #6d1a5e 100%);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: space-between;
-  padding: 1rem 0 0;
-  position: relative; overflow: hidden;
-}
-
-/* Flashing runway lights at top */
-.runway-lights {
-  display: flex; gap: 1.5rem; padding: 0 1rem;
-}
-.runway-light {
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: var(--yellow);
-  box-shadow: 0 0 12px rgba(251,191,36,.9);
-  animation: lightPulse 1s ease-in-out infinite alternate;
-}
-.runway-light:nth-child(2) { animation-delay: .2s; }
-.runway-light:nth-child(3) { animation-delay: .4s; }
-.runway-light:nth-child(4) { animation-delay: .6s; }
-.runway-light:nth-child(5) { animation-delay: .8s; }
-@keyframes lightPulse {
-  from { opacity: .3; transform: scale(.8); }
-  to   { opacity: 1;  transform: scale(1.1); }
-}
-
-.catwalk-phrase-wrap {
-  text-align: center; padding: .5rem 1rem;
-}
-#catwalk-phrase {
-  font-size: 1.4rem; font-weight: 900;
-  color: var(--yellow);
-  text-shadow: 0 0 20px rgba(251,191,36,.7);
-  animation: phraseGlow 1.5s ease-in-out infinite alternate;
-}
-@keyframes phraseGlow {
-  from { text-shadow: 0 0 10px rgba(251,191,36,.5); }
-  to   { text-shadow: 0 0 30px rgba(251,191,36,1), 0 0 60px rgba(255,110,180,.5); }
-}
-
-/* Mini character stage on catwalk */
-#catwalk-stage-wrap {
-  flex: 1;
-  display: flex; align-items: flex-end; justify-content: center;
-  max-height: 65vh;
-  padding: 0 1rem;
-}
-#catwalk-stage {
-  position: relative;
-  aspect-ratio: 768 / 1376;
-  height: 100%; width: auto;
-  max-width: 100%;
-  animation: catwalkSlide 1s cubic-bezier(.22,.61,.36,1) both;
-}
-@keyframes catwalkSlide {
-  from { transform: translateX(60px) scale(.85); opacity: 0; }
-  to   { transform: translateX(0) scale(1); opacity: 1; }
-}
-
-.runway-floor {
-  width: 100%; padding: .6rem 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
-  text-align: center; border-top: 2px solid rgba(255,255,255,.15);
-}
-.runway-text {
-  font-size: .85rem; font-weight: 900; letter-spacing: 4px;
-  color: rgba(255,255,255,.7);
-}
 
 /* ============================================================
    MODAL OVERLAYS (Score + Summary)
@@ -1138,9 +1060,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   /* Share camera & Random button */
   .btn-share-stage, .stage-controls-left button { width: 38px; height: 38px; font-size: 1.1rem; }
 
-  /* Catwalk */
-  #catwalk-phrase { font-size: 1.1rem; }
-  .catwalk-phrase-wrap { padding: .4rem 1rem; }
+
 }
 
 /* Intro on small screens — fallback for older rule */
@@ -1916,11 +1836,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   #intro-dots  { margin: .45rem 0 .35rem; }
   .intro-dot   { width: 6px; height: 6px; }
 
-  /* ── Runway/catwalk ── */
-  .catwalk-phrase-wrap { padding: .3rem 1rem; }
-  #catwalk-phrase { font-size: 1rem; }
-  .runway-floor   { padding: .3rem; }
-  .runway-text    { font-size: .8rem; }
+
 }
 
 /* Очень маленькие и узкие ландшафты (напр. Galaxy Fold) */
