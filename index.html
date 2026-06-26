@@ -5,13 +5,26 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>Путь к славе: K-Pop</title>
-<link rel="stylesheet" href="style.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=5.0"/>
 </head>
 <body>
 <!-- ===== LOADING SCREEN ===== -->
 <div id="loading-screen">
 <div class="loading-content">
-<div class="loading-star">⭐</div>
+<div class="loading-star">
+  <svg viewBox="0 0 24 24" width="70" height="70" fill="url(#star-grad)">
+    <defs>
+      <linearGradient id="star-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fff" />
+        <stop offset="100%" stop-color="#ffd6ec" />
+      </linearGradient>
+    </defs>
+    <path d="M12 0L14.8 8.8L24 12L14.8 15.2L12 24L9.2 15.2L0 12L9.2 8.8L12 0Z"/>
+  </svg>
+</div>
 <h1 id="loading-title">K-Pop Star Maker</h1>
 <div class="loading-bar-wrap"><div id="loading-bar"></div></div>
 <p id="loading-text">Preparing your K-Pop group debut...</p>
@@ -41,13 +54,26 @@
 <!-- Assignment Banner (turned into a floating card, school mode only) -->
 <div id="assignment-banner" class="assignment-card hidden">
 <div class="assignment-card-header" id="assignment-card-toggle">
-<span class="calendar-icon">📅</span>
+<span class="calendar-icon">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+    <line x1="16" y1="2" x2="16" y2="6"/>
+    <line x1="8" y1="2" x2="8" y2="6"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+  </svg>
+</span>
 <span id="banner-lesson"></span>
-<span class="arrow-icon" id="assignment-card-arrow">▼</span>
+<span class="arrow-icon" id="assignment-card-arrow">
+  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+    <polyline points="6 9 12 15 18 9"/>
+  </svg>
+</span>
 </div>
 <div class="assignment-card-content" id="assignment-card-content">
 <div class="assignment-card-title-row">
-<span class="camera-icon">📷</span>
+<span class="camera-icon">
+  <img src="Items/UI/camera.png" class="ui-icon" alt="camera">
+</span>
 <span id="banner-task-title" class="assignment-card-title"></span>
 </div>
 <p id="banner-task-desc" class="assignment-card-desc"></p>
@@ -57,36 +83,94 @@
 <!-- Top right controls for stars, achievements, sound -->
 <div id="panel-controls" class="panel-controls">
 <div id="panel-controls-inner" class="panel-controls-inner">
-<button id="followers-display" class="stars-btn followers-btn">👥 <span id="followers-count">0</span></button>
-<button id="stars-display" class="stars-btn">❤️ <span id="stars-count">0</span></button>
-<button id="btn-runway" class="btn btn-runway-main hidden">🌟 <span id="btn-runway-label">Runway!</span></button>
-<button id="btn-achievements" class="btn btn-yellow">🏆</button>
+<button id="btn-runway" class="btn btn-runway-main hidden">
+  <!-- Left sparkles -->
+  <div class="runway-sparkles runway-sparkles-left">
+    <svg class="runway-sparkle sparkle-lg" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
+    <svg class="runway-sparkle sparkle-sm" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
+    <svg class="runway-sparkle sparkle-xs" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
+  </div>
+  <svg class="runway-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="22" y1="2" x2="11" y2="13"></line>
+    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+  </svg>
+  <span id="btn-runway-label">Runway!</span>
+  <!-- Right sparkles -->
+  <div class="runway-sparkles runway-sparkles-right">
+    <svg class="runway-sparkle sparkle-lg" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
+    <svg class="runway-sparkle sparkle-sm" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
+    <svg class="runway-sparkle sparkle-xs" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
+  </div>
+</button>
+<button id="btn-achievements" class="btn btn-yellow">
+  <img src="Items/UI/achievements.png" class="ui-icon-btn" alt="achievements">
+</button>
 </div>
 </div>
 <!-- CENTER: character stage -->
 <section id="stage-wrap">
+<div class="stage-counters">
+  <button class="stage-counters-bar" id="stars-display">
+    <div class="stage-counter-unit" id="followers-display">
+      <img src="Items/UI/followers.png" class="ui-icon" alt="followers">
+      <span id="followers-count">0</span>
+    </div>
+    <div class="stage-counter-divider"></div>
+    <div class="stage-counter-unit">
+      <img src="Items/UI/heart.png" class="ui-icon" alt="heart">
+      <span id="stars-count">0</span>
+    </div>
+  </button>
+</div>
 <div id="stage">
 <div id="character-layers"></div>
 <div id="sparkles"></div>
 </div>
 <div id="outfit-name-display"></div>
 <div class="stage-controls-left">
-<button id="btn-random-stage" class="btn-random-stage" title="Случайный наряд">🎲</button>
-<button id="btn-prev-bg" class="btn-prev-bg" title="Предыдущий фон">◀</button>
-<button id="btn-next-bg" class="btn-next-bg" title="Следующий фон">▶</button>
+<button id="btn-random-stage" class="btn-random-stage" title="Случайный наряд">
+  <img src="Items/UI/random.png" class="ui-icon-btn" alt="random">
+</button>
+<button id="btn-prev-bg" class="btn-prev-bg" title="Предыдущий фон">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: auto;">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+</button>
+<button id="btn-next-bg" class="btn-next-bg" title="Следующий фон">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: auto;">
+    <polyline points="9 18 15 12 9 6"/>
+  </svg>
+</button>
 </div>
 </section>
-<!-- LEFT: category selector -->
-<aside id="category-panel">
-<div id="category-list"></div>
-<!-- Camera/Share button moved here, to sit at the bottom in desktop -->
-<button id="btn-share-stage" class="btn-share-stage" title="Сделать скриншот">📸</button>
-<button id="btn-sound" class="btn-share-stage" title="Вкл/Выкл звук">🔊</button>
+<!-- Right Sidebar Container -->
+<aside class="sidebar items-sidebar">
+  <div class="sidebar-split-layout">
+    <!-- LEFT: category selector -->
+    <div class="category-nav-column" id="category-panel">
+      <nav class="category-list" id="category-list">
+        <!-- Dynamically populated via JavaScript -->
+      </nav>
+      <!-- Camera/Share button moved here, to sit at the bottom in desktop -->
+      <button id="btn-share-stage" class="btn-share-stage" title="Сделать скриншот">
+        <img src="Items/UI/camera.png" class="ui-icon-btn" alt="camera">
+      </button>
+      <button id="btn-sound" class="btn-share-stage" title="Вкл/Выкл звук">
+        <img src="Items/UI/sound.png" class="ui-icon-btn" alt="sound">
+      </button>
+    </div>
+
+    <!-- RIGHT: items grid -->
+    <div class="items-content-column" id="items-panel">
+      <div class="items-grid-container">
+        <div class="items-grid" id="items-grid">
+          <!-- Dynamically populated via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
 </aside>
-<!-- RIGHT: items grid -->
-<aside id="items-panel">
-<div id="items-grid"></div>
-</aside>
+
 </main>
 </div>
 
@@ -196,13 +280,17 @@
       <div class="score-breakdown">
         <!-- Row: Items equipped -->
         <div class="score-breakdown-row" id="score-row-items">
-          <span class="breakdown-icon">🧩</span>
+          <span class="breakdown-icon">
+            <img src="Items/UI/hanger.png" alt="Hanger" class="breakdown-img">
+          </span>
           <span class="breakdown-label" id="score-items-label">Образ: 0/6</span>
           <span class="breakdown-value" id="score-items-value">0</span>
         </div>
         <!-- Row: Trend multiplier (hidden if x1.0) -->
         <div class="score-breakdown-row trend-row" id="score-row-trend">
-          <span class="breakdown-icon">🔥</span>
+          <span class="breakdown-icon">
+            <img src="Items/UI/fire.png" alt="Fire" class="breakdown-img">
+          </span>
           <span class="breakdown-label" id="score-trend-label">Тренд</span>
           <span class="breakdown-value trend-multiplier" id="score-trend-value">+0</span>
         </div>
@@ -211,12 +299,16 @@
       <!-- Rewards: followers + likes -->
       <div class="score-rewards-block">
         <div class="score-reward-item" id="score-reward-followers">
-          <span class="reward-icon">👥</span>
+          <span class="reward-icon">
+            <img src="Items/UI/followers.png" alt="Followers" class="reward-img">
+          </span>
           <span class="reward-text"><span class="reward-plus">+</span><span id="score-followers-gained">0</span><span class="reward-unit" id="score-total-unit"> подписчиков</span></span>
         </div>
         <div class="score-reward-item" id="score-reward-row">
-          <span class="reward-icon">❤️</span>
-          <span class="reward-text"><span id="score-reward-value">+0</span></span>
+          <span class="reward-icon">
+            <img src="Items/UI/heart.png" alt="Likes" class="reward-img">
+          </span>
+          <span class="reward-text"><span class="reward-plus">+</span><span id="score-reward-value">0</span><span class="reward-unit" id="score-likes-unit"> лайков</span></span>
         </div>
       </div>
     </div>
@@ -230,7 +322,13 @@
       <!-- Secondary action buttons are 50/50 at the bottom -->
       <div class="score-actions-row-sub">
         <button id="btn-double-reward" class="btn btn-double-reward score-btn hidden"></button>
-        <button id="btn-share-score" class="btn btn-share-outfit score-btn">📸 <span id="btn-share-score-label">Share Outfit</span></button>
+        <button id="btn-share-score" class="btn btn-share-outfit score-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; display: inline-block; vertical-align: middle;">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <span id="btn-share-score-label">Share Outfit</span>
+        </button>
       </div>
     </div>
   </div>
@@ -319,6 +417,43 @@
       <label for="dev-bg-blur">Размытие фона: <span id="dev-bg-blur-val">1.5px</span></label>
       <input type="range" id="dev-bg-blur" min="0" max="15" step="0.5" value="1.5">
     </div>
+    <div class="dev-control-group">
+      <label for="dev-ui-theme">Стиль интерфейса (Палитра):</label>
+      <select id="dev-ui-theme" class="dev-select">
+        <option value="default">Lavender Dream (Лаванда)</option>
+        <option value="strawberry">Strawberry Milkshake (Клубника)</option>
+        <option value="peach">Peach Blossom (Персик)</option>
+        <option value="bubblegum">Neon Bubblegum (Жвачка)</option>
+        <option value="mintchoco">Mint Choco (Мятный Шоколад)</option>
+        <option value="cherry">Vibrant Cherry (Спелая Вишня)</option>
+        <option value="sakura">Sakura Petal (Лепесток Сакуры)</option>
+        <option value="rose">Rose Quartz (Розовый Кварц)</option>
+        <option value="candyfloss">Sweet Candyfloss (Сладкая Вата)</option>
+        <option value="lilac">Lilac Blossom (Сиреневый)</option>
+        <option value="peachcream">Peach Cream (Персиковый Крем)</option>
+        <option value="coral">Coral Candy (Коралловая Конфета)</option>
+        <option value="melon">Melon Ice Cream (Дынное Мороженое)</option>
+        <option value="marshmallow">Marshmallow Sky (Зефирное Небо)</option>
+        <option value="raspberry">Raspberry Sorbet (Малиновый Сорбет)</option>
+        <option value="vanilla">Vanilla Orchid (Ванильная Орхидея)</option>
+      </select>
+    </div>
+    <div class="dev-control-group">
+      <label for="dev-runway-style">Стиль кнопки «Опубликовать»:</label>
+      <select id="dev-runway-style" class="dev-select">
+        <option value="sweet" selected>Sweet Sparkle (Сладкая искра) [Рекомендуется]</option>
+        <option value="candy">Candy Shimmer (Леденцовый блеск)</option>
+        <option value="glass">Soft Glassmorphism (Матовое стекло)</option>
+        <option value="y2k">Retro Y2K Neon (Ретро неон)</option>
+        <option value="vip">Golden Star VIP (Золотая звезда)</option>
+        <option value="cyber">Cyberpunk Laser (Киберпанк)</option>
+        <option value="kawaii">Kawaii Bubblegum (Кавайная жвачка)</option>
+        <option value="holo">Holographic Glitch (Голограмма)</option>
+        <option value="minimal">Minimalist Chic (Минимализм)</option>
+        <option value="gothic">Spooky Gothic (Готика)</option>
+        <option value="disco">Electric Disco (Диско-лайт)</option>
+      </select>
+    </div>
     <button id="dev-panel-reset" class="btn btn-yellow dev-reset-btn">Сбросить настройки</button>
   </div>
 </div>
@@ -336,6 +471,6 @@
 <!-- Yandex Games SDK — обязательно до game.js -->
 <script src="/sdk.js"></script>
 <script src="bboxes.js"></script>
-<script src="game.js"></script>
+<script src="game.js?v=5.0"></script>
 </body>
 </html>

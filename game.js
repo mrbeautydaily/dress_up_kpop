@@ -40,7 +40,7 @@ const T = {
     btnSaved:      '✅ Saved!',
     btnSchool:     '🌟 Promo',
     btnSchoolOn:   '🌟 Promo ON',
-    btnRunway:     '📱 Publish Post',
+    btnRunway:     'Publish Post',
     // Panels
     categoryLabel: 'Category',
     itemsLabel:    'Items',
@@ -89,7 +89,7 @@ const T = {
     btnSaved:      '✅ Сохранено!',
     btnSchool:     '🌟 Промо',
     btnSchoolOn:   '🌟 Промо ВКЛ',
-    btnRunway:     '📱 Опубликовать',
+    btnRunway:     'Опубликовать',
     // Panels
     categoryLabel: 'Категория',
     itemsLabel:    'Вещи',
@@ -1422,12 +1422,12 @@ const LAYER_ORDER = [
 
 function getCategories() {
   return [
-    { key:'hair',        label:t('catHair'),    icon:'💇' },
-    { key:'tops',        label:t('catTops'),    icon:'👕' },
-    { key:'bottoms',     label:t('catBottoms'), icon:'👖' },
-    { key:'shoes',       label:t('catShoes'),   icon:'👟' },
-    { key:'socks',       label:t('catSocks'),   icon:'🧦' },
-    { key:'accessories', label:t('catAcc'),     icon:'✨' },
+    { key:'hair',        label:t('catHair'),    icon:`<img src="Items/UI/hair.png" class="ui-icon" alt="hair">` },
+    { key:'tops',        label:t('catTops'),    icon:`<img src="Items/UI/tops.png" class="ui-icon" alt="tops">` },
+    { key:'bottoms',     label:t('catBottoms'), icon:`<img src="Items/UI/bottoms.png" class="ui-icon" alt="bottoms">` },
+    { key:'shoes',       label:t('catShoes'),   icon:`<img src="Items/UI/shoes.png" class="ui-icon" alt="shoes">` },
+    { key:'socks',       label:t('catSocks'),   icon:`<img src="Items/UI/socks.png" class="ui-icon" alt="socks">` },
+    { key:'accessories', label:t('catAcc'),     icon:`<img src="Items/UI/accessories.png" class="ui-icon" alt="accessories">` },
   ];
 }
 
@@ -1588,12 +1588,12 @@ let activeCategory    = 'hair';
 // Подкатегории для категорий с разделением
 const CATEGORY_SUBS = {
   tops: [
-    { key:'blouses', icon:'👚', label:'Blouses', label_ru:'Блузки'  },
-    { key:'dresses', icon:'👗', label:'Dresses', label_ru:'Платья'  },
+    { key:'blouses', icon:`<img src="Items/UI/blouses.png" alt="Blouses">`, label:'Blouses', label_ru:'Блузки'  },
+    { key:'dresses', icon:`<img src="Items/UI/dresses.png" alt="Dresses">`, label:'Dresses', label_ru:'Платья'  },
   ],
   bottoms: [
-    { key:'pants',   icon:'👖', label:'Pants',   label_ru:'Брюки'  },
-    { key:'skirts',  icon:'🎀', label:'Skirts',  label_ru:'Юбки'   },
+    { key:'pants',   icon:`<img src="Items/UI/pants.png" alt="Pants">`, label:'Pants',   label_ru:'Брюки'  },
+    { key:'skirts',  icon:`<img src="Items/UI/skirts.png" alt="Skirts">`, label:'Skirts',  label_ru:'Юбки'   },
   ],
 };
 
@@ -1810,7 +1810,9 @@ function toggleSound() {
   soundOn = !soundOn;
   try { localStorage.setItem('kpop_sound', soundOn ? '1' : '0'); } catch(e) {}
   const btn = $('btn-sound');
-  if (btn) btn.textContent = soundOn ? '🔊' : '🔇';
+  if (btn) {
+    btn.classList.toggle('muted', !soundOn);
+  }
   if (soundOn) { if (_actx) _actx.resume(); actx(); startBGM(); sfxClick(); }
   else { pauseBGM(); stopBGM(); }
 }
@@ -1818,7 +1820,9 @@ function toggleSound() {
 function initAudio() {
   soundOn = localStorage.getItem('kpop_sound') !== '0';
   const btn = $('btn-sound');
-  if (btn) btn.textContent = soundOn ? '🔊' : '🔇';
+  if (btn) {
+    btn.classList.toggle('muted', !soundOn);
+  }
   // Браузеры запрещают AudioContext до первого жеста пользователя
   document.addEventListener('click', function onFirstClick() {
     actx();
@@ -1918,22 +1922,59 @@ function buildCategoryPanel() {
   const list = $('category-list');
   list.innerHTML = '';
   getCategories().forEach(cat => {
+    // 1. Wrapper div
+    const wrapper = document.createElement('div');
+    wrapper.className = `category-item-wrapper ${cat.key === activeCategory ? 'active' : ''}`;
+    wrapper.dataset.key = cat.key;
+
+    // 2. Main button with icon
     const btn = document.createElement('button');
-    btn.className = 'cat-btn' + (cat.key === activeCategory ? ' active' : '');
+    btn.className = `category-item cat-btn ${cat.key === activeCategory ? 'active' : ''}`;
     btn.dataset.key = cat.key;
-    btn.innerHTML = `<span class="cat-icon">${cat.icon}</span>${cat.label}`;
+    btn.innerHTML = `<span class="category-icon cat-icon">${cat.icon}</span>`;
+    btn.title = cat.label;
+
+    // 3. Text label
+    const label = document.createElement('span');
+    label.className = `category-item-label ${cat.key === activeCategory ? 'active' : ''}`;
+    label.textContent = cat.label;
+
+    // 4. Click event handler
     btn.addEventListener('click', () => selectCategory(cat.key));
-    list.appendChild(btn);
+
+    wrapper.appendChild(btn);
+    wrapper.appendChild(label);
+    list.appendChild(wrapper);
   });
 }
 
 function selectCategory(key) {
   activeCategory = key;
-  document.querySelectorAll('.cat-btn').forEach(btn =>
+  
+  // Update active classes across UI elements
+  document.querySelectorAll('.category-item-wrapper').forEach(w => 
+    w.classList.toggle('active', w.dataset.key === key)
+  );
+  document.querySelectorAll('.category-item, .cat-btn').forEach(btn =>
     btn.classList.toggle('active', btn.dataset.key === key)
   );
+  document.querySelectorAll('.category-item-label').forEach(l => {
+    const wrapper = l.closest('.category-item-wrapper');
+    if (wrapper) {
+      l.classList.toggle('active', wrapper.dataset.key === key);
+    }
+  });
+
+  // Reset scroll position when switching categories
+  const grid = $('items-grid');
+  if (grid) {
+    grid.scrollTop = 0;
+    grid.scrollLeft = 0;
+  }
+
   buildItemsGrid(key);
 }
+
 
 function buildSubTabs(category) {
   const subs = CATEGORY_SUBS[category];
@@ -1948,7 +1989,7 @@ function buildSubTabs(category) {
   subs.forEach(sub => {
     const btn = document.createElement('button');
     btn.className = 'sub-tab-btn' + (activeSub[category] === sub.key ? ' active' : '');
-    btn.textContent = sub.icon + ' ' + subLabel(sub);
+    btn.innerHTML = sub.icon + '<span>' + subLabel(sub) + '</span>';
     btn.addEventListener('click', () => {
       activeSub[category] = sub.key;
       buildSubTabs(category);
@@ -2103,18 +2144,41 @@ function buildItemsGrid(category) {
     const isDeal = locked && item.id === dealId;
     const cost   = isDeal ? getDailyDealLikesCost(item.id) : itemLikesCost(item.id);
 
+    const baseCost = itemCost(item.id);
+    let rarityClass = 'rarity-common';
+    if (baseCost > 0) {
+      if (baseCost <= 25) {
+        rarityClass = 'rarity-uncommon';
+      } else if (baseCost <= 39) {
+        rarityClass = 'rarity-rare';
+      } else if (baseCost <= 49) {
+        rarityClass = 'rarity-epic';
+      } else {
+        rarityClass = 'rarity-legendary';
+      }
+    }
+
+    const isEquipped = equipped[category] === item.id;
     const card = document.createElement('div');
-    card.className = 'item-card'
-      + (equipped[category] === item.id ? ' selected' : '')
+    card.className = 'item-card ' + rarityClass
+      + (isEquipped ? ' selected equipped' : '')
       + (locked ? ' locked' : '');
     card.dataset.id = item.id;
 
     const filterStyle = item.filter ? ` style="filter:${item.filter}"` : '';
-    const thumbHTML = item.src
-      ? `<div class="item-thumb-wrapper" style="position: relative;">
+    let thumbHTML = '';
+    if (item.src) {
+      thumbHTML = `<div class="item-thumb-wrapper" style="position: relative;">
           <canvas class="item-thumb" width="120" height="120" style="display: block; width: 100%; height: 100%; pointer-events: none;"${filterStyle}></canvas>
-        </div>`
-      : `<div class="thumb-none">✕</div>`;
+        </div>`;
+    } else {
+      thumbHTML = `<div class="item-thumb-wrapper" style="display: flex; justify-content: center; align-items: center;">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--card-text)" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>`;
+    }
 
     const isAdItem     = AD_ITEMS.has(item.id);
     const isReviewItem = item.id === REVIEW_ITEM;
@@ -2135,6 +2199,13 @@ function buildItemsGrid(category) {
         drawItemThumbnail(canvas, item.src);
       }
     }
+    if (isEquipped) {
+      const check = document.createElement('div');
+      check.className = 'equipped-indicator';
+      check.textContent = '✓';
+      card.appendChild(check);
+    }
+
     card.addEventListener('click', () => {
       tryEquipOrBuy(category, item.id);
     });
@@ -2171,9 +2242,21 @@ function equipItem(category, itemId) {
   spawnSparkles(12);
   sfxEquip();
   updateOutfitName();
-  document.querySelectorAll('#items-grid .item-card').forEach(card =>
-    card.classList.toggle('selected', card.dataset.id === itemId)
-  );
+  document.querySelectorAll('#items-grid .item-card').forEach(card => {
+    const isCurrent = card.dataset.id === itemId;
+    card.classList.toggle('selected', isCurrent);
+    card.classList.toggle('equipped', isCurrent);
+
+    const indicator = card.querySelector('.equipped-indicator');
+    if (isCurrent && !indicator) {
+      const check = document.createElement('div');
+      check.className = 'equipped-indicator';
+      check.textContent = '✓';
+      card.appendChild(check);
+    } else if (!isCurrent && indicator) {
+      indicator.remove();
+    }
+  });
   saveOutfit();
   checkAchievements();
   updateRunwayBtn();
@@ -3381,10 +3464,13 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       rewardRow.style.display = 'flex';
       const rewardValEl = $('score-reward-value');
       if (rewardValEl) {
-        const likesSuffix = lang === 'ru' ? ' лайков' : ' likes';
-        rewardValEl.textContent = '+0' + likesSuffix;
+        rewardValEl.textContent = '0';
         const likesVal = earned || 0;
-        setTimeout(() => animateCounter(rewardValEl, likesVal, 900, '+', likesSuffix, 'short'), 800);
+        setTimeout(() => animateCounter(rewardValEl, likesVal, 900, '', '', 'short'), 800);
+      }
+      const likesUnitEl = $('score-likes-unit');
+      if (likesUnitEl) {
+        likesUnitEl.textContent = lang === 'ru' ? ' лайков' : ' likes';
       }
     }
   }
@@ -4172,6 +4258,8 @@ async function init() {
   // Initialize developer tools panel
   initDevPanel();
 
+
+
   // Hide loading, show intro or game
   const loadingEl = $('loading-screen');
   loadingEl.style.transition = 'opacity .4s ease';
@@ -4386,8 +4474,10 @@ function initDevPanel() {
   const bgYVal = $('dev-bg-y-val');
   const bgBlurSlider = $('dev-bg-blur');
   const bgBlurVal = $('dev-bg-blur-val');
+  const themeSelect = $('dev-ui-theme');
+  const runwayStyleSelect = $('dev-runway-style');
 
-  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider) return;
+  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider || !runwayStyleSelect) return;
 
   // Toggle dev panel view
   trigger.addEventListener('click', () => {
@@ -4411,13 +4501,19 @@ function initDevPanel() {
   const savedBgScale = localStorage.getItem('dev_bg_scale') || '0.95';
   const savedBgY = localStorage.getItem('dev_bg_y') || '0';
   const savedBgBlur = localStorage.getItem('dev_bg_blur') || '1.5';
+  const savedTheme = localStorage.getItem('dev_ui_theme') || 'default';
+  const savedRunwayStyle = localStorage.getItem('dev_runway_style') || 'sweet';
 
-  // Apply scales and values initially
+  // Apply scales, values and theme initially
   applyCharScale(savedCharScale);
   applyCharY(savedCharY);
   applyBgScale(savedBgScale);
   applyBgY(savedBgY);
   applyBgBlur(savedBgBlur);
+  applyTheme(savedTheme);
+  applyRunwayStyle(savedRunwayStyle);
+  if (themeSelect) themeSelect.value = savedTheme;
+  if (runwayStyleSelect) runwayStyleSelect.value = savedRunwayStyle;
 
   // Sync sliders
   charSlider.value = savedCharScale;
@@ -4471,6 +4567,22 @@ function initDevPanel() {
     localStorage.setItem('dev_bg_blur', val);
   });
 
+  if (themeSelect) {
+    themeSelect.addEventListener('change', (e) => {
+      const val = e.target.value;
+      applyTheme(val);
+      localStorage.setItem('dev_ui_theme', val);
+    });
+  }
+
+  if (runwayStyleSelect) {
+    runwayStyleSelect.addEventListener('change', (e) => {
+      const val = e.target.value;
+      applyRunwayStyle(val);
+      localStorage.setItem('dev_runway_style', val);
+    });
+  }
+
   // Reset function
   resetBtn.addEventListener('click', () => {
     applyCharScale('1.15');
@@ -4478,6 +4590,8 @@ function initDevPanel() {
     applyBgScale('0.95');
     applyBgY('0');
     applyBgBlur('1.5');
+    applyTheme('default');
+    applyRunwayStyle('sweet');
     
     charSlider.value = '1.15';
     charVal.textContent = '1.15x';
@@ -4493,12 +4607,17 @@ function initDevPanel() {
 
     bgBlurSlider.value = '1.5';
     bgBlurVal.textContent = '1.5px';
+
+    if (themeSelect) themeSelect.value = 'default';
+    if (runwayStyleSelect) runwayStyleSelect.value = 'sweet';
     
     localStorage.setItem('dev_char_scale', '1.15');
     localStorage.setItem('dev_char_y', '30');
     localStorage.setItem('dev_bg_scale', '0.95');
     localStorage.setItem('dev_bg_y', '0');
     localStorage.setItem('dev_bg_blur', '1.5');
+    localStorage.setItem('dev_ui_theme', 'default');
+    localStorage.setItem('dev_runway_style', 'sweet');
   });
 
   function applyCharScale(val) {
@@ -4519,6 +4638,28 @@ function initDevPanel() {
 
   function applyBgBlur(val) {
     document.documentElement.style.setProperty('--bg-blur', val + 'px');
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.classList.remove(
+      'theme-strawberry', 'theme-peach', 'theme-bubblegum', 'theme-mintchoco', 'theme-cherry',
+      'theme-sakura', 'theme-rose', 'theme-candyfloss', 'theme-lilac', 'theme-peachcream',
+      'theme-coral', 'theme-melon', 'theme-marshmallow', 'theme-raspberry', 'theme-vanilla'
+    );
+    if (theme && theme !== 'default') {
+      document.documentElement.classList.add('theme-' + theme);
+    }
+  }
+
+  function applyRunwayStyle(style) {
+    const btn = $('btn-runway');
+    if (!btn) return;
+    btn.classList.remove(
+      'runway-style-sweet', 'runway-style-candy', 'runway-style-glass', 'runway-style-y2k', 'runway-style-vip',
+      'runway-style-cyber', 'runway-style-kawaii', 'runway-style-holo', 'runway-style-minimal',
+      'runway-style-gothic', 'runway-style-disco'
+    );
+    btn.classList.add('runway-style-' + style);
   }
 }
 
