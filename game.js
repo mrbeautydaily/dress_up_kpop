@@ -1626,6 +1626,11 @@ const $ = id => document.getElementById(id);
 function buildCharacterLayers() {
   const container = $('character-layers');
   container.innerHTML = '';
+  
+  const auraDiv = document.createElement('div');
+  auraDiv.className = 'character-aura';
+  container.appendChild(auraDiv);
+
   const shadowDiv = document.createElement('div');
   shadowDiv.className = 'character-shadow';
   container.appendChild(shadowDiv);
@@ -4474,10 +4479,13 @@ function initDevPanel() {
   const bgYVal = $('dev-bg-y-val');
   const bgBlurSlider = $('dev-bg-blur');
   const bgBlurVal = $('dev-bg-blur-val');
-  const themeSelect = $('dev-ui-theme');
-  const runwayStyleSelect = $('dev-runway-style');
+  const bgDimSlider = $('dev-bg-dim');
+  const bgDimVal = $('dev-bg-dim-val');
+  const auraOpacitySlider = $('dev-aura-opacity');
+  const auraOpacityVal = $('dev-aura-opacity-val');
+  const auraColorSelect = $('dev-aura-color');
 
-  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider || !runwayStyleSelect) return;
+  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider || !bgDimSlider || !auraOpacitySlider || !auraColorSelect) return;
 
   // Toggle dev panel view
   trigger.addEventListener('click', () => {
@@ -4501,19 +4509,19 @@ function initDevPanel() {
   const savedBgScale = localStorage.getItem('dev_bg_scale') || '0.95';
   const savedBgY = localStorage.getItem('dev_bg_y') || '0';
   const savedBgBlur = localStorage.getItem('dev_bg_blur') || '1.5';
-  const savedTheme = localStorage.getItem('dev_ui_theme') || 'default';
-  const savedRunwayStyle = localStorage.getItem('dev_runway_style') || 'sweet';
+  const savedBgDim = localStorage.getItem('dev_bg_dim') || '15';
+  const savedAuraOpacity = localStorage.getItem('dev_aura-opacity') || '70';
+  const savedAuraColor = localStorage.getItem('dev_aura-color') || 'warm';
 
-  // Apply scales, values and theme initially
+  // Apply scales and values initially
   applyCharScale(savedCharScale);
   applyCharY(savedCharY);
   applyBgScale(savedBgScale);
   applyBgY(savedBgY);
   applyBgBlur(savedBgBlur);
-  applyTheme(savedTheme);
-  applyRunwayStyle(savedRunwayStyle);
-  if (themeSelect) themeSelect.value = savedTheme;
-  if (runwayStyleSelect) runwayStyleSelect.value = savedRunwayStyle;
+  applyBgDim(savedBgDim);
+  applyAuraOpacity(savedAuraOpacity);
+  applyAuraColor(savedAuraColor);
 
   // Sync sliders
   charSlider.value = savedCharScale;
@@ -4530,6 +4538,14 @@ function initDevPanel() {
 
   bgBlurSlider.value = savedBgBlur;
   bgBlurVal.textContent = parseFloat(savedBgBlur).toFixed(1) + 'px';
+
+  bgDimSlider.value = savedBgDim;
+  bgDimVal.textContent = savedBgDim + '%';
+
+  auraOpacitySlider.value = savedAuraOpacity;
+  auraOpacityVal.textContent = savedAuraOpacity + '%';
+
+  auraColorSelect.value = savedAuraColor;
 
   // Slider change listeners
   charSlider.addEventListener('input', (e) => {
@@ -4567,21 +4583,25 @@ function initDevPanel() {
     localStorage.setItem('dev_bg_blur', val);
   });
 
-  if (themeSelect) {
-    themeSelect.addEventListener('change', (e) => {
-      const val = e.target.value;
-      applyTheme(val);
-      localStorage.setItem('dev_ui_theme', val);
-    });
-  }
+  bgDimSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    applyBgDim(val);
+    bgDimVal.textContent = val + '%';
+    localStorage.setItem('dev_bg_dim', val);
+  });
 
-  if (runwayStyleSelect) {
-    runwayStyleSelect.addEventListener('change', (e) => {
-      const val = e.target.value;
-      applyRunwayStyle(val);
-      localStorage.setItem('dev_runway_style', val);
-    });
-  }
+  auraOpacitySlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    applyAuraOpacity(val);
+    auraOpacityVal.textContent = val + '%';
+    localStorage.setItem('dev_aura-opacity', val);
+  });
+
+  auraColorSelect.addEventListener('change', (e) => {
+    const val = e.target.value;
+    applyAuraColor(val);
+    localStorage.setItem('dev_aura-color', val);
+  });
 
   // Reset function
   resetBtn.addEventListener('click', () => {
@@ -4590,8 +4610,9 @@ function initDevPanel() {
     applyBgScale('0.95');
     applyBgY('0');
     applyBgBlur('1.5');
-    applyTheme('default');
-    applyRunwayStyle('sweet');
+    applyBgDim('15');
+    applyAuraOpacity('70');
+    applyAuraColor('warm');
     
     charSlider.value = '1.15';
     charVal.textContent = '1.15x';
@@ -4608,16 +4629,22 @@ function initDevPanel() {
     bgBlurSlider.value = '1.5';
     bgBlurVal.textContent = '1.5px';
 
-    if (themeSelect) themeSelect.value = 'default';
-    if (runwayStyleSelect) runwayStyleSelect.value = 'sweet';
+    bgDimSlider.value = '15';
+    bgDimVal.textContent = '15%';
+
+    auraOpacitySlider.value = '70';
+    auraOpacityVal.textContent = '70%';
+
+    auraColorSelect.value = 'warm';
     
     localStorage.setItem('dev_char_scale', '1.15');
     localStorage.setItem('dev_char_y', '30');
     localStorage.setItem('dev_bg_scale', '0.95');
     localStorage.setItem('dev_bg_y', '0');
     localStorage.setItem('dev_bg_blur', '1.5');
-    localStorage.setItem('dev_ui_theme', 'default');
-    localStorage.setItem('dev_runway_style', 'sweet');
+    localStorage.setItem('dev_bg_dim', '15');
+    localStorage.setItem('dev_aura-opacity', '70');
+    localStorage.setItem('dev_aura-color', 'warm');
   });
 
   function applyCharScale(val) {
@@ -4640,26 +4667,30 @@ function initDevPanel() {
     document.documentElement.style.setProperty('--bg-blur', val + 'px');
   }
 
-  function applyTheme(theme) {
-    document.documentElement.classList.remove(
-      'theme-strawberry', 'theme-peach', 'theme-bubblegum', 'theme-mintchoco', 'theme-cherry',
-      'theme-sakura', 'theme-rose', 'theme-candyfloss', 'theme-lilac', 'theme-peachcream',
-      'theme-coral', 'theme-melon', 'theme-marshmallow', 'theme-raspberry', 'theme-vanilla'
-    );
-    if (theme && theme !== 'default') {
-      document.documentElement.classList.add('theme-' + theme);
-    }
+  function applyBgDim(val) {
+    const brightness = (1 - parseFloat(val) / 100).toFixed(2);
+    document.documentElement.style.setProperty('--bg-brightness', brightness);
   }
 
-  function applyRunwayStyle(style) {
-    const btn = $('btn-runway');
-    if (!btn) return;
-    btn.classList.remove(
-      'runway-style-sweet', 'runway-style-candy', 'runway-style-glass', 'runway-style-y2k', 'runway-style-vip',
-      'runway-style-cyber', 'runway-style-kawaii', 'runway-style-holo', 'runway-style-minimal',
-      'runway-style-gothic', 'runway-style-disco'
-    );
-    btn.classList.add('runway-style-' + style);
+  function applyAuraOpacity(val) {
+    const opacity = (parseFloat(val) / 100).toFixed(2);
+    document.documentElement.style.setProperty('--char-aura-opacity', opacity);
+  }
+
+  function applyAuraColor(val) {
+    let gradient = '';
+    if (val === 'warm') {
+      gradient = 'radial-gradient(ellipse at center, rgba(255, 253, 240, 0.6) 0%, rgba(255, 240, 210, 0.35) 45%, rgba(255, 240, 210, 0.1) 70%, transparent 85%)';
+    } else if (val === 'white') {
+      gradient = 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.35) 45%, rgba(255, 255, 255, 0.1) 70%, transparent 85%)';
+    } else if (val === 'purple') {
+      gradient = 'radial-gradient(ellipse at center, rgba(228, 174, 252, 0.55) 0%, rgba(161, 72, 200, 0.3) 45%, rgba(161, 72, 200, 0.1) 70%, transparent 85%)';
+    } else if (val === 'pink') {
+      gradient = 'radial-gradient(ellipse at center, rgba(253, 171, 213, 0.55) 0%, rgba(209, 71, 141, 0.3) 45%, rgba(209, 71, 141, 0.1) 70%, transparent 85%)';
+    } else if (val === 'dark') {
+      gradient = 'radial-gradient(ellipse at center, rgba(16, 4, 28, 0.6) 0%, rgba(30, 8, 50, 0.3) 45%, rgba(30, 8, 50, 0.1) 70%, transparent 85%)';
+    }
+    document.documentElement.style.setProperty('--char-aura-gradient', gradient);
   }
 }
 

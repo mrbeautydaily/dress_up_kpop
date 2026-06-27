@@ -83,24 +83,12 @@
 <!-- Top right controls for stars, achievements, sound -->
 <div id="panel-controls" class="panel-controls">
 <div id="panel-controls-inner" class="panel-controls-inner">
-<button id="btn-runway" class="btn btn-runway-main hidden">
-  <!-- Left sparkles -->
-  <div class="runway-sparkles runway-sparkles-left">
-    <svg class="runway-sparkle sparkle-lg" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
-    <svg class="runway-sparkle sparkle-sm" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
-    <svg class="runway-sparkle sparkle-xs" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
-  </div>
+<button id="btn-runway" class="btn btn-runway-main runway-style-minimal hidden">
   <svg class="runway-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
     <line x1="22" y1="2" x2="11" y2="13"></line>
     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
   </svg>
   <span id="btn-runway-label">Runway!</span>
-  <!-- Right sparkles -->
-  <div class="runway-sparkles runway-sparkles-right">
-    <svg class="runway-sparkle sparkle-lg" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
-    <svg class="runway-sparkle sparkle-sm" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
-    <svg class="runway-sparkle sparkle-xs" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/></svg>
-  </div>
 </button>
 <button id="btn-achievements" class="btn btn-yellow">
   <img src="Items/UI/achievements.png" class="ui-icon-btn" alt="achievements">
@@ -418,42 +406,24 @@
       <input type="range" id="dev-bg-blur" min="0" max="15" step="0.5" value="1.5">
     </div>
     <div class="dev-control-group">
-      <label for="dev-ui-theme">Стиль интерфейса (Палитра):</label>
-      <select id="dev-ui-theme" class="dev-select">
-        <option value="default">Lavender Dream (Лаванда)</option>
-        <option value="strawberry">Strawberry Milkshake (Клубника)</option>
-        <option value="peach">Peach Blossom (Персик)</option>
-        <option value="bubblegum">Neon Bubblegum (Жвачка)</option>
-        <option value="mintchoco">Mint Choco (Мятный Шоколад)</option>
-        <option value="cherry">Vibrant Cherry (Спелая Вишня)</option>
-        <option value="sakura">Sakura Petal (Лепесток Сакуры)</option>
-        <option value="rose">Rose Quartz (Розовый Кварц)</option>
-        <option value="candyfloss">Sweet Candyfloss (Сладкая Вата)</option>
-        <option value="lilac">Lilac Blossom (Сиреневый)</option>
-        <option value="peachcream">Peach Cream (Персиковый Крем)</option>
-        <option value="coral">Coral Candy (Коралловая Конфета)</option>
-        <option value="melon">Melon Ice Cream (Дынное Мороженое)</option>
-        <option value="marshmallow">Marshmallow Sky (Зефирное Небо)</option>
-        <option value="raspberry">Raspberry Sorbet (Малиновый Сорбет)</option>
-        <option value="vanilla">Vanilla Orchid (Ванильная Орхидея)</option>
-      </select>
+      <label for="dev-bg-dim">Затемнение фона: <span id="dev-bg-dim-val">15%</span></label>
+      <input type="range" id="dev-bg-dim" min="0" max="60" step="5" value="15">
     </div>
     <div class="dev-control-group">
-      <label for="dev-runway-style">Стиль кнопки «Опубликовать»:</label>
-      <select id="dev-runway-style" class="dev-select">
-        <option value="sweet" selected>Sweet Sparkle (Сладкая искра) [Рекомендуется]</option>
-        <option value="candy">Candy Shimmer (Леденцовый блеск)</option>
-        <option value="glass">Soft Glassmorphism (Матовое стекло)</option>
-        <option value="y2k">Retro Y2K Neon (Ретро неон)</option>
-        <option value="vip">Golden Star VIP (Золотая звезда)</option>
-        <option value="cyber">Cyberpunk Laser (Киберпанк)</option>
-        <option value="kawaii">Kawaii Bubblegum (Кавайная жвачка)</option>
-        <option value="holo">Holographic Glitch (Голограмма)</option>
-        <option value="minimal">Minimalist Chic (Минимализм)</option>
-        <option value="gothic">Spooky Gothic (Готика)</option>
-        <option value="disco">Electric Disco (Диско-лайт)</option>
+      <label for="dev-aura-opacity">Непрозрачность ауры: <span id="dev-aura-opacity-val">70%</span></label>
+      <input type="range" id="dev-aura-opacity" min="0" max="100" step="5" value="70">
+    </div>
+    <div class="dev-control-group">
+      <label for="dev-aura-color">Цвет ауры:</label>
+      <select id="dev-aura-color" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--main-4); background: var(--white); color: var(--text); font-family: inherit; font-size: 14px; outline: none; margin-top: 4px;">
+        <option value="warm">Студийный теплый</option>
+        <option value="white">Нейтральный белый</option>
+        <option value="purple">Лавандовый (K-Pop)</option>
+        <option value="pink">Розовый неоновый</option>
+        <option value="dark">Темный (Готический)</option>
       </select>
     </div>
+
     <button id="dev-panel-reset" class="btn btn-yellow dev-reset-btn">Сбросить настройки</button>
   </div>
 </div>
