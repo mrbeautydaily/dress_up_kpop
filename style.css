@@ -348,7 +348,6 @@ button { cursor: pointer; border: none; font-family: inherit; }
 /* ---------- ASSIGNMENT BANNER ---------- */
 #assignment-banner {
   background: linear-gradient(90deg, var(--purple), var(--pink));
-  padding: .35rem .9rem;
   flex-shrink: 0;
 }
 #banner-inner {
@@ -380,7 +379,6 @@ button { cursor: pointer; border: none; font-family: inherit; }
   grid-row: 1;
   grid-column: 2 / 4;
   background: linear-gradient(90deg, var(--sec-a1), var(--main-1)) !important;
-  border-left: 2px solid rgba(243, 222, 252, 0.5) !important;
   border-bottom: 3px solid rgba(168, 85, 247, 0.28) !important;
   box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1) !important;
   z-index: 5 !important;
@@ -1032,6 +1030,22 @@ button { cursor: pointer; border: none; font-family: inherit; }
 .btn-share-outfit:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(45,212,191,.5); }
 .btn-share-outfit:active { transform: scale(.95); }
 
+/* Next post / New day buttons hover and active states (same as share outfit button) */
+#btn-next-lesson, #btn-new-day {
+  transition: transform .15s, box-shadow .15s, background-color .15s !important;
+}
+#btn-next-lesson:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 4px 14px rgba(161, 72, 200, 0.45) !important;
+}
+#btn-new-day:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 4px 14px rgba(209, 71, 141, 0.45) !important;
+}
+#btn-next-lesson:active, #btn-new-day:active {
+  transform: scale(.95) !important;
+}
+
 /* Share button — плавающая камера на сцене */
 .btn-share-stage {
   position: absolute;
@@ -1119,6 +1133,54 @@ button { cursor: pointer; border: none; font-family: inherit; }
   transition: width 1.2s cubic-bezier(.22,.61,.36,1); width: 0;
 }
 #summary-rank-next { font-size: .7rem; color: var(--text-muted); text-align: center; }
+
+/* Score modal rank section */
+.score-rank-section {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(229, 231, 235, 0.6);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.score-rank-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+}
+.score-rank-badge {
+  font-weight: 800;
+  color: var(--purple);
+}
+.rank-badge-img {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.score-rank-next {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.76rem;
+}
+.score-rank-progress-wrap {
+  width: 100%;
+  height: 8px;
+  background: rgba(229, 231, 235, 0.8);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 2px;
+}
+.score-rank-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #ec4899, #a855f7);
+  border-radius: 99px;
+  transition: width 1.2s cubic-bezier(.22,.61,.36,1);
+  width: 0;
+}
+
 
 /* ============================================================
    RESPONSIVE
@@ -1930,7 +1992,6 @@ button { cursor: pointer; border: none; font-family: inherit; }
   }
 
   /* ── Баннер задания: однострочный ── */
-  #assignment-banner { padding: .18rem .7rem; }
   #banner-inner { min-width: 0; font-size: .65rem; gap: .35rem; flex-wrap: nowrap; }
   #banner-task {
     min-width: 0;
@@ -1959,7 +2020,6 @@ button { cursor: pointer; border: none; font-family: inherit; }
     position: static !important;
     padding: .35rem .5rem !important;
     background: linear-gradient(90deg, var(--sec-a1), var(--main-1)) !important;
-    border-left: 2px solid rgba(243, 222, 252, 0.5) !important;
     border-bottom: 3px solid rgba(168, 85, 247, 0.28) !important;
     box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1) !important;
     box-sizing: border-box !important;
@@ -2493,7 +2553,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   -webkit-backdrop-filter: blur(10px) !important;
   border-radius: 16px !important;
   border: 1.5px solid rgba(255, 110, 180, 0.35) !important;
-  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.15) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28), 0 4px 15px rgba(161, 72, 200, 0.35) !important;
   font-family: inherit !important;
   overflow: hidden !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -2503,7 +2563,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  padding: 10px 14px !important;
+  padding: 8px 12px !important;
   cursor: pointer !important;
   user-select: none !important;
   font-size: 0.82rem !important;
@@ -2513,8 +2573,19 @@ button { cursor: pointer; border: none; font-family: inherit; }
   border-bottom: 1px solid rgba(255, 110, 180, 0.15) !important;
 }
 
-.assignment-card-header .calendar-icon {
-  font-size: 0.95rem !important;
+#banner-task-title {
+  font-size: 0.92rem !important;
+  font-weight: 800 !important;
+  color: var(--purple) !important;
+}
+
+.assignment-card-header-subtitle {
+  font-size: 0.6rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: var(--text-muted) !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
 }
 
 .assignment-card-header .arrow-icon {
@@ -2525,32 +2596,15 @@ button { cursor: pointer; border: none; font-family: inherit; }
 }
 
 .assignment-card-content {
-  padding: 12px 14px !important;
+  padding: 8px 12px 10px 12px !important;
   transition: max-height 0.3s ease, padding 0.3s ease !important;
-}
-
-.assignment-card-title-row {
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  margin-bottom: 6px !important;
-}
-
-.assignment-card-title-row .camera-icon {
-  font-size: 0.95rem !important;
-}
-
-.assignment-card-title {
-  font-size: 0.88rem !important;
-  font-weight: 800 !important;
-  color: #1f2937 !important;
 }
 
 .assignment-card-desc {
   font-size: 0.76rem !important;
-  line-height: 1.35 !important;
-  color: #4b5563 !important;
-  margin: 0 0 10px 0 !important;
+  line-height: 1.25 !important;
+  color: #555e6b !important;
+  margin: 0 0 8px 0 !important;
 }
 
 .assignment-card-tags {
@@ -2560,13 +2614,13 @@ button { cursor: pointer; border: none; font-family: inherit; }
 }
 
 .tag-badge {
-  background: rgba(112, 78, 201, 0.08) !important;
+  background: rgba(161, 72, 200, 0.1) !important;
   color: var(--purple) !important;
-  padding: 3px 10px !important;
+  border: 1px solid rgba(161, 72, 200, 0.35) !important;
+  padding: 2.5px 8px !important;
   border-radius: 99px !important;
-  font-size: 0.68rem !important;
+  font-size: 0.64rem !important;
   font-weight: 700 !important;
-  border: 1px solid rgba(112, 78, 201, 0.15) !important;
   text-transform: none !important;
 }
 
@@ -2594,28 +2648,27 @@ button { cursor: pointer; border: none; font-family: inherit; }
     border-radius: 12px !important;
   }
   .assignment-card-header {
-    padding: 6px 10px !important;
+    padding: 5px 8px !important;
     font-size: 0.74rem !important;
   }
-  .assignment-card-header .calendar-icon {
-    font-size: 0.85rem !important;
+  #banner-task-title {
+    font-size: 0.82rem !important;
+  }
+  .assignment-card-header-subtitle {
+    font-size: 0.55rem !important;
   }
   .assignment-card-content {
-    padding: 8px 10px !important;
-  }
-  .assignment-card-title {
-    font-size: 0.78rem !important;
-  }
-  .assignment-card-title-row {
-    margin-bottom: 4px !important;
+    padding: 6px 8px 8px 8px !important;
   }
   .assignment-card-desc {
     font-size: 0.68rem !important;
-    margin: 0 0 6px 0 !important;
+    line-height: 1.2 !important;
+    color: #555e6b !important;
+    margin: 0 0 5px 0 !important;
   }
   .tag-badge {
-    padding: 2px 7px !important;
-    font-size: 0.62rem !important;
+    padding: 2px 6px !important;
+    font-size: 0.58rem !important;
   }
 }
 
@@ -2649,15 +2702,15 @@ button { cursor: pointer; border: none; font-family: inherit; }
   font-family: 'Outfit', sans-serif !important;
   font-weight: 700 !important;
   box-sizing: border-box !important;
-  transition: transform var(--transition), filter var(--transition) !important;
-  box-shadow: none !important;
+  transition: transform var(--transition), filter var(--transition), box-shadow var(--transition) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28), 0 4px 15px rgba(161, 72, 200, 0.35) !important;
   outline: none !important;
 }
 
 .stage-counters-bar:hover {
   filter: brightness(1.03) !important;
   transform: translateY(-1px) scale(1.02) !important;
-  box-shadow: none !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32), 0 6px 18px rgba(161, 72, 200, 0.4) !important;
 }
 
 .stage-counters-bar:active {
@@ -2785,8 +2838,8 @@ button { cursor: pointer; border: none; font-family: inherit; }
   background: #ffffff !important;
   color: #3b0764 !important;
   border: 2px solid #3b0764 !important;
-  box-shadow: 0px 4px 0px #3b0764 !important;
-  border-radius: 16px !important;
+  box-shadow: 0px 2px 0px #3b0764 !important;
+  /* border-radius: 16px !important; */
   font-weight: 800 !important;
   display: flex !important;
   align-items: center !important;
@@ -3325,11 +3378,16 @@ button { cursor: pointer; border: none; font-family: inherit; }
 }
 
 .instagram-comments-container-left .score-comment-avatar {
-  background: #efefef;
-  border: 1px solid #dbdbdb;
+  background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+  padding: 1.5px;
+  box-sizing: border-box;
   width: 30px;
   height: 30px;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
 }
 
 .instagram-comments-container-left .score-comment-nick {
@@ -4268,12 +4326,28 @@ button { cursor: pointer; border: none; font-family: inherit; }
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+  padding: 1.5px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
   flex-shrink: 0;
+}
+
+.score-comment-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  background-color: #ffffff;
+  border: 1px solid #1a1a1a;
+  box-sizing: border-box;
+}
+
+.instagram-comments-container-left .score-comment-avatar-img {
+  border: 1px solid #ffffff;
 }
 
 .score-comment-text-block {

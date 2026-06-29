@@ -38,8 +38,8 @@ const T = {
     btnReset:      '🔄 Reset',
     btnSave:       '💾 Save',
     btnSaved:      '✅ Saved!',
-    btnSchool:     '🌟 Promo',
-    btnSchoolOn:   '🌟 Promo ON',
+    btnSchool:     '🌟 Career',
+    btnSchoolOn:   '🌟 Career ON',
     btnRunway:     'Publish Post',
     // Panels
     categoryLabel: 'Category',
@@ -51,7 +51,7 @@ const T = {
     catSocks:      'Socks',
     catAcc:        'Acc.',
     // Banner
-    bannerDayLesson: 'Promo Tour {d} · Day {l}/5',
+    bannerDayLesson: '#{d}',
     // Score screen
     scoreResults:    '📍 {title}',
     scoreRequired:   'Outfit: {f}/{t} slots · Trend: {tags} ({m}/{r})',
@@ -61,12 +61,12 @@ const T = {
     btnNextClass:    '➡ Next Post',
     btnSeeResults:   '🌟 Day Results!',
     // Summary
-    summaryTitle:    'Promo Tour {d} Complete!',
+    summaryTitle:    'Post #{d} Complete!',
     summaryDayScore: 'New followers: +{s}',
-    summaryRankLine: '{rank}  ·  {pts} followers',
-    summaryNextRank: 'Next: {name} at {at}',
-    summaryMaxRank:  '👑 Maximum rank achieved! K-Pop Legends!',
-    btnNewDay:       '☀️ Next Promo Tour',
+    summaryRankLine: '{pts} followers',
+    summaryNextRank: 'Next goal: {at}',
+    summaryMaxRank:  '👑 1 MILLION! K-Pop Legends!',
+    btnNewDay:       '➡ Next Post',
     btnExitSchool:   '🎨 Free Style Mode',
     // Ranks
     rankTrainee:     '🌱 Nugu (Rookies)',
@@ -87,8 +87,8 @@ const T = {
     btnReset:      '🔄 Сброс',
     btnSave:       '💾 Сохранить',
     btnSaved:      '✅ Сохранено!',
-    btnSchool:     '🌟 Промо',
-    btnSchoolOn:   '🌟 Промо ВКЛ',
+    btnSchool:     '🌟 Карьера',
+    btnSchoolOn:   '🌟 Карьера ВКЛ',
     btnRunway:     'Опубликовать',
     // Panels
     categoryLabel: 'Категория',
@@ -100,7 +100,7 @@ const T = {
     catSocks:      'Носки',
     catAcc:        'Акс.',
     // Banner
-    bannerDayLesson: 'Промо-тур {d} · День {l}/5',
+    bannerDayLesson: '#{d}',
     // Score screen
     scoreResults:    '📍 {title}',
     scoreRequired:   'Образ: {f}/{t} слотов · Тренд: {tags} ({m}/{r})',
@@ -110,12 +110,12 @@ const T = {
     btnNextClass:    '➡ Следующий пост',
     btnSeeResults:   '🌟 Итоги дня!',
     // Summary
-    summaryTitle:    'Промо-тур {d} завершен!',
+    summaryTitle:    'Пост #{d} завершен!',
     summaryDayScore: 'Новые подписчики: +{s}',
-    summaryRankLine: '{rank}  ·  {pts} подписчиков',
-    summaryNextRank: 'Далее: {name} с {at}',
-    summaryMaxRank:  '👑 Максимальный ранг достигнут! Легенды K-Pop!',
-    btnNewDay:       '☀️ Следующий промо-тур',
+    summaryRankLine: '{pts} подписчиков',
+    summaryNextRank: 'Цель: {at}',
+    summaryMaxRank:  '👑 1 МИЛЛИОН! Легенды K-Pop!',
+    btnNewDay:       '➡ Следующий пост',
     btnExitSchool:   '🎨 Свободный стиль',
     // Ranks
     rankTrainee:     '🌱 Nugu (Новички)',
@@ -1484,47 +1484,47 @@ function getStarsHTML(starsNum) {
 
 const PROMO_ACTIVITIES = [
   { id:'recording',
-    title:'🎙️ Recording Session',     title_ru:'🎙️ Запись трека',
+    title:'Recording Session',     title_ru:'Запись трека',
     desc: 'Fans want pure charisma and bold vibe for the title track!',
     desc_ru:'Фанаты хотят чистую харизму и дерзкий вайб от заглавного трека!',
     requiredTags:['kpop','bold'] },
   { id:'fitness',
-    title:'🧘 Fitness & Stretching',  title_ru:'🧘 Фитнес и растяжка',
+    title:'Fitness & Stretching',  title_ru:'Фитнес и растяжка',
     desc: 'Fans expect a comfortable, sporty outfit for stretching!',
     desc_ru:'Фанаты ждут удобный спортивный лук на растяжке!',
     requiredTags:['sporty','casual'] },
   { id:'photoshoot',
-    title:'📸 Album Photoshoot',      title_ru:'📸 Фотосессия для альбома',
+    title:'Album Photoshoot',      title_ru:'Фотосессия для альбома',
     desc: 'Fans expect an elegant, concept-driven outfit for the album book.',
     desc_ru:'Фанаты ждут элегантный концептуальный образ для буклета альбома.',
     requiredTags:['kpop','elegant'] },
   { id:'fansign',
-    title:'🤝 Fansign Event',         title_ru:'🤝 Автограф-сессия',
+    title:'Fansign Event',         title_ru:'Автограф-сессия',
     desc: 'Meet your fans! They demand an elegant and neat appearance.',
     desc_ru:'Встреться с фанатами! Они ждут элегантный и аккуратный вид.',
     requiredTags:['school','formal'] },
   { id:'variety_show',
-    title:'📺 Variety Show',          title_ru:'📺 Развлекательное шоу',
+    title:'Variety Show',          title_ru:'Развлекательное шоу',
     desc: 'Show a cute, eye-catching look for the television screen! Fans are watching!',
     desc_ru:'Покажи милый, выделяющийся образ для экранов ТВ! Фанаты ждут его!',
     requiredTags:['kpop','cute'] },
   { id:'dance_practice',
-    title:'💃 Choreography Practice', title_ru:'💃 Репетиция хореографии',
+    title:'Choreography Practice', title_ru:'Репетиция хореографии',
     desc: 'Show style AND movement. Fans want to see you ready to dance!',
     desc_ru:'Покажи стиль И свободу движений. Фанаты ждут твоей готовности к танцу!',
     requiredTags:['sporty','kpop'] },
   { id:'vlog', // Продюсер Сон отвечает за видео-контент
-    title:'🧋 Vlog Recording',        title_ru:'🧋 Запись влога',
+    title:'Vlog Recording',        title_ru:'Запись влога',
     desc: 'Show your casual everyday style behind-the-scenes to your fans!',
     desc_ru:'Покажи фанатам свой естественный повседневный стиль за кулисами!',
     requiredTags:['casual','cute'] },
   { id:'fans_qa',
-    title:'📱 Live with Fans',        title_ru:'📱 Эфир с фанатами',
+    title:'Live with Fans',        title_ru:'Эфир с фанатами',
     desc: 'Live stream time! Fans expect a neat and casual dress for the broadcast.',
     desc_ru:'Время прямого эфира! Фанаты ждут опрятный и повседневный наряд для трансляции.',
     requiredTags:['school','casual'] },
   { id:'dance_challenge',
-    title:'🎵 Viral Dance Challenge', title_ru:'🎵 Вирусный танец',
+    title:'Viral Dance Challenge', title_ru:'Вирусный танец',
     desc: 'Record a viral dance! Fans want a bright, trendy look for social media!',
     desc_ru:'Запиши вирусный танец! Фанаты ждут яркий, трендовый образ для соцсетей!',
     requiredTags:['cute','bold'] }
@@ -1532,12 +1532,12 @@ const PROMO_ACTIVITIES = [
 
 const FINAL_STAGES = [
   { id:'live_stage',
-    title:'🎤 Inkigayo Live Stage',    title_ru:'🎤 Выступление на Inkigayo',
+    title:'Inkigayo Live Stage',    title_ru:'Выступление на Inkigayo',
     desc: 'Your debut performance! Fans are watching your bold stage style!',
     desc_ru:'Твое дебютное выступление! Фанаты ждут дерзкий сценический стиль!',
     requiredTags:['kpop','bold'] },
   { id:'grand_concert',
-    title:'🏆 Rookie Awards Stage',   title_ru:'🏆 Сцена премии Rookie Awards',
+    title:'Rookie Awards Stage',   title_ru:'Сцена премии Rookie Awards',
     desc: 'The biggest event! Fans expect maximum elegance and perfection.',
     desc_ru:'Главное событие! Фанаты ждут максимальную элегантность и совершенство.',
     requiredTags:['formal','elegant'] }
@@ -1545,13 +1545,32 @@ const FINAL_STAGES = [
 
 const FREE_POST = {
   id:'free_style',
-  title:'📷 Free Style Post',     title_ru:'📷 Пост в свободном стиле',
+  title:'Free Style Post',     title_ru:'Пост в свободном стиле',
   desc: 'Post whatever you like! Your fans love your personal style!',
   desc_ru:'Публикуй что хочешь! Фанаты обожают твой личный стиль!',
   requiredTags:[], isFree: true
 };
 
 const ASSIGNMENTS = [...PROMO_ACTIVITIES, ...FINAL_STAGES, FREE_POST];
+
+const ACTIVITY_ICONS = {
+  recording: 'recording.png',
+  fitness: 'fitness.png',
+  photoshoot: 'photoshoot.png',
+  fansign: 'fansign.png',
+  variety_show: 'variety_show.png',
+  dance_practice: 'dance_practice.png',
+  vlog: 'vlog.png',
+  fans_qa: 'fans_qa.png',
+  dance_challenge: 'dance_challenge.png',
+  live_stage: 'live_stage.png',
+  grand_concert: 'grand_concert.png',
+  free_style: 'free_style.png'
+};
+
+function getActivityIcon(id) {
+  return ACTIVITY_ICONS[id] || 'camera.png';
+}
 
 function assignmentTitle(a) { return lang === 'ru' ? a.title_ru : a.title; }
 function assignmentDesc(a)  { return lang === 'ru' ? a.desc_ru  : a.desc;  }
@@ -2628,10 +2647,23 @@ function scoreOutfit(assignment) {
 // ────────────────────────────────────────────────────────────
 
 function buildDaySchedule() {
-  const promos = [...PROMO_ACTIVITIES].sort(() => Math.random() - 0.5).slice(0, 3);
-  const finalStage = FINAL_STAGES[Math.floor(Math.random() * FINAL_STAGES.length)];
-  // 3 promos + 1 free + 1 final = 5 lessons
-  school.schedule = [...promos, FREE_POST, finalStage];
+  const allTasks = [
+    PROMO_ACTIVITIES[0], // Recording Session (bold, kpop)
+    PROMO_ACTIVITIES[1], // Fitness & Stretching (sporty, casual)
+    PROMO_ACTIVITIES[2], // Album Photoshoot (kpop, elegant)
+    FREE_POST,            // Free Style Post
+    PROMO_ACTIVITIES[3], // Fansign Event (school, formal)
+    PROMO_ACTIVITIES[4], // Variety Show (kpop, cute)
+    FINAL_STAGES[0],     // Inkigayo Live Stage (kpop, bold)
+    PROMO_ACTIVITIES[5], // Choreography Practice (sporty, kpop)
+    PROMO_ACTIVITIES[6], // Vlog Recording (casual, cute)
+    FREE_POST,            // Free Style Post
+    PROMO_ACTIVITIES[7], // Live with Fans (school, casual)
+    PROMO_ACTIVITIES[8], // Viral Dance Challenge (cute, bold)
+    FINAL_STAGES[1],     // Rookie Awards Stage (formal, elegant)
+  ];
+  const idx = Math.max(0, school.day - 1) % allTasks.length;
+  school.schedule = [allTasks[idx]];
 }
 
 function startSchoolMode() {
@@ -2701,10 +2733,17 @@ function showAssignmentBanner() {
   if (!a) return; // guard: schedule not ready yet
   updateStageBackground(a.id);
   
-  const lessonText = tf('bannerDayLesson', { d: school.day, l: school.lessonIndex + 1 });
-  if ($('banner-lesson')) {
-    $('banner-lesson').textContent = lessonText;
+  const iconEl = $('banner-task-icon');
+  if (iconEl) {
+    iconEl.src = `Items/UI/activities/${getActivityIcon(a.id)}`;
+    iconEl.style.display = 'block';
   }
+
+  const subtitleEl = $('banner-task-subtitle');
+  if (subtitleEl) {
+    subtitleEl.textContent = lang === 'ru' ? 'Тема:' : 'Theme:';
+  }
+
   if ($('banner-task-title')) {
     $('banner-task-title').textContent = assignmentTitle(a);
   }
@@ -2718,7 +2757,7 @@ function showAssignmentBanner() {
     translateTags(a.requiredTags).forEach(tag => {
       const span = document.createElement('span');
       span.className = 'tag-badge';
-      span.textContent = tag;
+      span.textContent = `#${tag}`;
       tagsContainer.appendChild(span);
     });
   }
@@ -2810,66 +2849,6 @@ function animateStatsCounter(el, targetVal, isLikes = false) {
   }
   
   requestAnimationFrame(update);
-}
-
-// Generate a stream of floating live-stream style hearts from the post image
-function spawnFloatingHearts() {
-  const leftCol = document.querySelector('.score-left-col');
-  const postImage = $('score-post-image-container');
-  if (!leftCol || !postImage) return;
-  
-  const rect = postImage.getBoundingClientRect();
-  const parentRect = leftCol.getBoundingClientRect();
-  
-  // Spawn from center-bottom of the post image
-  const spawnX = rect.left - parentRect.left + rect.width / 2;
-  const spawnY = rect.top - parentRect.top + rect.height * 0.8;
-  
-  const heartEmojis = ['❤️', '💖', '💝', '💕', '💗'];
-  
-  let heartCount = 18;
-  let interval = setInterval(() => {
-    if (heartCount <= 0) {
-      clearInterval(interval);
-      return;
-    }
-    heartCount--;
-    
-    const heart = document.createElement('div');
-    heart.className = 'floating-heart';
-    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-    
-    // Random scale, rotation, duration, horizontal drift
-    const scale = Math.random() * 0.4 + 0.7; // 0.7 to 1.1
-    const rot = Math.random() * 40 - 20; // -20deg to 20deg
-    const duration = Math.random() * 1000 + 1200; // 1.2s to 2.2s
-    const drift = Math.random() * 80 - 40; // -40px to 40px
-    
-    heart.style.cssText = `
-      position: absolute;
-      left: ${spawnX}px;
-      top: ${spawnY}px;
-      font-size: 1.2rem;
-      pointer-events: none;
-      z-index: 100;
-      transform: translate(-50%, -50%) scale(${scale}) rotate(${rot}deg);
-      opacity: 0.9;
-      transition: transform ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity ${duration}ms ease-out;
-    `;
-    
-    leftCol.appendChild(heart);
-    
-    // Trigger transition next frame
-    requestAnimationFrame(() => {
-      heart.style.transform = `translate(calc(-50% + ${drift}px), -150px) scale(${scale * 1.3}) rotate(${rot * 2}deg)`;
-      heart.style.opacity = '0';
-    });
-    
-    // Remove after transition
-    setTimeout(() => {
-      heart.remove();
-    }, duration);
-  }, 100);
 }
 
 // Synthesize a camera shutter click sound using Web Audio API
@@ -3091,6 +3070,24 @@ function generateSocialComments(result, assignment) {
     '@kpop_aesthetic', '@hallyu_wave', '@blink_army', '@midzy_once'
   ];
   const emojis = ['🐼', '🦊', '🐰', '🐱', '🐻', '🐨', '🐯', '🦄', '💖', '✨', '🎵'];
+  const nicknameAvatars = {
+    '@kpop_star_fan': 'Avatars/avatar_1.png',
+    '@yuri_bias_forever': 'Avatars/avatar_2.png',
+    '@kpop_lover_xx': 'Avatars/avatar_3.png',
+    '@idol_vibe': 'Avatars/avatar_4.png',
+    '@knetizen_99': 'Avatars/avatar_5.png',
+    '@kpop_queen': 'Avatars/avatar_6.png',
+    '@fandom_leader': 'Avatars/avatar_7.png',
+    '@bias_wrecker': 'Avatars/avatar_8.png',
+    '@kpop_dance_crew': 'Avatars/avatar_9.png',
+    '@starlight_kpop': 'Avatars/avatar_10.png',
+    '@weverse_enjoyer': 'Avatars/avatar_11.png',
+    '@multifan_life': 'Avatars/avatar_12.png',
+    '@kpop_aesthetic': 'Avatars/avatar_13.png',
+    '@hallyu_wave': 'Avatars/avatar_14.png',
+    '@blink_army': 'Avatars/avatar_15.png',
+    '@midzy_once': 'Avatars/avatar_16.png'
+  };
 
   const commentsData = result ? [
     { type: 'style', val: result.trendMatches },
@@ -3104,6 +3101,7 @@ function generateSocialComments(result, assignment) {
 
   return commentsData.map(c => {
     const nick = nicknames[Math.floor(Math.random() * nicknames.length)];
+    const avatar = nicknameAvatars[nick] || 'Avatars/avatar_1.png';
     const emoji = emojis[Math.floor(Math.random() * emojis.length)];
     let text = '';
 
@@ -3188,7 +3186,7 @@ function generateSocialComments(result, assignment) {
       }
     }
 
-    return { nick, emoji, text, scoreHtml: '' };
+    return { nick, emoji, avatar, text, scoreHtml: '' };
   });
 }
 
@@ -3596,10 +3594,69 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       setTimeout(() => animateCounter(gainedEl, followersVal, 900, '', '', 'short'), 800);
     }
 
-    // Spawn floating hearts for visual flair
-    setTimeout(() => {
-      spawnFloatingHearts();
-    }, 600);
+    // Update Milestone Progress (1K → 10K → 100K → 500K → 1M)
+    const MILESTONES = [1000, 10000, 100000, 500000, 1000000];
+    const prevTotal = Math.max(0, school.totalFollowers - (socialStats ? socialStats.followers : 0));
+
+    // Find current milestone bracket
+    function getMilestone(followers) {
+      let prevM = 0;
+      for (const m of MILESTONES) {
+        if (followers < m) return { from: prevM, to: m };
+        prevM = m;
+      }
+      return { from: MILESTONES[MILESTONES.length - 2], to: MILESTONES[MILESTONES.length - 1] };
+    }
+
+    const curMilestone = getMilestone(school.totalFollowers);
+    const prevMilestone = getMilestone(prevTotal);
+
+    const rankBadgeEl = $('score-rank-badge');
+    const rankBarEl = $('score-rank-bar');
+    const rankNextEl = $('score-rank-next');
+
+    // Show current total as badge
+    const rankBadgeValEl = $('score-rank-badge-val');
+    if (rankBadgeValEl) {
+      rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
+    } else if (rankBadgeEl) {
+      rankBadgeEl.textContent = `📊 ${formatFollowers(school.totalFollowers)}`;
+    }
+
+    if (school.totalFollowers >= GOAL_FOLLOWERS) {
+      if (rankBarEl) {
+        const pDenom = prevMilestone.to - prevMilestone.from;
+        const prevPct = pDenom > 0 ? ((prevTotal - prevMilestone.from) / pDenom) * 100 : 100;
+        rankBarEl.style.width = Math.min(Math.max(0, prevPct), 100) + '%';
+        setTimeout(() => { rankBarEl.style.width = '100%'; }, 800);
+      }
+      if (rankNextEl) {
+        rankNextEl.innerHTML = lang === 'ru'
+          ? '<span style="color: #d97706; font-weight: 800;">🎉 1 МИЛЛИОН! Легенды K-Pop! 🎉</span>'
+          : '<span style="color: #d97706; font-weight: 800;">🎉 1 MILLION! K-Pop Legends! 🎉</span>';
+      }
+    } else {
+      const denom = curMilestone.to - curMilestone.from;
+      const pDenom = prevMilestone.to - prevMilestone.from;
+      const prevPercent = pDenom > 0 ? ((prevTotal - prevMilestone.from) / pDenom) * 100 : 0;
+      const nextPercent = denom > 0 ? ((school.totalFollowers - curMilestone.from) / denom) * 100 : 0;
+
+      if (rankBarEl) {
+        // If milestone bracket changed, start from 0
+        const startPct = (curMilestone.to !== prevMilestone.to) ? 0 : Math.min(Math.max(0, prevPercent), 100);
+        rankBarEl.style.width = startPct + '%';
+        setTimeout(() => {
+          rankBarEl.style.width = Math.min(Math.max(0, nextPercent), 100) + '%';
+        }, 800);
+      }
+
+      if (rankNextEl) {
+        const remaining = curMilestone.to - school.totalFollowers;
+        rankNextEl.textContent = lang === 'ru'
+          ? `Цель: ${formatFollowers(curMilestone.to)} · осталось ${formatFollowers(remaining)}`
+          : `Goal: ${formatFollowers(curMilestone.to)} · ${formatFollowers(remaining)} left`;
+      }
+    }
   }
 
   // Comments slider overlay state
@@ -3654,7 +3711,9 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       const likeBtn = $('overlay-like-btn');
       const replyBtn = $('overlay-reply-btn');
 
-      if (avatarEl) avatarEl.textContent = comment.emoji;
+      if (avatarEl) {
+        avatarEl.innerHTML = `<img src="${comment.avatar || 'Avatars/avatar_1.png'}" alt="avatar" class="score-comment-avatar-img">`;
+      }
       if (nickEl) nickEl.textContent = comment.nick;
       if (textEl) textEl.textContent = comment.text;
       if (timeEl) timeEl.textContent = commentTimes[activeCommentIndex] || '2m';
@@ -3822,22 +3881,22 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       $('score-modal').classList.add('hidden');
     };
   } else {
-    const isLast = school.lessonIndex >= 4;
-    $('btn-next-lesson').textContent = isLast ? t('btnSeeResults') : t('btnNextClass');
+    // Every post is a day. The next button advances to the next day.
+    $('btn-next-lesson').textContent = t('btnNewDay');
     $('btn-next-lesson').onclick = () => {
       stopAutoScroll();
       if (picker) picker.classList.add('hidden');
       $('score-modal').classList.add('hidden');
       showFullscreenAd(() => {
-        if (isLast) {
-          showDailySummary();
-          $('btn-runway').disabled = false;
-        } else {
-          school.lessonIndex++;
-          showAssignmentBanner();
-          resetOutfit();
-          $('btn-runway').disabled = false;
-        }
+        school.day++;
+        school.lessonIndex  = 0;
+        school.lessonScores = [];
+        school.dayFollowersGained = 0;
+        buildDaySchedule();
+        showAssignmentBanner();
+        resetOutfit();
+        $('btn-runway').disabled = false;
+        saveSchoolProgress();
       });
     };
   }
@@ -3926,8 +3985,12 @@ function showDailySummary() {
     const row = document.createElement('div');
     row.className = 'summary-lesson-row';
     const starsNum = school.lessonScores[i] || 0;
+    const iconName = getActivityIcon(a.id);
     row.innerHTML = `
-      <span class="summary-lesson-name">${assignmentTitle(a)}</span>
+      <span class="summary-lesson-name" style="display:inline-flex; align-items:center; gap:6px;">
+        <img src="Items/UI/activities/${iconName}" class="ui-icon" style="width:16px; height:16px;" alt="">
+        ${assignmentTitle(a)}
+      </span>
       <span class="summary-lesson-score" style="font-weight:700; color:#a855f7;">${starsNum} ${lang === 'ru' ? 'очк.' : 'pts'}</span>
     `;
     list.appendChild(row);
@@ -4289,20 +4352,20 @@ async function init() {
 
 const INTRO_STEPS = {
   ru: [
-    { text: 'Привет! Я Ю На! 👋\nТак рада наконец-то познакомиться с тобой!' },
-    { text: 'Мы только что начали наш K-Pop тур! 🏫✨\nЭто самый захватывающий путь для будущих идолов!' },
-    { text: 'Наша цель — набрать 1 000 000 подписчиков! 👑\nЗдесь всё решает стиль и образ!' },
-    { text: 'Помогай мне подбирать лучшие образы для публикаций! 💅\nЧем круче образ — тем больше подписчиков!' },
-    { text: 'Участвуй в промо 🏫, публикуй посты 📱 и собирай лайки ❤️\nСтань легендой K-Pop!' },
-    { text: 'Готова? Тогда поехали! Покажем им, кто тут настоящая звезда! 🔥💖', last: true },
+    { text: 'Привет! Я Ю На из Eclipse! 👋\nМы только что дебютировали как K-Pop группа!' },
+    { text: 'Нас пока никто не знает... 😅\nНо мы будем публиковать посты каждый день и набирать подписчиков!' },
+    { text: 'Мне нужна твоя помощь! 💖\nБудь моим стилистом — помогай подбирать крутые образы для публикаций!' },
+    { text: 'Каждый пост — это шанс! 📱\nЗаписи, фотосессии, концерты... Чем лучше образ — тем больше фанатов!' },
+    { text: 'Наша мечта — 1 000 000 подписчиков! 👑\nОт полных ноунеймов до K-Pop легенд!' },
+    { text: 'Ну что, поможешь мне? 🔥💖\nДавай начнём нашу карьеру прямо сейчас!', last: true },
   ],
   en: [
-    { text: "Hi! I'm Yu Na! 👋\nSo happy to finally meet you!" },
-    { text: "We just started our K-Pop tour! 🏫✨\nThe most exciting journey for future idols!" },
-    { text: "Our goal is to reach 1,000,000 subscribers! 👑\nHere, style and looks are everything!" },
-    { text: "Help me put together the best outfits for our posts! 💅\nBetter looks = more fans!" },
-    { text: "Join promos 🏫, publish posts 📱, earn Likes ❤️\nBecome a K-Pop legend!" },
-    { text: "Ready? Let's go! Time to show them who the real star is! 🔥💖", last: true },
+    { text: "Hi! I'm Yu Na from Eclipse! 👋\nWe just debuted as a K-Pop group!" },
+    { text: "Nobody knows us yet... 😅\nBut we're going to post every day and build our following!" },
+    { text: "I need your help! 💖\nBe my stylist — help me pick the best outfits for our posts!" },
+    { text: "Every post is a chance! 📱\nRecordings, photoshoots, concerts... Better looks = more fans!" },
+    { text: "Our dream is 1,000,000 followers! 👑\nFrom total nobodies to K-Pop legends!" },
+    { text: "So, will you help me? 🔥💖\nLet's start our career right now!", last: true },
   ],
 };
 
