@@ -73,11 +73,8 @@ const T = {
     rankDebut:       '💖 Rising Stars',
     rankIdol:        '🌟 Chart Toppers',
     rankStar:        '👑 K-Pop Legends',
-    // Milestone modal
-    milestoneTitle: '🎉 Milestone Reached! 🎉',
-    milestoneSubtitle: 'You have reached {followers} followers! Your popularity is sky-rocketing!',
-    milestoneRewardLabel: 'Reward:',
-    milestoneClaimBtn: 'Awesome!',
+    // Milestone progress subtext
+    milestoneSubtextLeft: '{milestone} Followers! ✅',
     // Outfit names (free mode)
     adj: ['Sparkly','Dreamy','Fierce','Sweet','Chic','Bold','Pastel','Glam','Iconic','Fresh'],
     noun:['Idol','Star','Diva','Queen','Vision','Dream','Look','Vibe','Moment','Era'],
@@ -127,11 +124,8 @@ const T = {
     rankDebut:       '💖 Восходящие звёзды',
     rankIdol:        '🌟 Лидеры чартов',
     rankStar:        '👑 K-Pop Легенды',
-    // Milestone modal
-    milestoneTitle: '🎉 Новая высота взята! 🎉',
-    milestoneSubtitle: 'Вы набрали {followers} подписчиков! Ваша популярность стремительно растет!',
-    milestoneRewardLabel: 'Награда:',
-    milestoneClaimBtn: 'Отлично!',
+    // Milestone progress subtext
+    milestoneSubtextLeft: '{milestone} подписчиков! ✅',
     // Outfit names (free mode)
     adj:  ['Сверкающий','Мечтательный','Дерзкий','Сладкий','Шикарный','Смелый','Пастельный','Гламурный','Культовый','Свежий'],
     noun: ['Идол','Звезда','Дива','Королева','Образ','Мечта','Лук','Вайб','Момент','Эпоха'],
@@ -1643,22 +1637,55 @@ function initAudio() {
 
 const SPARKLE_EMOJIS = ['✨','⭐','💫','🌟','💖','💕','💗','💓','🩷','💝','❤️','🌸'];
 
-function spawnSparkles(count = 6) {
-  const container = $('sparkles');
+function spawnSparkles(count = 6, targetEl = null) {
+  const modal = $('score-modal');
+  const useModal = modal && !modal.classList.contains('hidden');
+  const container = useModal ? $('modal-sparkles') : $('sparkles');
+  if (!container) return;
+
+  let originX = null;
+  let originY = null;
+
+  if (targetEl) {
+    const targetRect = targetEl.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    originX = targetRect.left - containerRect.left + targetRect.width / 2;
+    originY = targetRect.top - containerRect.top + targetRect.height / 2;
+  }
+
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
-      const el = document.createElement('span');
+      const el = document.createElement('img');
+      el.src = 'Items/UI/heart.png';
       el.className = 'sparkle';
-      el.textContent = SPARKLE_EMOJIS[Math.floor(Math.random() * SPARKLE_EMOJIS.length)];
-      const x  = 20 + Math.random() * 60;
-      const y  = 10 + Math.random() * 80;
-      el.style.left = x + '%';
-      el.style.top  = y + '%';
-      el.style.setProperty('--dx', (Math.random() - 0.5) * 80 + 'px');
-      el.style.setProperty('--dy', -(20 + Math.random() * 60) + 'px');
+      el.style.width = '1.25rem';
+      el.style.height = '1.25rem';
+      el.style.objectFit = 'contain';
+      
+      if (originX !== null && originY !== null) {
+        el.style.left = originX + 'px';
+        el.style.top = originY + 'px';
+        
+        // Radial velocity explosion
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 45 + Math.random() * 90;
+        const dx = Math.cos(angle) * speed;
+        const dy = Math.sin(angle) * speed;
+        
+        el.style.setProperty('--dx', dx + 'px');
+        el.style.setProperty('--dy', dy + 'px');
+      } else {
+        const x  = 20 + Math.random() * 60;
+        const y  = 10 + Math.random() * 80;
+        el.style.left = x + '%';
+        el.style.top  = y + '%';
+        el.style.setProperty('--dx', (Math.random() - 0.5) * 80 + 'px');
+        el.style.setProperty('--dy', -(20 + Math.random() * 60) + 'px');
+      }
+      
       container.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
-    }, i * 60);
+    }, i * 40);
   }
 }
 
@@ -3469,10 +3496,17 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     const rankBadgeEl = $('score-rank-badge');
     const rankBarEl = $('score-rank-bar');
     const rankNextEl = $('score-rank-next');
+    const rankSectionEl = $('score-rank-section');
+    const giftBoxEl = $('score-gift-box');
 
     // Hide milestone alert initially
-    const alertEl = $('score-milestone-alert');
+    const alertEl = $('score-milestone-subtext');
     if (alertEl) alertEl.classList.add('hidden');
+    if (rankSectionEl) rankSectionEl.classList.remove('celebrating');
+    if (giftBoxEl) {
+      giftBoxEl.classList.remove('shaking');
+      giftBoxEl.classList.remove('hidden-box');
+    }
 
     // Milestone calculation and reward check
     const newlyReached = [];
@@ -3501,6 +3535,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         const pDenom = prevMilestone.to - prevMilestone.from;
         const prevPct = pDenom > 0 ? ((prevTotal - prevMilestone.from) / pDenom) * 100 : 100;
         rankBarEl.style.width = Math.min(Math.max(0, prevPct), 100) + '%';
+        rankBarEl.style.transition = 'width 0.6s cubic-bezier(.22,.61,.36,1)';
         setTimeout(() => { rankBarEl.style.width = '100%'; }, 300);
       }
       if (rankNextEl) {
@@ -3515,16 +3550,31 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         addLikes(reward);
         saveSchoolProgress();
 
+        if (giftBoxEl) {
+          setTimeout(() => {
+            giftBoxEl.classList.add('shaking');
+          }, 900);
+        }
+
         setTimeout(() => {
-          spawnSparkles(25);
+          if (giftBoxEl) {
+            giftBoxEl.classList.remove('shaking');
+            giftBoxEl.classList.add('hidden-box');
+          }
+          spawnSparkles(35, giftBoxEl);
           sfxClick();
 
+          if (rankSectionEl) rankSectionEl.classList.add('celebrating');
+
           if (alertEl) {
-            $('score-milestone-alert-title').textContent = lang === 'ru' ? '🎉 Легендарный Рубеж!' : '🎉 Legendary Milestone!';
-            $('score-milestone-alert-subtitle').textContent = lang === 'ru' ? '1 000 000 Подписчиков!' : '1,000,000 Followers!';
-            $('score-milestone-alert-reward').innerHTML = lang === 'ru'
-              ? `Награда: <b>+${formatLikes(reward)}</b> <img src="Items/UI/heart.png" class="inline-heart milestone-alert-heart" alt="heart">`
-              : `Reward: <b>+${formatLikes(reward)}</b> <img src="Items/UI/heart.png" class="inline-heart milestone-alert-heart" alt="heart">`;
+            const titleTextEl = $('score-milestone-title-text');
+            const rewardTextEl = $('score-milestone-reward-text');
+            if (titleTextEl) {
+              titleTextEl.textContent = tf('milestoneSubtextLeft', { milestone: formatFollowers(1000000) });
+            }
+            if (rewardTextEl) {
+              rewardTextEl.textContent = '+' + formatFollowers(reward);
+            }
             alertEl.classList.remove('hidden');
           }
           showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`);
@@ -3541,12 +3591,20 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       if (rankBarEl) {
         if (milestoneCrossed) {
           // 1. Start at prevPercent of the old bracket
+          rankBarEl.style.transition = '';
           rankBarEl.style.width = Math.min(Math.max(0, prevPercent), 100) + '%';
           
           // 2. Animate to 100% of the old bracket
           setTimeout(() => {
+            rankBarEl.style.transition = 'width 0.6s cubic-bezier(.22,.61,.36,1)';
             rankBarEl.style.width = '100%';
           }, 300);
+
+          if (giftBoxEl) {
+            setTimeout(() => {
+              giftBoxEl.classList.add('shaking');
+            }, 900);
+          }
 
           if (rankNextEl) {
             const remaining = prevMilestone.to - prevTotal;
@@ -3557,8 +3615,14 @@ function showScoreScreen(assignment, result, earned, socialStats) {
           
           // 3. When it reaches 100% (after ~1500ms total), trigger celebration and reward
           setTimeout(() => {
-            spawnSparkles(25);
+            if (giftBoxEl) {
+              giftBoxEl.classList.remove('shaking');
+              giftBoxEl.classList.add('hidden-box');
+            }
+            spawnSparkles(30, giftBoxEl);
             sfxClick();
+
+            if (rankSectionEl) rankSectionEl.classList.add('celebrating');
             
             const milestone = newlyReached[newlyReached.length - 1] || prevMilestone.to;
             const reward = MILESTONE_REWARDS[milestone] || 3000;
@@ -3567,13 +3631,14 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             saveSchoolProgress();
             
             if (alertEl) {
-              $('score-milestone-alert-title').textContent = lang === 'ru' ? '🎉 Новый рубеж взят!' : '🎉 New Milestone!';
-              $('score-milestone-alert-subtitle').textContent = lang === 'ru'
-                ? `${formatFollowers(milestone)} Подписчиков!`
-                : `${formatFollowers(milestone)} Followers!`;
-              $('score-milestone-alert-reward').innerHTML = lang === 'ru'
-                ? `Награда: <b>+${formatLikes(reward)}</b> <img src="Items/UI/heart.png" class="inline-heart milestone-alert-heart" alt="heart">`
-                : `Reward: <b>+${formatLikes(reward)}</b> <img src="Items/UI/heart.png" class="inline-heart milestone-alert-heart" alt="heart">`;
+              const titleTextEl = $('score-milestone-title-text');
+              const rewardTextEl = $('score-milestone-reward-text');
+              if (titleTextEl) {
+                titleTextEl.textContent = tf('milestoneSubtextLeft', { milestone: formatFollowers(milestone) });
+              }
+              if (rewardTextEl) {
+                rewardTextEl.textContent = '+' + formatFollowers(reward);
+              }
               alertEl.classList.remove('hidden');
             }
             showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`);
@@ -3583,6 +3648,11 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             
             // 4. Wait another 1500ms for player to celebrate, then reset progress bar to 0% and animate to new nextPercent
             setTimeout(() => {
+              if (rankSectionEl) rankSectionEl.classList.remove('celebrating');
+              if (giftBoxEl) {
+                giftBoxEl.classList.remove('hidden-box');
+              }
+
               rankBarEl.style.transition = 'none';
               rankBarEl.style.width = '0%';
               void rankBarEl.offsetWidth; // trigger reflow
@@ -3602,6 +3672,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
           
         } else {
           // No milestone crossed: standard animation
+          rankBarEl.style.transition = '';
           rankBarEl.style.width = Math.min(Math.max(0, prevPercent), 100) + '%';
           setTimeout(() => {
             rankBarEl.style.width = Math.min(Math.max(0, nextPercent), 100) + '%';
