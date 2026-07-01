@@ -90,119 +90,332 @@ button { cursor: pointer; border: none; font-family: inherit; }
 
 /* ---------- INTRO DIALOGUE ---------- */
 #intro-overlay {
-  position: fixed; inset: 0; z-index: 900;
-  display: flex; align-items: flex-end;
+  position: fixed; inset: 0; z-index: 1000;
   overflow: hidden;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-#intro-overlay.hidden { display: none; }
+#intro-overlay.hidden { display: none !important; }
 
 #intro-bg {
   position: absolute; inset: 0;
   background-image: var(--page-bg, url('Background/photoshoot.jpg'));
   background-size: cover; background-position: center;
-  filter: blur(calc(var(--bg-blur, 1.5px) * 2 / 3)) brightness(0.88) saturate(0.9);
-  transform: translateY(var(--bg-y, 0px)) scale(calc(1.04 * var(--bg-scale, 1)));
-  transition: transform 0.1s ease-out, filter 0.1s ease-out;
+  filter: blur(4px) brightness(0.6);
+  transform: scale(1.05);
+  transition: background-image 0.8s ease, filter 0.8s ease, transform 0.8s ease;
+  z-index: 1;
 }
 
-/* Character stage on the right */
+
+/* Spotlight beam */
+.intro-spotlight {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle 35vh at 50% 40%, rgba(255,255,255,0.15) 0%, transparent 80%);
+  pointer-events: none; z-index: 3;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.intro-spotlight.active {
+  opacity: 1;
+  animation: pulseSpotlight 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulseSpotlight {
+  0% { transform: scale(1) translateX(-1%); opacity: 0.9; }
+  100% { transform: scale(1.05) translateX(1%); opacity: 1; }
+}
+
+/* Particles / Confetti / Stars */
+#intro-particles {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 4;
+  overflow: hidden;
+}
+.intro-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 20%, transparent 80%);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(0) rotate(0deg);
+}
+
+/* Character stage */
 #intro-character {
   position: absolute;
-  bottom: 0; right: 5%;
-  height: 85%;
-  z-index: 2;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  height: 90vh;
+  z-index: 5;
   display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease;
+}
+#intro-character.active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
 }
 #intro-char-stage {
   position: relative;
   aspect-ratio: 768 / 1376;
   height: 100%;
-  max-height: 68vh;
   width: auto;
   overflow: visible;
 }
 
-/* Dialogue box on the left */
+/* Glassmorphism Dialogue Panel */
 #intro-dialogue {
-  position: relative; z-index: 3;
-  width: 56%; max-width: 340px;
-  margin: 0 0 5% 4%;
-  background: rgba(255,255,255,0.93);
-  border: 2.5px solid var(--pink);
-  border-radius: 20px;
-  padding: 1.1rem 1.2rem 1rem;
-  box-shadow: 0 8px 32px rgba(168,85,247,.22);
-  animation: introPop .35s cubic-bezier(.34,1.56,.64,1);
+  position: absolute;
+  left: 50%;
+  bottom: 12vh;
+  transform: translateX(-50%) scale(0.9);
+  width: 90%;
+  max-width: 600px;
+  background: rgba(18, 12, 28, 0.72);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  border: 1.5px solid rgba(244, 63, 94, 0.35); /* rose-500 tint */
+  border-radius: 24px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              0 0 15px rgba(244, 63, 94, 0.15);
+  opacity: 0;
+  z-index: 10;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
 }
-/* Speech bubble triangle pointing right */
-#intro-dialogue::after {
-  content: '';
-  position: absolute; right: -16px; bottom: 32px;
-  border: 8px solid transparent;
-  border-left-color: var(--pink);
-}
-#intro-dialogue::before {
-  content: '';
-  position: absolute; right: -13px; bottom: 33px;
-  border: 7px solid transparent;
-  border-left-color: rgba(255,255,255,0.93);
-  z-index: 1;
+#intro-dialogue.active {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
 }
 
 #intro-name-badge {
   display: inline-block;
-  background: linear-gradient(90deg, var(--pink), var(--purple));
-  color: #fff; font-weight: 800; font-size: .78rem;
-  border-radius: 99px; padding: .22rem .75rem;
-  margin-bottom: .6rem;
+  background: linear-gradient(135deg, #f43f5e, #a855f7); /* rose-500 to purple-500 */
+  color: #fff; font-weight: 800; font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 1px;
+  border-radius: 99px; padding: 0.3rem 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 4px 10px rgba(244, 63, 94, 0.3);
 }
 
 #intro-text {
-  font-size: .92rem; line-height: 1.55;
-  color: var(--text); min-height: 4.5em;
+  font-size: 0.98rem; line-height: 1.6;
+  color: #f1f5f9; min-height: 4.8em;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  cursor: pointer;
 }
 
 #intro-dots {
-  display: flex; gap: .35rem; justify-content: center;
-  margin: .7rem 0 .5rem;
+  display: flex; gap: 0.4rem; justify-content: center;
+  margin: 0.8rem 0;
 }
 .intro-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--pink-light);
-  transition: background .2s, transform .2s;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.3s, transform 0.3s;
 }
 .intro-dot.active {
-  background: var(--sec-a1);
-  transform: scale(1.25);
+  background: #f43f5e;
+  transform: scale(1.3);
+  box-shadow: 0 0 8px #f43f5e;
 }
 
 #intro-next-btn {
   display: block; width: 100%;
-  background: linear-gradient(90deg, var(--pink), var(--purple));
-  color: #fff; font-weight: 800; font-size: .9rem;
+  background: linear-gradient(90deg, #f43f5e, #d946ef);
+  color: #fff; font-weight: 800; font-size: 0.95rem;
+  letter-spacing: 0.5px;
   border: none; border-radius: 99px;
-  padding: .55rem 1rem; cursor: pointer;
-  transition: transform .15s, box-shadow .15s;
-  box-shadow: 0 4px 14px rgba(168,85,247,.3);
+  padding: 0.7rem 1.5rem; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
 }
-#intro-next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(168,85,247,.4); }
-#intro-next-btn:active { transform: scale(.97); }
+#intro-next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6);
+}
+#intro-next-btn:active { transform: scale(0.97); }
 
-@keyframes introPop {
-  from { opacity: 0; transform: translateY(24px) scale(.95); }
-  to   { opacity: 1; transform: translateY(0)   scale(1); }
+/* Skip Intro button */
+.intro-skip-btn {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem; font-weight: 600;
+  padding: 0.4rem 0.9rem; border-radius: 99px;
+  cursor: pointer; z-index: 15;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.intro-skip-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Typing cursor blink */
 .intro-cursor {
   display: inline-block;
-  width: 2px; height: 1em;
-  background: var(--pink);
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  animation: blink .6s step-end infinite;
+  width: 2px; height: 1.1em;
+  background: #f43f5e;
+  margin-left: 3px;
+  vertical-align: middle;
+  animation: blink 0.6s step-end infinite;
 }
 @keyframes blink { 50% { opacity: 0; } }
+
+/* Followers cinematic display - Social Phone Card */
+.intro-follower-counter {
+  position: absolute;
+  top: 50vh; left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  z-index: 9; /* Render above letterbox (which is 8) */
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  width: 440px;
+  max-width: 90vw;
+}
+.intro-follower-counter.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.intro-follower-counter .instagram-post {
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6) !important;
+  border-radius: 12px;
+}
+.intro-follower-counter .instagram-post button {
+  pointer-events: none;
+}
+.intro-follower-counter .social-post-image-container {
+  aspect-ratio: 1 / 1 !important;
+  max-height: none !important;
+}
+#intro-phone-char-stage {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.66);
+  width: 78%;
+  height: 140%;
+  pointer-events: none;
+}
+
+/* Floating heart animation */
+@keyframes floatUpHeart {
+  0% { transform: translate(-50%, -50%) scale(0.8) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate(-50%, -150px) scale(1.4) rotate(var(--rot)); opacity: 0; }
+}
+.floating-heart {
+  position: absolute;
+  font-size: 1.5rem;
+  pointer-events: none;
+  animation: floatUpHeart 1.2s ease-out forwards;
+  z-index: 10;
+}
+.intro-inline-heart {
+  height: 1.15em;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 3px 2px 3px;
+}
+
+/* Cinematic text (Phase 1) */
+.intro-dream-text {
+  position: absolute;
+  top: 45vh; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; max-width: 500px;
+  text-align: center;
+  font-size: 1.5rem; font-weight: 300;
+  line-height: 1.8;
+  color: #fff;
+  z-index: 7;
+  opacity: 0;
+  font-style: italic;
+  text-shadow: 0 0 15px rgba(255,255,255,0.3);
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+.intro-dream-text.active {
+  opacity: 1;
+}
+
+/* Flash effect overlay */
+.intro-flash {
+  position: absolute; inset: 0;
+  background: #fff; z-index: 12;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.intro-flash.active {
+  opacity: 1;
+}
+
+/* Media Query Adaptations */
+@media (max-width: 599px) {
+  #intro-character { height: 75vh; }
+  #intro-dialogue {
+    bottom: 8vh;
+    padding: 1rem 1.2rem;
+    width: 92%;
+  }
+  #intro-text { font-size: 0.85rem; min-height: 4em; }
+  #intro-name-badge { font-size: 0.75rem; padding: 0.2rem 0.8rem; }
+  #intro-next-btn { padding: 0.55rem 1.2rem; font-size: 0.85rem; }
+  .intro-dream-text { font-size: 1.15rem; }
+  .intro-follower-num { font-size: 2.5rem; }
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  #intro-character {
+    height: 95vh !important;
+    left: 28% !important;
+    transform: translateX(-50%) translateY(100px) !important;
+  }
+  #intro-character.active {
+    transform: translateX(-50%) translateY(0) !important;
+  }
+  #intro-dialogue {
+    left: 70% !important;
+    bottom: 50% !important;
+    transform: translate(-50%, 50%) scale(0.8) !important;
+    width: 48% !important;
+    padding: 0.8rem 1.2rem !important;
+    margin-bottom: 0 !important;
+  }
+  #intro-dialogue.active {
+    transform: translate(-50%, 50%) scale(1) !important;
+  }
+  #intro-text {
+    font-size: 0.82rem !important;
+    line-height: 1.45 !important;
+    min-height: 3.5em !important;
+  }
+  #intro-name-badge {
+    font-size: 0.72rem !important;
+    padding: 0.2rem 0.8rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+  #intro-next-btn {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.82rem !important;
+  }
+  .intro-follower-counter {
+    width: 58vh !important;
+    max-width: none !important;
+  }
+}
+}
 
 /* ---------- LOADING SCREEN ---------- */
 @keyframes gradientShift {
@@ -1134,6 +1347,79 @@ button { cursor: pointer; border: none; font-family: inherit; }
 }
 #summary-rank-next { font-size: .7rem; color: var(--text-muted); text-align: center; }
 
+/* Milestone celebration alert inside score modal */
+.score-milestone-alert {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(236, 72, 153, 0.08));
+  border: 1.5px solid var(--pink);
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.15);
+  animation: slide-bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slide-bounce-in {
+  0% { transform: translateY(12px) scale(0.95); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.milestone-alert-badge {
+  font-size: 1.8rem;
+  animation: joy-bounce 1s infinite alternate ease-in-out;
+}
+
+@keyframes joy-bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+.milestone-alert-content {
+  flex: 1;
+  text-align: left;
+}
+
+.milestone-alert-title {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: var(--purple);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.milestone-alert-subtitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 1px 0;
+}
+
+.milestone-alert-reward {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+}
+
+.milestone-alert-reward b {
+  color: var(--pink);
+  font-weight: 900;
+}
+
+.milestone-alert-heart {
+  width: 0.95rem !important;
+  height: 0.95rem !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  margin-left: 2px !important;
+}
+
 /* Score modal rank section */
 .score-rank-section {
   background: rgba(255, 255, 255, 0.4);
@@ -1206,15 +1492,14 @@ button { cursor: pointer; border: none; font-family: inherit; }
 
 /* ── Большие экраны / 4K ── */
 @media (min-width: 1600px) {
-  #intro-character { height: 90%; }
-  #intro-char-stage { max-height: 80vh; }
+  #intro-character { height: 92vh; }
   #intro-dialogue {
-    width: 44%; max-width: 520px;
-    padding: 1.6rem 1.8rem 1.4rem;
+    max-width: 720px;
+    padding: 1.5rem 2rem;
   }
-  #intro-text { font-size: 1.1rem; min-height: 5em; }
-  #intro-name-badge { font-size: 1rem; padding: .3rem 1rem; }
-  #intro-next-btn { font-size: 1rem; padding: .65rem; }
+  #intro-text { font-size: 1.15rem; min-height: 5em; }
+  #intro-name-badge { font-size: 1rem; padding: .3rem 1.2rem; }
+  #intro-next-btn { font-size: 1.05rem; padding: 0.8rem 2rem; }
 }
 
 /* ============================================================
@@ -1457,14 +1742,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   #summary-rank-badge { font-size: .9rem; }
   #summary-rank-next { font-size: .64rem; }
 
-  /* Achievements */
-  .ach-modal-box  { border-radius: 22px 22px 14px 14px; max-height: 88vh; }
-  .ach-modal-header { padding: .8rem 1rem; font-size: .9rem; }
-  .ach-list       { gap: .45rem; padding: .55rem .8rem; }
-  .ach-row        { padding: .48rem .6rem; gap: .5rem; }
-  .ach-row-icon   { font-size: 1.25rem; }
-  .ach-row-name   { font-size: .76rem; }
-  .ach-row-desc   { font-size: .64rem; }
+
 
   /* Shop — компактный для телефона */
   .shop-box { border-radius: 18px 18px 12px 12px; max-height: 78vh; width: 96%; }
@@ -1492,39 +1770,28 @@ button { cursor: pointer; border: none; font-family: inherit; }
     grid-column: 1 / -1; width: fit-content;
     margin-bottom: .1rem; font-size: .52rem; padding: .1rem .38rem;
   }
-  .shop-card-icon  { grid-column: 1; grid-row: 1 / 3; font-size: 1.4rem; margin: 0; text-align: center; align-self: center; }
+  .shop-card-icon, .shop-card-icon-img { grid-column: 1; grid-row: 1 / 3; font-size: 1.4rem; width: 1.8rem; height: 1.8rem; object-fit: contain; margin: 0; align-self: center; }
   .shop-card-stars { grid-column: 2; grid-row: 1; font-size: .82rem; font-weight: 800; margin: 0; }
   .shop-card-bonus { grid-column: 2; grid-row: 2; font-size: .6rem; margin: 0; min-height: 0; }
   .shop-card-price { grid-column: 3; grid-row: 1 / 3; align-self: center; font-size: .7rem; padding: .22rem .5rem; display: inline-block; }
 
   /* Ad row */
   .shop-ad-card { padding: .35rem .5rem; gap: .4rem; }
-  .shop-ad-icon { font-size: 1.1rem; }
+  .shop-ad-icon, .shop-ad-icon-img { font-size: 1.1rem; width: 1.5rem; height: 1.5rem; object-fit: contain; flex-shrink: 0; }
   .shop-ad-text { font-size: .68rem; }
   .shop-ad-btn  { font-size: .6rem; padding: .16rem .42rem; }
 
-  /* Daily login */
-  .daily-box { padding: 1.2rem 1rem 1.5rem; border-radius: 22px 22px 14px 14px; }
-  .daily-icon  { font-size: 2.4rem; }
-  .daily-title { font-size: 1.1rem; }
-  .daily-streak { font-size: .88rem; }
-  .daily-reward { font-size: 1.7rem; margin-bottom: .8rem; }
+
 
   /* Toasts */
   .game-toast { font-size: .76rem; }
-  .achievement-toast { bottom: 8px; left: 8px; max-width: calc(100vw - 16px); }
+
   .stars-gain-toast { top: 48px; right: 10px; font-size: .95rem; }
 
   /* Context hints */
   .ctx-hint { font-size: .73rem; max-width: 195px; padding: .45rem .8rem; }
 
-  /* Intro */
-  #intro-character { right: 2%; height: 70%; opacity: .55; }
-  #intro-dialogue  { width: 88%; margin: 0 auto 6%; }
-  #intro-dialogue::after, #intro-dialogue::before { display: none; }
-  #intro-text { font-size: .8rem; min-height: 3.2em; }
-  #intro-name-badge { font-size: .7rem; }
-  #intro-next-btn { font-size: .8rem; padding: .42rem; }
+  /* Intro is handled in the main section */
 
   /* Share camera & Random button */
   .btn-share-stage, .stage-controls-left button { width: 38px; height: 38px; font-size: 1.1rem; }
@@ -1532,12 +1799,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
 
 }
 
-/* Intro on small screens — fallback for older rule */
-@media (max-width: 420px) {
-  #intro-character { right: 2%; height: 70%; opacity: .55; }
-  #intro-dialogue { width: 88%; margin: 0 auto 8%; }
-  #intro-dialogue::after, #intro-dialogue::before { display: none; }
-}
+/* Intro is handled in the main section */
 
 /* Mobile landscape */
 @media (max-height: 480px) and (orientation: landscape) {
@@ -1741,66 +2003,12 @@ button { cursor: pointer; border: none; font-family: inherit; }
 .game-toast.hidden { display: none; }
 @keyframes toastIn { from{opacity:0;transform:translateY(-6px);} to{opacity:1;transform:translateY(0);} }
 
-/* --- Daily Login Popup --- */
-.daily-box {
-  text-align: center; padding: 2rem 1.5rem;
-}
-.daily-icon { font-size: 3rem; margin-bottom: .5rem; }
-.daily-title { font-size: 1.4rem; font-weight: 800; color: var(--purple); margin: 0 0 .5rem; }
-.daily-streak { font-size: 1rem; font-weight: 700; color: var(--pink); margin-bottom: .75rem; }
-.daily-reward {
-  font-size: 2rem; font-weight: 900; color: var(--yellow);
-  margin-bottom: 1.2rem;
-  animation: gainPop .5s cubic-bezier(.34,1.56,.64,1) both;
-}
 
-/* --- Achievement Toast --- */
-.achievement-toast {
-  position: fixed; bottom: 24px; left: 16px; z-index: 9999;
-  display: flex; align-items: center; gap: .75rem;
-  background: #fff; border: 2px solid var(--yellow);
-  border-radius: 14px; padding: .65rem 1rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,.15);
-  animation: achSlideIn .35s cubic-bezier(.34,1.56,.64,1) both;
-  max-width: 260px;
-}
-.achievement-toast.ach-out { animation: achSlideOut .5s ease forwards; }
-@keyframes achSlideIn  { from{opacity:0;transform:translateY(40px);} to{opacity:1;transform:translateY(0);} }
-@keyframes achSlideOut { to{opacity:0;transform:translateY(40px);} }
-.ach-icon { font-size: 1.8rem; }
-.ach-label { font-size: .65rem; color: var(--yellow); font-weight: 800; text-transform: uppercase; }
-.ach-name  { font-size: .85rem; font-weight: 700; color: #1f2937; }
-.ach-reward{ font-size: .78rem; color: var(--purple); font-weight: 700; }
 
-/* --- Achievements Modal --- */
-.ach-modal-box {
-  max-height: 85vh; display: flex; flex-direction: column;
-  padding: 0; overflow: hidden;
-}
-.ach-modal-header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 1rem 1.2rem; border-bottom: 1px solid #e5e7eb;
-  font-weight: 800; font-size: 1rem; color: var(--purple);
-  flex-shrink: 0;
-}
-.ach-close-btn {
+.modal-close-btn {
   background: none; border: none; font-size: 1.1rem;
   cursor: pointer; color: #888; padding: .2rem .4rem;
 }
-.ach-list {
-  overflow-y: auto; padding: .75rem 1rem; display: flex; flex-direction: column; gap: .6rem;
-}
-.ach-row {
-  display: flex; align-items: center; gap: .75rem;
-  padding: .65rem .8rem; border-radius: 12px;
-  background: var(--purple-light);
-}
-.ach-row.done { background: #f0fdf4; border: 1px solid #86efac; }
-.ach-row-icon { font-size: 1.5rem; flex-shrink: 0; }
-.ach-row-info { flex: 1; min-width: 0; }
-.ach-row-name { font-weight: 700; font-size: .82rem; color: #1f2937; }
-.ach-row-desc { font-size: .7rem; color: #6b7280; margin-top: .1rem; }
-.ach-row-reward { font-size: .78rem; font-weight: 800; color: var(--yellow); white-space: nowrap; }
 
 /* --- Gem/Shop button --- */
 .btn-gem {
@@ -1824,12 +2032,12 @@ button { cursor: pointer; border: none; font-family: inherit; }
   background: linear-gradient(90deg, var(--sec-a1), var(--main-1));
   color: #fff; font-weight: 800; font-size: 1rem;
 }
-.shop-header .ach-close-btn {
+.shop-header .modal-close-btn {
   color: rgba(255,255,255,0.85);
   font-size: 1.2rem;
   padding: .25rem .5rem;
 }
-.shop-header .ach-close-btn:hover { color: #fff; }
+.shop-header .modal-close-btn:hover { color: #fff; }
 .shop-subtitle {
   text-align: center; font-size: .82rem;
   color: var(--text-muted); padding: .7rem 1rem .3rem;
@@ -1889,6 +2097,41 @@ button { cursor: pointer; border: none; font-family: inherit; }
   white-space: nowrap;
 }
 .shop-card-icon { font-size: 1.8rem; margin-bottom: .3rem; }
+.shop-card-icon-img {
+  height: 3.2rem;
+  object-fit: contain;
+  margin: 0 auto .4rem;
+  display: block;
+}
+.shop-header-title-container {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.shop-header-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+.shop-ad-icon-img {
+  width: 2.2rem;
+  height: 2.2rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.inline-heart {
+  width: 0.95rem !important;
+  height: 0.95rem !important;
+  object-fit: contain !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  margin-left: 2px !important;
+  position: relative !important;
+  top: -1px !important;
+}
+.item-card.locked .inline-heart {
+  filter: none !important;
+}
 .shop-card-stars {
   font-size: 1rem; font-weight: 800;
   color: var(--text); margin-bottom: .2rem;
@@ -2171,7 +2414,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
     padding: 0.5rem !important;
     gap: 4px !important;
   }
-  .instagram-post {
+  .score-left-col .instagram-post {
     height: 86vh !important;
     max-height: 86vh !important;
     width: calc(86vh * 768 / 1376) !important;
@@ -2180,22 +2423,22 @@ button { cursor: pointer; border: none; font-family: inherit; }
     display: flex;
     flex-direction: column;
   }
-  .instagram-media-container {
+  .score-left-col .instagram-media-container {
     height: 100% !important;
     width: 100% !important;
   }
-  .social-post-image-container {
+  .score-left-col .social-post-image-container {
     width: 100% !important;
     height: 100% !important;
     max-height: none !important;
   }
-  .instagram-actions-left-row {
+  .score-left-col .instagram-actions-left-row {
     display: none !important;
   }
-  .score-comment-overlay {
+  .score-left-col .score-comment-overlay {
     display: none !important;
   }
-  .instagram-comments-container-left {
+  .score-left-col .instagram-comments-container-left {
     display: none !important;
   }
 
@@ -2269,12 +2512,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   #summary-emoji-big { font-size: 1.8rem; margin-bottom: .2rem; }
   #summary-title     { font-size: 1rem; }
 
-  /* Achievements */
-  .ach-modal-box  { max-width: 94vw; max-height: 88vh; }
-  .ach-list       { gap: .4rem; padding: .5rem .8rem; }
-  .ach-row        { padding: .4rem; gap: .5rem; }
-  .ach-row-icon   { font-size: 1.2rem; }
-  .ach-modal-header { padding: .6rem 1rem; font-size: .9rem; }
+
 
   /* Shop */
   .shop-box   { max-width: 94vw; max-height: 88vh; overflow-y: auto; }
@@ -2292,33 +2530,19 @@ button { cursor: pointer; border: none; font-family: inherit; }
   .shop-ad-text    { font-size: .75rem; }
   .shop-ad-btn     { font-size: .65rem; padding: .2rem .55rem; }
 
-  /* Daily login */
-  .daily-box   { padding: 1rem; }
-  .daily-icon  { font-size: 2rem; }
-  .daily-title { font-size: 1rem; }
-  .daily-reward { font-size: 1.5rem; margin-bottom: .7rem; }
+
 
   /* Stars gain toast */
   .stars-gain-toast { font-size: .75rem; }
   .game-toast       { font-size: .72rem; padding: .3rem .65rem; }
-  .achievement-toast { bottom: 12px; padding: .45rem .75rem; }
+
 
   /* Context hints — smaller on mobile */
   .ctx-hint { font-size: .72rem; padding: .4rem .75rem; max-width: 180px; }
 
-  /* ── Интро: адаптация для ландшафта ── */
-  #intro-overlay { align-items: center; }
-  #intro-character {
-    right: 2%; height: 95%;
-  }
-  #intro-dialogue {
-    width: 60%; margin: 0 0 4% 3%;
-  }
-  #intro-text { font-size: .78rem; min-height: 3em; }
-  #intro-name-badge { font-size: .68rem; }
-  #intro-next-btn { font-size: .78rem; padding: .4rem; }
-  #intro-dots  { margin: .45rem 0 .35rem; }
-  .intro-dot   { width: 6px; height: 6px; }
+
+
+  /* Intro is handled in the main section */
 
 
 }
@@ -2577,6 +2801,9 @@ button { cursor: pointer; border: none; font-family: inherit; }
   font-size: 0.92rem !important;
   font-weight: 800 !important;
   color: var(--purple) !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  line-height: 1.25 !important;
 }
 
 .assignment-card-header-subtitle {
@@ -2677,6 +2904,8 @@ button { cursor: pointer; border: none; font-family: inherit; }
     width: 190px !important;
   }
 }
+
+
 
 /* Counters on the stage (likes and followers) */
 .stage-counters {
@@ -2812,9 +3041,7 @@ button { cursor: pointer; border: none; font-family: inherit; }
   transform: none !important;
 }
 
-.panel-controls #btn-achievements {
-  display: none !important;
-}
+
 
 .panel-controls .btn-yellow,
 .panel-controls .btn-sound {
@@ -3185,6 +3412,15 @@ button { cursor: pointer; border: none; font-family: inherit; }
   line-height: 1.1;
   margin-top: 1px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Hide post time and location on mobile screens */
+@media (max-width: 650px), (max-height: 620px) and (orientation: landscape) {
+  .instagram-meta-dot,
+  .instagram-meta-time,
+  .instagram-location-left {
+    display: none !important;
+  }
 }
 
 .instagram-dots-left {
@@ -4216,21 +4452,21 @@ button { cursor: pointer; border: none; font-family: inherit; }
     padding: 0.6rem;
     background: #000000;
   }
-  .instagram-post {
+  .score-left-col .instagram-post {
     max-width: 340px;
     margin: 0 auto;
   }
-  .instagram-post .social-post-image-container {
+  .score-left-col .instagram-post .social-post-image-container {
     max-width: 100% !important;
     margin-bottom: 0;
   }
-  .instagram-actions-left-row {
+  .score-left-col .instagram-actions-left-row {
     display: none !important;
   }
-  .score-comment-overlay {
+  .score-left-col .score-comment-overlay {
     display: none !important;
   }
-  .instagram-comments-container-left {
+  .score-left-col .instagram-comments-container-left {
     display: none !important;
   }
   .score-right-col {

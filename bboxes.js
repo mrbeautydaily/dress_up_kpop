@@ -684,12 +684,7 @@ const ITEM_BBOXES = {
     "w": 173,
     "h": 203
   },
-  "Items/UI/achievements.png": {
-    "x": 0,
-    "y": 0,
-    "w": 187,
-    "h": 185
-  },
+
   "Items/UI/blouses.png": {
     "x": 0,
     "y": 0,

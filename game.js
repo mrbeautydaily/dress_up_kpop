@@ -31,7 +31,7 @@ const T = {
   en: {
     // Loading
     loadingTitle:  'K-Pop Idol: Star Maker',
-    loadingText:   'Preparing your K-Pop group debut...',
+    loadingText:   'Loading...',
     // Header
     gameTitle:     '✨ K-Pop Star Maker ✨',
     btnRandom:     '🎲 Random',
@@ -73,6 +73,11 @@ const T = {
     rankDebut:       '💖 Rising Stars',
     rankIdol:        '🌟 Chart Toppers',
     rankStar:        '👑 K-Pop Legends',
+    // Milestone modal
+    milestoneTitle: '🎉 Milestone Reached! 🎉',
+    milestoneSubtitle: 'You have reached {followers} followers! Your popularity is sky-rocketing!',
+    milestoneRewardLabel: 'Reward:',
+    milestoneClaimBtn: 'Awesome!',
     // Outfit names (free mode)
     adj: ['Sparkly','Dreamy','Fierce','Sweet','Chic','Bold','Pastel','Glam','Iconic','Fresh'],
     noun:['Idol','Star','Diva','Queen','Vision','Dream','Look','Vibe','Moment','Era'],
@@ -80,7 +85,7 @@ const T = {
   ru: {
     // Loading
     loadingTitle:  'Путь к славе: K-Pop',
-    loadingText:   'Готовим дебют твоей K-Pop группы...',
+    loadingText:   'Загрузка...',
     // Header
     gameTitle:     '✨ K-Pop: Путь к славе ✨',
     btnRandom:     '🎲 Случайно',
@@ -122,6 +127,11 @@ const T = {
     rankDebut:       '💖 Восходящие звёзды',
     rankIdol:        '🌟 Лидеры чартов',
     rankStar:        '👑 K-Pop Легенды',
+    // Milestone modal
+    milestoneTitle: '🎉 Новая высота взята! 🎉',
+    milestoneSubtitle: 'Вы набрали {followers} подписчиков! Ваша популярность стремительно растет!',
+    milestoneRewardLabel: 'Награда:',
+    milestoneClaimBtn: 'Отлично!',
     // Outfit names (free mode)
     adj:  ['Сверкающий','Мечтательный','Дерзкий','Сладкий','Шикарный','Смелый','Пастельный','Гламурный','Культовый','Свежий'],
     noun: ['Идол','Звезда','Дива','Королева','Образ','Мечта','Лук','Вайб','Момент','Эпоха'],
@@ -256,10 +266,10 @@ let _catalog  = []; // реальные данные о товарах из ка
 
 // Пакеты звёзд (теперь дают лайки). id должны совпадать с продуктами в консоли Яндекс Игр.
 const STAR_PACKAGES = [
-  { id: 'stars_30',  likes:  3000, bonus: 0,     icon: '❤️' },
-  { id: 'stars_150', likes: 15000, bonus: 0,     icon: '💖' },
-  { id: 'stars_300', likes: 30000, bonus: 3000,  icon: '💝', popular: true },
-  { id: 'stars_600', likes: 60000, bonus: 10000, icon: '💕' },
+  { id: 'stars_30',  likes:  3000, bonus: 0,     icon: 'Items/UI/shop_heart_1.png' },
+  { id: 'stars_150', likes: 15000, bonus: 0,     icon: 'Items/UI/shop_heart_2.png' },
+  { id: 'stars_300', likes: 30000, bonus: 3000,  icon: 'Items/UI/shop_heart_3.png', popular: true },
+  { id: 'stars_600', likes: 60000, bonus: 10000, icon: 'Items/UI/shop_heart_4.png' },
 ];
 
 async function initPayments() {
@@ -330,8 +340,8 @@ function grantStarPackage(pkg) {
   spawnSparkles(14);
   sfxUnlock();
   const msg = pkg.bonus > 0
-    ? (lang === 'ru' ? `+${formatLikes(pkg.likes)} ❤️ и +${formatLikes(pkg.bonus)} бонус!` : `+${formatLikes(pkg.likes)} ❤️ + ${formatLikes(pkg.bonus)} bonus!`)
-    : `+${formatLikes(pkg.likes)} ❤️`;
+    ? (lang === 'ru' ? `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> и +${formatLikes(pkg.bonus)} бонус!` : `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> + ${formatLikes(pkg.bonus)} bonus!`)
+    : `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`;
   showToast(msg);
 }
 
@@ -349,9 +359,9 @@ function showShopModal() {
   const adCard = document.createElement('div');
   adCard.className = 'shop-ad-card';
   adCard.innerHTML = `
-    <span class="shop-ad-icon">📺</span>
+    <img src="Items/UI/shop_ad_tv.png" class="shop-ad-icon-img" alt="ad icon">
     <span class="shop-ad-text">
-      <b>+1 000 ❤️</b> — ${lang === 'ru' ? 'за просмотр рекламы' : 'watch an ad'}
+      <b>+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> — ${lang === 'ru' ? 'за просмотр рекламы' : 'watch an ad'}
     </span>
     <span class="shop-ad-btn">${lang === 'ru' ? 'Смотреть' : 'Watch'}</span>`;
   adCard.addEventListener('click', () => {
@@ -369,7 +379,7 @@ function showShopModal() {
             _adShowing = false;
             adCard.classList.remove('loading');
             if (_actx && soundOn) _actx.resume(); resumeBGM();
-            if (_rewarded) { addLikes(1000); spawnSparkles(8); showToast('+1 000 ❤️'); }
+            if (_rewarded) { addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart">'); }
           },
           onError: () => {
             _adShowing = false;
@@ -380,7 +390,7 @@ function showShopModal() {
         },
       });
     } else {
-      addLikes(1000); spawnSparkles(8); showToast('+1 000 ❤️ (dev)');
+      addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> (dev)');
       adCard.classList.remove('loading');
     }
   });
@@ -404,8 +414,8 @@ function showShopModal() {
 
     card.innerHTML = `
       ${badgeHtml}
-      <div class="shop-card-icon">${pkg.icon}</div>
-      <div class="shop-card-stars">${formatLikes(pkg.likes + pkg.bonus)} ❤️</div>
+      <img src="${pkg.icon}" class="shop-card-icon-img" alt="pack icon">
+      <div class="shop-card-stars">${formatLikes(pkg.likes + pkg.bonus)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>
       ${bonusLine}
       <div class="shop-card-price">${(_catalog.find(c=>c.id===pkg.id)||{}).price||"—"}</div>`;
 
@@ -804,12 +814,26 @@ function addLikes(n) {
 function updateLikesDisplay() {
   const el = $('stars-count');
   if (el) el.textContent = formatLikes(prog.likes);
+  setTimeout(adjustStageCounters, 0);
 }
 
 function updateFollowersDisplay() {
   const el = $('followers-count');
   if (el) el.textContent = formatFollowers(school.totalFollowers);
+  setTimeout(adjustStageCounters, 0);
 }
+
+// ────────────────────────────────────────────────────────────
+// MILESTONE GOALS & REWARDS
+// ────────────────────────────────────────────────────────────
+
+const MILESTONE_REWARDS = {
+  1000: 3000,
+  10000: 5000,
+  100000: 10000,
+  500000: 25000,
+  1000000: 50000
+};
 
 // ────────────────────────────────────────────────────────────
 // PROGRESSION — UNLOCK / BUY
@@ -886,15 +910,15 @@ function showBuyBar(category, itemId, cost) {
     const canBuy = prog.likes >= cost;
     const shopHint = !canBuy
       ? `<button class="buy-bar-gem-hint" id="buy-bar-shop">
-           💖 ${lang === 'ru' ? 'Купить лайки' : 'Buy Likes'}
+           <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> ${lang === 'ru' ? 'Купить лайки' : 'Buy Likes'}
          </button>`
       : '';
     bar.innerHTML = `
       <div class="buy-bar-name">${iName(item)}${isDeal ? ' 🔥' : ''}</div>
-      ${isDeal ? `<div class="buy-bar-deal">${formatLikes(origCost)} ❤️ → <b>${formatLikes(cost)} ❤️</b></div>` : ''}
+      ${isDeal ? `<div class="buy-bar-deal">${formatLikes(origCost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> → <b>${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b></div>` : ''}
       <div class="buy-bar-row">
         <button class="buy-bar-btn buy-confirm${canBuy ? '' : ' cant-buy'}" id="buy-bar-yes">
-          ${canBuy ? (lang === 'ru' ? `Купить ${formatLikes(cost)} ❤️` : `Buy ${formatLikes(cost)} ❤️`) : (lang === 'ru' ? `Нужно ${formatLikes(cost)} ❤️` : `Need ${formatLikes(cost)} ❤️`)}
+          ${canBuy ? (lang === 'ru' ? `Купить ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">` : `Buy ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`) : (lang === 'ru' ? `Нужно ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">` : `Need ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`)}
         </button>
         <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
       </div>
@@ -911,7 +935,6 @@ function showBuyBar(category, itemId, cost) {
       buildItemsGrid(activeCategory);
       spawnSparkles(8);
       sfxUnlock();
-      checkAchievements();
     };
     if (!canBuy && document.getElementById('buy-bar-shop')) {
       document.getElementById('buy-bar-shop').onclick = e => {
@@ -1042,11 +1065,11 @@ function triggerStarsHint() {
     const hasAdOption = [...AD_ITEMS].some(id => !isUnlocked(id));
     const text = hasAdOption
       ? (lang === 'ru'
-          ? '💡 Нажми <b>❤️</b> чтобы купить лайки<br>или получи вещи <b>бесплатно</b> за рекламу!'
-          : '💡 Tap <b>❤️</b> to buy Likes<br>or get items <b>free</b> by watching ads!')
+          ? '💡 Нажми <b><img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> чтобы купить лайки<br>или получи вещи <b>бесплатно</b> за рекламу!'
+          : '💡 Tap <b><img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> to buy Likes<br>or get items <b>free</b> by watching ads!')
       : (lang === 'ru'
-          ? '💡 Нажми <b>❤️</b> чтобы купить лайки!'
-          : '💡 Tap <b>❤️</b> to buy more Likes!');
+          ? '💡 Нажми <b><img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> чтобы купить лайки!'
+          : '💡 Tap <b><img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> to buy more Likes!');
     showCtxHint('stars-display', text, 5000);
   } else {
     // Повторные разы — мягкое покачивание без тултипа
@@ -1064,7 +1087,6 @@ function unlockItemFree(category, itemId) {
   buildItemsGrid(activeCategory);
   spawnSparkles(12);
   sfxUnlock();
-  checkAchievements();
   spawnSparkles(16);
 }
 
@@ -1123,7 +1145,7 @@ function showReviewForItem(category, itemId) {
 function showToast(msg) {
   let el = $('game-toast');
   if (!el) { el = document.createElement('div'); el.id = 'game-toast'; document.body.appendChild(el); }
-  el.textContent = msg;
+  el.innerHTML = msg;
   el.className = 'game-toast';
   clearTimeout(el._t);
   el._t = setTimeout(() => el.className = 'game-toast hidden', 2000);
@@ -1167,244 +1189,9 @@ function refreshDailyTask(today) {
 function checkDailyLogin() {
   const today = todayStr();
   refreshDailyTask(today);
-  if (prog.lastLoginDate === today) return;
-  const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-  prog.loginStreak  = prog.lastLoginDate === yesterday.toISOString().slice(0, 10)
-    ? prog.loginStreak + 1 : 1;
-  prog.lastLoginDate = today;
-  saveProgress();
-  const reward = (10 + Math.min((prog.loginStreak - 1) * 3, 15)) * 100;
-  addLikes(reward);
-  checkAchievements();
-  showDailyLoginPopup(reward);
 }
 
-function showDailyLoginPopup(reward) {
-  const popup = $('daily-login-popup');
-  if (!popup) return;
-  const titleEl = popup.querySelector('.daily-title');
-  if (titleEl) titleEl.textContent = lang === 'ru' ? '❤️ Ежедневный бонус!' : '❤️ Daily Bonus!';
-  const collectBtn = $('daily-collect-btn');
-  if (collectBtn) collectBtn.textContent = lang === 'ru' ? '✨ Забрать!' : '✨ Collect!';
-  $('daily-stars-reward').textContent = '+' + formatLikes(reward) + ' ❤️';
-  $('daily-streak-text').textContent  = lang === 'ru'
-    ? `День ${prog.loginStreak} подряд 🔥`
-    : `Day ${prog.loginStreak} streak 🔥`;
-  popup.classList.remove('hidden');
-  sfxDailyBonus();
-  if (collectBtn) collectBtn.onclick = () => { popup.classList.add('hidden'); sfxClick(); };
-}
 
-// ────────────────────────────────────────────────────────────
-// PROGRESSION — ACHIEVEMENTS
-// ────────────────────────────────────────────────────────────
-
-const ACHIEVEMENTS = [
-  // ── Первые шаги ──────────────────────────────────────────
-  { id:'first_look',    icon:'👗', reward:1500,
-    name:'First Look',         name_ru:'Первый образ',
-    desc:'Wear something in every slot',      desc_ru:'Надень что-нибудь в каждую категорию',
-    check:() => Object.keys(clothes).every(cat => equipped[cat] !== clothes[cat][0].id) },
-  { id:'first_unlock',  icon:'🛒', reward:1000,
-    name:'First Purchase',     name_ru:'Первая покупка',
-    desc:'Unlock your first item',            desc_ru:'Купи первую вещь',
-    check:() => prog.unlocked.length >= 1 },
-  { id:'school_start',  icon:'📚', reward:2000,
-    name:"School's In",        name_ru:'Первый звонок',
-    desc:'Complete your first lesson',        desc_ru:'Пройди первый урок',
-    check:() => prog.totalLessons >= 1 },
-  { id:'runway_debut',  icon:'🌟', reward:2000,
-    name:'Runway Debut',       name_ru:'Дебют на подиуме',
-    desc:'Walk the runway for the first time',desc_ru:'Выйди на подиум в первый раз',
-    check:() => (prog.runwayCount || 0) >= 1 },
-
-  // ── Оценки ───────────────────────────────────────────────
-  { id:'grade_b',       icon:'📝', reward:2000,
-    name:'Honor Roll',         name_ru:'Хорошистка',
-    desc:'Earn 75+ points in a post',          desc_ru:'Набери 75+ очков за пост',
-    check:() => prog.highScore >= 75 },
-  { id:'grade_a',       icon:'⭐', reward:3000,
-    name:'A-Student',          name_ru:'Отличница',
-    desc:'Earn 90+ points in a post',          desc_ru:'Набери 90+ очков за пост',
-    check:() => prog.highScore >= 90 },
-  { id:'perfect',       icon:'💯', reward:5000,
-    name:'Perfection!',        name_ru:'Совершенство!',
-    desc:'Earn 100 points in a post',          desc_ru:'Набери 100 очков за пост',
-    check:() => prog.highScore >= 100 },
-  { id:'perfect_3',     icon:'🏅', reward:6000,
-    name:'Triple Perfect',     name_ru:'Три идеала',
-    desc:'Earn 100 points three times',        desc_ru:'Набери 100 очков за пост три раза',
-    check:() => (prog.perfectCount || 0) >= 3 },
-
-  // ── Уроки ────────────────────────────────────────────────
-  { id:'fashionista',   icon:'👑', reward:4000,
-    name:'Fashionista',        name_ru:'Фэшионистка',
-    desc:'Complete 5 lessons',                desc_ru:'Пройди 5 уроков',
-    check:() => prog.totalLessons >= 5 },
-  { id:'lessons_10',    icon:'📖', reward:5000,
-    name:'Dedicated Student',  name_ru:'Прилежная студентка',
-    desc:'Complete 10 lessons',               desc_ru:'Пройди 10 уроков',
-    check:() => prog.totalLessons >= 10 },
-  { id:'lessons_25',    icon:'🎓', reward:8000,
-    name:'Class President',    name_ru:'Президент класса',
-    desc:'Complete 25 lessons',               desc_ru:'Пройди 25 уроков',
-    check:() => prog.totalLessons >= 25 },
-  { id:'lessons_50',    icon:'🏆', reward:8000,
-    name:'School Legend',      name_ru:'Легенда школы',
-    desc:'Complete 50 lessons',               desc_ru:'Пройди 50 уроков',
-    check:() => prog.totalLessons >= 50 },
-  { id:'lessons_100',   icon:'👸', reward:12000,
-    name:'K-Pop Icon',         name_ru:'K-Pop Икона',
-    desc:'Complete 100 lessons',              desc_ru:'Пройди 100 уроков',
-    check:() => prog.totalLessons >= 100 },
-
-  // ── Подиум ───────────────────────────────────────────────
-  { id:'runway_5',      icon:'✨', reward:4000,
-    name:'Runway Regular',     name_ru:'Завсегдатай подиума',
-    desc:'Walk the runway 5 times',           desc_ru:'Выйди на подиум 5 раз',
-    check:() => (prog.runwayCount || 0) >= 5 },
-  { id:'runway_10',     icon:'💫', reward:6000,
-    name:'Catwalk Queen',      name_ru:'Королева подиума',
-    desc:'Walk the runway 10 times',          desc_ru:'Выйди на подиум 10 раз',
-    check:() => (prog.runwayCount || 0) >= 10 },
-  { id:'runway_25',     icon:'🦋', reward:6000,
-    name:'Supermodel',         name_ru:'Супермодель',
-    desc:'Walk the runway 25 times',          desc_ru:'Выйди на подиум 25 раз',
-    check:() => (prog.runwayCount || 0) >= 25 },
-
-  // ── Гардероб ─────────────────────────────────────────────
-  { id:'shopper',       icon:'🛍️', reward:3500,
-    name:'Shopaholic',         name_ru:'Шопоголик',
-    desc:'Unlock 5 items',                    desc_ru:'Купи 5 вещей',
-    check:() => prog.unlocked.length >= 5 },
-  { id:'wardrobe_10',   icon:'👚', reward:5000,
-    name:'Fashion Lover',      name_ru:'Любительница моды',
-    desc:'Unlock 10 items',                   desc_ru:'Купи 10 вещей',
-    check:() => prog.unlocked.length >= 10 },
-  { id:'wardrobe_20',   icon:'🧥', reward:5500,
-    name:'Style Expert',       name_ru:'Эксперт стиля',
-    desc:'Unlock 20 items',                   desc_ru:'Купи 20 вещей',
-    check:() => prog.unlocked.length >= 20 },
-  { id:'wardrobe_35',   icon:'💎', reward:7000,
-    name:'Closet Legend',      name_ru:'Легенда гардероба',
-    desc:'Unlock 35 items',                   desc_ru:'Купи 35 вещей',
-    check:() => prog.unlocked.length >= 35 },
-
-  // ── Серия дней ───────────────────────────────────────────
-  { id:'streak_3',      icon:'🔥', reward:3000,
-    name:'3-Day Streak',       name_ru:'3 дня подряд',
-    desc:'Play 3 days in a row',              desc_ru:'Заходи 3 дня подряд',
-    check:() => prog.loginStreak >= 3 },
-  { id:'streak_7',      icon:'🌟', reward:6000,
-    name:'Week Warrior',       name_ru:'Неделя без пропусков',
-    desc:'Play 7 days in a row',              desc_ru:'Заходи 7 дней подряд',
-    check:() => prog.loginStreak >= 7 },
-  { id:'streak_14',     icon:'💖', reward:6000,
-    name:'Fortnight Fan',      name_ru:'Две недели подряд',
-    desc:'Play 14 days in a row',             desc_ru:'Заходи 14 дней подряд',
-    check:() => prog.loginStreak >= 14 },
-  { id:'streak_30',     icon:'👑', reward:10000,
-    name:'Idol Dedication',    name_ru:'Преданность идола',
-    desc:'Play 30 days in a row',             desc_ru:'Заходи 30 дней подряд',
-    check:() => prog.loginStreak >= 30 },
-
-  // ── Ежедневные задания ───────────────────────────────────
-  { id:'daily_done',    icon:'📅', reward:2000,
-    name:'Daily Devotee',      name_ru:'Первое задание',
-    desc:'Complete a daily challenge',        desc_ru:'Выполни первое ежедневное задание',
-    check:() => (prog.dailyTasksCompleted || 0) >= 1 },
-  { id:'daily_5',       icon:'📆', reward:4000,
-    name:'Routine Builder',    name_ru:'Привычка — вторая натура',
-    desc:'Complete 5 daily challenges',       desc_ru:'Выполни 5 ежедневных заданий',
-    check:() => (prog.dailyTasksCompleted || 0) >= 5 },
-  { id:'daily_10',      icon:'🗓️', reward:6000,
-    name:'Daily Champion',     name_ru:'Чемпион дня',
-    desc:'Complete 10 daily challenges',      desc_ru:'Выполни 10 ежедневных заданий',
-    check:() => (prog.dailyTasksCompleted || 0) >= 10 },
-  { id:'daily_30',      icon:'🏅', reward:10000,
-    name:'Monthly Master',     name_ru:'Мастер месяца',
-    desc:'Complete 30 daily challenges',      desc_ru:'Выполни 30 ежедневных заданий',
-    check:() => (prog.dailyTasksCompleted || 0) >= 30 },
-
-  // ── Лайки (бывшие Звёзды) ───────────────────────────────────────────────
-  { id:'star200',       icon:'💫', reward:2500,
-    name:'Like Collector',     name_ru:'Коллекционер лайков',
-    desc:'Earn 20,000 likes total',           desc_ru:'Заработай 20 000 лайков суммарно',
-    check:() => (prog.likesEarned || 0) >= 20000 },
-  { id:'star500',       icon:'🌠', reward:5000,
-    name:'Rising Popularity',   name_ru:'Популярная группа',
-    desc:'Earn 50,000 likes total',           desc_ru:'Заработай 50 000 лайков суммарно',
-    check:() => (prog.likesEarned || 0) >= 50000 },
-  { id:'star1000',      icon:'⭐', reward:6000,
-    name:'Crowd Pleaser',      name_ru:'Любимцы публики',
-    desc:'Earn 100,000 likes total',          desc_ru:'Заработай 100 000 лайков суммарно',
-    check:() => (prog.likesEarned || 0) >= 100000 },
-  { id:'star2500',      icon:'🌟', reward:0,
-    name:'Global Idols',       name_ru:'Мировые кумиры',
-    desc:'Earn 250,000 likes total',          desc_ru:'Заработай 250 000 лайков суммарно',
-    check:() => (prog.likesEarned || 0) >= 250000 },
-];
-
-function checkAchievements() {
-  return; // Achievements are disabled
-}
-
-function setAchievementDot(visible) {
-  const btn = $('btn-achievements');
-  if (!btn) return;
-  let dot = btn.querySelector('.notif-dot');
-  if (visible && !dot) {
-    dot = document.createElement('span');
-    dot.className = 'notif-dot';
-    btn.appendChild(dot);
-  } else if (!visible && dot) {
-    dot.remove();
-  }
-}
-
-function showAchievementToast(ach) {
-  setAchievementDot(true);
-  const el = document.createElement('div');
-  el.className = 'achievement-toast';
-  const name = lang === 'ru' ? ach.name_ru : ach.name;
-  el.innerHTML = `<span class="ach-icon">${ach.icon}</span>
-    <div><div class="ach-label">${lang === 'ru' ? 'Достижение!' : 'Achievement!'}</div>
-    <div class="ach-name">${name}</div>
-    ${ach.reward > 0 ? `<div class="ach-reward">+${formatLikes(ach.reward)} ❤️</div>` : ''}</div>`;
-  document.body.appendChild(el);
-  sfxAchievement();
-  setTimeout(() => el.classList.add('ach-out'), 2800);
-  setTimeout(() => el.remove(), 3400);
-}
-
-function showAchievementsModal() {
-  const modal = $('achievements-modal');
-  if (!modal) return;
-
-  const titleEl = $('ach-modal-title');
-  if (titleEl) titleEl.textContent = lang === 'ru' ? 'Достижения' : 'Achievements';
-
-  // Убираем красную точку — игрок открыл и ознакомился
-  setAchievementDot(false);
-
-  const list = $('achievements-list');
-  list.innerHTML = '';
-  ACHIEVEMENTS.forEach(ach => {
-    const done = !!prog.achievements[ach.id];
-    const desc = lang === 'ru' ? ach.desc_ru : ach.desc;
-    const row  = document.createElement('div');
-    row.className = 'ach-row' + (done ? ' done' : '');
-    row.innerHTML = `
-      <div class="ach-row-icon">${done ? ach.icon : '🔒'}</div>
-      <div class="ach-row-info">
-        <div class="ach-row-name">${lang === 'ru' ? ach.name_ru : ach.name}</div>
-        <div class="ach-row-desc">${desc}</div>
-      </div>
-      ${ach.reward > 0 ? `<div class="ach-row-reward">${done ? '✓' : '+' + formatLikes(ach.reward)} ❤️</div>` : ''}`;
-    list.appendChild(row);
-  });
-  modal.classList.remove('hidden');
-}
 
 // ────────────────────────────────────────────────────────────
 // LAYER ORDER & CATEGORIES
@@ -1630,6 +1417,7 @@ const school = {
   totalFollowers:     0,     // total followers (gained across posts)
   totalPosts:         0,     // total published posts
   dayFollowersGained: 0,     // followers gained during current day
+  rewardedMilestones: [],    // list of already rewarded follower milestones
 };
 
 // ────────────────────────────────────────────────────────────
@@ -1750,17 +1538,8 @@ function sfxUnlock() {
   [[880,.28,.13,0],[1108,.24,.13,.06],[1318,.2,.18,.12],[1760,.16,.32,.18]]
     .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
 }
-function sfxAchievement() {
-  [[523,.28,.18,0],[659,.28,.18,.09],[784,.28,.18,.18],
-   [1046,.32,.15,.28],[1318,.28,.4,.36]]
-    .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
-}
 function sfxClick() { tone(1100,.1,.06); }
-function sfxDailyBonus() {
-  [[392,.28,.18,0],[523,.28,.18,.11],[659,.28,.18,.22],
-   [784,.28,.18,.33],[1046,.32,.45,.44]]
-    .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
-}
+
 function sfxRunway() {
   if (!soundOn) return;
   const c = actx();
@@ -1775,8 +1554,11 @@ function sfxRunway() {
   o.start(); o.stop(c.currentTime + 0.46);
 }
 function sfxScore(trendMatches) {
-  if (trendMatches >= 2) sfxAchievement();
-  else if (trendMatches === 1) {
+  if (trendMatches >= 2) {
+    [[523,.28,.18,0],[659,.28,.18,.09],[784,.28,.18,.18],
+     [1046,.32,.15,.28],[1318,.28,.4,.36]]
+      .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
+  } else if (trendMatches === 1) {
     [[523,.22,.18,0],[659,.22,.18,.09],[784,.22,.28,.18]]
       .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
   } else {
@@ -2207,13 +1989,13 @@ function buildItemsGrid(category) {
     const isAdItem     = AD_ITEMS.has(item.id);
     const isReviewItem = item.id === REVIEW_ITEM;
     const badge = isDeal
-      ? `<div class="item-deal-badge">🔥 ${formatLikes(cost)}❤️</div>`
+      ? `<div class="item-deal-badge">🔥 ${formatLikes(cost)}<img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>`
       : locked && isAdItem
         ? `<div class="item-cost-badge item-ad-badge">📺 ${lang === 'ru' ? 'Реклама' : 'Ad'}</div>`
         : locked && isReviewItem
           ? `<div class="item-cost-badge item-review-badge">✍️ ${lang === 'ru' ? 'Отзыв' : 'Review'}</div>`
           : locked && cost > 0
-            ? `<div class="item-cost-badge">${formatLikes(cost)}❤️</div>`
+            ? `<div class="item-cost-badge">${formatLikes(cost)}<img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>`
             : '';
 
     card.innerHTML = `${thumbHTML}${badge}<span class="item-name">${iName(item)}</span>`;
@@ -2282,7 +2064,6 @@ function equipItem(category, itemId) {
     }
   });
   saveOutfit();
-  checkAchievements();
   updateRunwayBtn();
   checkRunwayHint();
 }
@@ -2554,6 +2335,7 @@ function saveSchoolProgress() {
       totalFollowers: school.totalFollowers,
       totalPosts: school.totalPosts,
       dayFollowersGained: school.dayFollowersGained,
+      rewardedMilestones: school.rewardedMilestones || [],
     }));
   } catch(e) {}
   updateFollowersDisplay();
@@ -2567,6 +2349,18 @@ function loadSchoolProgress() {
       school.totalFollowers = s.totalFollowers || s.totalScore || 0;
       school.totalPosts = s.totalPosts || 0;
       school.dayFollowersGained = s.dayFollowersGained || 0;
+      if (s.rewardedMilestones) {
+        school.rewardedMilestones = s.rewardedMilestones;
+      } else {
+        // Pre-populate already reached milestones to avoid retroactive reward spam/exploit on first load
+        const MILESTONES = [1000, 10000, 100000, 500000, 1000000];
+        school.rewardedMilestones = [];
+        for (const m of MILESTONES) {
+          if (school.totalFollowers >= m) {
+            school.rewardedMilestones.push(m);
+          }
+        }
+      }
     }
   } catch(e) {}
   updateFollowersDisplay();
@@ -2763,7 +2557,68 @@ function showAssignmentBanner() {
   }
   
   $('outfit-name-display').textContent = assignmentDesc(a);
+  setTimeout(() => {
+    adjustAssignmentBannerWidth();
+    adjustStageCounters();
+  }, 0);
 }
+
+function adjustAssignmentBannerWidth() {
+  const banner = $('assignment-banner');
+  const stage = $('stage');
+  if (!banner || banner.classList.contains('hidden') || !stage) return;
+
+  const stageRect = stage.getBoundingClientRect();
+  if (stageRect.width === 0) return; // Not visible or rendered yet
+
+  // Standard width from CSS
+  const standardWidth = window.innerWidth < 600 ? 190 : (window.innerWidth < 860 ? 210 : 290);
+  const bannerLeft = window.innerWidth < 860 ? 8 : 12;
+
+  // Character starts around 30% of stage width
+  const characterLeft = stageRect.left + stageRect.width * 0.3;
+
+  // Available space up to character with a 12px margin
+  const availableWidth = characterLeft - bannerLeft - 12;
+
+  if (availableWidth < standardWidth) {
+    banner.style.setProperty('width', `${Math.max(120, availableWidth)}px`, 'important');
+  } else {
+    banner.style.setProperty('width', `${standardWidth}px`, 'important');
+  }
+}
+
+function adjustStageCounters() {
+  const counters = document.querySelector('.stage-counters');
+  const stage = $('stage');
+  const stageWrap = $('stage-wrap');
+  if (!counters || !stage || !stageWrap) return;
+
+  const stageRect = stage.getBoundingClientRect();
+  const stageWrapRect = stageWrap.getBoundingClientRect();
+  if (stageRect.width === 0) return; // Not visible or rendered yet
+
+  // Character right boundary is around 70% of stage width
+  const characterRight = stageRect.left + stageRect.width * 0.7;
+
+  // Available space from right edge of stageWrap to characterRight (minus 12px margin and 12px gap)
+  const availableSpace = stageWrapRect.right - characterRight - 24;
+
+  // Reset transform to get natural width
+  counters.style.transform = 'none';
+  counters.style.transformOrigin = 'top right';
+
+  const countersRect = counters.getBoundingClientRect();
+  const naturalWidth = countersRect.width;
+
+  if (naturalWidth > availableSpace) {
+    const scale = Math.max(0.65, availableSpace / naturalWidth);
+    counters.style.setProperty('transform', `scale(${scale})`, 'important');
+  } else {
+    counters.style.setProperty('transform', 'none', 'important');
+  }
+}
+
 
 
 // ────────────────────────────────────────────────────────────
@@ -3615,12 +3470,30 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     const rankBarEl = $('score-rank-bar');
     const rankNextEl = $('score-rank-next');
 
-    // Show current total as badge
+    // Hide milestone alert initially
+    const alertEl = $('score-milestone-alert');
+    if (alertEl) alertEl.classList.add('hidden');
+
+    // Milestone calculation and reward check
+    const newlyReached = [];
+    if (!school.rewardedMilestones) {
+      school.rewardedMilestones = [];
+    }
+    for (const m of MILESTONES) {
+      if (school.totalFollowers >= m && !school.rewardedMilestones.includes(m)) {
+        newlyReached.push(m);
+        school.rewardedMilestones.push(m);
+      }
+    }
+
+    const milestoneCrossed = curMilestone.to !== prevMilestone.to;
+
+    // Show current total as badge (if milestone crossed, we update it at the climax of the animation)
     const rankBadgeValEl = $('score-rank-badge-val');
     if (rankBadgeValEl) {
-      rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
+      rankBadgeValEl.textContent = formatFollowers(milestoneCrossed ? prevTotal : school.totalFollowers);
     } else if (rankBadgeEl) {
-      rankBadgeEl.textContent = `📊 ${formatFollowers(school.totalFollowers)}`;
+      rankBadgeEl.textContent = `📊 ${formatFollowers(milestoneCrossed ? prevTotal : school.totalFollowers)}`;
     }
 
     if (school.totalFollowers >= GOAL_FOLLOWERS) {
@@ -3628,12 +3501,36 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         const pDenom = prevMilestone.to - prevMilestone.from;
         const prevPct = pDenom > 0 ? ((prevTotal - prevMilestone.from) / pDenom) * 100 : 100;
         rankBarEl.style.width = Math.min(Math.max(0, prevPct), 100) + '%';
-        setTimeout(() => { rankBarEl.style.width = '100%'; }, 800);
+        setTimeout(() => { rankBarEl.style.width = '100%'; }, 300);
       }
       if (rankNextEl) {
         rankNextEl.innerHTML = lang === 'ru'
           ? '<span style="color: #d97706; font-weight: 800;">🎉 1 МИЛЛИОН! Легенды K-Pop! 🎉</span>'
           : '<span style="color: #d97706; font-weight: 800;">🎉 1 MILLION! K-Pop Legends! 🎉</span>';
+      }
+
+      // If reached 1M for the first time
+      if (newlyReached.includes(1000000)) {
+        const reward = MILESTONE_REWARDS[1000000] || 50000;
+        addLikes(reward);
+        saveSchoolProgress();
+
+        setTimeout(() => {
+          spawnSparkles(25);
+          sfxClick();
+
+          if (alertEl) {
+            $('score-milestone-alert-title').textContent = lang === 'ru' ? '🎉 Легендарный Рубеж!' : '🎉 Legendary Milestone!';
+            $('score-milestone-alert-subtitle').textContent = lang === 'ru' ? '1 000 000 Подписчиков!' : '1,000,000 Followers!';
+            $('score-milestone-alert-reward').innerHTML = lang === 'ru'
+              ? `Награда: <b>+${formatLikes(reward)}</b> <img src="Items/UI/heart.png" class="inline-heart milestone-alert-heart" alt="heart">`
+              : `Reward: <b>+${formatLikes(reward)}</b> <img src="Items/UI/heart.png" class="inline-heart milestone-alert-heart" alt="heart">`;
+            alertEl.classList.remove('hidden');
+          }
+          showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`);
+          
+          if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
+        }, 1500);
       }
     } else {
       const denom = curMilestone.to - curMilestone.from;
@@ -3642,19 +3539,81 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       const nextPercent = denom > 0 ? ((school.totalFollowers - curMilestone.from) / denom) * 100 : 0;
 
       if (rankBarEl) {
-        // If milestone bracket changed, start from 0
-        const startPct = (curMilestone.to !== prevMilestone.to) ? 0 : Math.min(Math.max(0, prevPercent), 100);
-        rankBarEl.style.width = startPct + '%';
-        setTimeout(() => {
-          rankBarEl.style.width = Math.min(Math.max(0, nextPercent), 100) + '%';
-        }, 800);
-      }
+        if (milestoneCrossed) {
+          // 1. Start at prevPercent of the old bracket
+          rankBarEl.style.width = Math.min(Math.max(0, prevPercent), 100) + '%';
+          
+          // 2. Animate to 100% of the old bracket
+          setTimeout(() => {
+            rankBarEl.style.width = '100%';
+          }, 300);
 
-      if (rankNextEl) {
-        const remaining = curMilestone.to - school.totalFollowers;
-        rankNextEl.textContent = lang === 'ru'
-          ? `Цель: ${formatFollowers(curMilestone.to)} · осталось ${formatFollowers(remaining)}`
-          : `Goal: ${formatFollowers(curMilestone.to)} · ${formatFollowers(remaining)} left`;
+          if (rankNextEl) {
+            const remaining = prevMilestone.to - prevTotal;
+            rankNextEl.textContent = lang === 'ru'
+              ? `Цель: ${formatFollowers(prevMilestone.to)} · осталось ${formatFollowers(remaining)}`
+              : `Goal: ${formatFollowers(prevMilestone.to)} · ${formatFollowers(remaining)} left`;
+          }
+          
+          // 3. When it reaches 100% (after ~1500ms total), trigger celebration and reward
+          setTimeout(() => {
+            spawnSparkles(25);
+            sfxClick();
+            
+            const milestone = newlyReached[newlyReached.length - 1] || prevMilestone.to;
+            const reward = MILESTONE_REWARDS[milestone] || 3000;
+            
+            addLikes(reward);
+            saveSchoolProgress();
+            
+            if (alertEl) {
+              $('score-milestone-alert-title').textContent = lang === 'ru' ? '🎉 Новый рубеж взят!' : '🎉 New Milestone!';
+              $('score-milestone-alert-subtitle').textContent = lang === 'ru'
+                ? `${formatFollowers(milestone)} Подписчиков!`
+                : `${formatFollowers(milestone)} Followers!`;
+              $('score-milestone-alert-reward').innerHTML = lang === 'ru'
+                ? `Награда: <b>+${formatLikes(reward)}</b> <img src="Items/UI/heart.png" class="inline-heart milestone-alert-heart" alt="heart">`
+                : `Reward: <b>+${formatLikes(reward)}</b> <img src="Items/UI/heart.png" class="inline-heart milestone-alert-heart" alt="heart">`;
+              alertEl.classList.remove('hidden');
+            }
+            showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`);
+            
+            // Update total followers display badge early to reflect progress
+            if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
+            
+            // 4. Wait another 1500ms for player to celebrate, then reset progress bar to 0% and animate to new nextPercent
+            setTimeout(() => {
+              rankBarEl.style.transition = 'none';
+              rankBarEl.style.width = '0%';
+              void rankBarEl.offsetWidth; // trigger reflow
+              rankBarEl.style.transition = ''; // restore CSS transition
+              rankBarEl.style.width = Math.min(Math.max(0, nextPercent), 100) + '%';
+              
+              // Update goal text to show remaining to new milestone
+              if (rankNextEl) {
+                const remaining = curMilestone.to - school.totalFollowers;
+                rankNextEl.textContent = lang === 'ru'
+                  ? `Цель: ${formatFollowers(curMilestone.to)} · осталось ${formatFollowers(remaining)}`
+                  : `Goal: ${formatFollowers(curMilestone.to)} · ${formatFollowers(remaining)} left`;
+              }
+            }, 1500);
+            
+          }, 1500);
+          
+        } else {
+          // No milestone crossed: standard animation
+          rankBarEl.style.width = Math.min(Math.max(0, prevPercent), 100) + '%';
+          setTimeout(() => {
+            rankBarEl.style.width = Math.min(Math.max(0, nextPercent), 100) + '%';
+          }, 300);
+          
+          if (rankNextEl) {
+            const remaining = curMilestone.to - school.totalFollowers;
+            rankNextEl.textContent = lang === 'ru'
+              ? `Цель: ${formatFollowers(curMilestone.to)} · осталось ${formatFollowers(remaining)}`
+              : `Goal: ${formatFollowers(curMilestone.to)} · ${formatFollowers(remaining)} left`;
+          }
+        }
       }
     }
   }
@@ -3722,7 +3681,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
       if (likeBtn) {
         if (state.liked) {
-          likeBtn.textContent = '❤️';
+          likeBtn.innerHTML = '<img src="Items/UI/heart.png" class="inline-heart" alt="heart">';
           likeBtn.classList.add('liked');
         } else {
           likeBtn.textContent = lang === 'ru' ? 'Нравится' : 'Like';
@@ -3917,9 +3876,9 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   earned = earned || 0;
   if (!isFree && result.trendMatches >= 1) {
     let doubled = false;
-    dblBtn.textContent = lang === 'ru'
-      ? `📺 Удвоить награду (+${formatLikes(earned)} ❤️)`
-      : `📺 Double reward (+${formatLikes(earned)} ❤️)`;
+    dblBtn.innerHTML = lang === 'ru'
+      ? `📺 Удвоить награду (+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">)`
+      : `📺 Double reward (+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">)`;
     dblBtn.classList.remove('hidden');
     dblBtn.onclick = () => {
       if (doubled || _adShowing) return;
@@ -3928,7 +3887,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         dblBtn.classList.add('hidden');
         addLikes(earned);
         spawnSparkles(12);
-        showToast(`✨ +${formatLikes(earned)} ❤️ × 2!`);
+        showToast(`✨ +${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> × 2!`);
       };
       if (ysdk) {
         _adShowing = true;
@@ -4032,7 +3991,6 @@ function onRunwayClick() {
     hideCtxHint();
     prog.runwayCount = (prog.runwayCount || 0) + 1;
     saveProgress();
-    checkAchievements();
     
     // Play shutter sound, trigger visual flash, and clone DOM stage instantly
     $('btn-runway').disabled = true;
@@ -4090,7 +4048,6 @@ function onRunwayClick() {
   saveProgress();
   const dailyBonus = isDaily ? 1500 : 0;
   addLikes(earned + dailyBonus);
-  checkAchievements();
   saveSchoolProgress();
 
   // Instant shutter click + flash -> show post and results using stage cloning
@@ -4234,6 +4191,10 @@ async function init() {
     cardToggle.addEventListener('click', () => {
       sfxClick();
       $('assignment-banner').classList.toggle('collapsed');
+      setTimeout(() => {
+        adjustAssignmentBannerWidth();
+        adjustStageCounters();
+      }, 0);
     });
   }
 
@@ -4243,17 +4204,23 @@ async function init() {
     if (banner && !banner.classList.contains('hidden') && window.innerWidth < 768) {
       banner.classList.add('collapsed');
     }
+    adjustAssignmentBannerWidth();
+    adjustStageCounters();
   });
   // Trigger once on load
   if (window.innerWidth < 768) {
     const banner = $('assignment-banner');
     if (banner) banner.classList.add('collapsed');
   }
+  setTimeout(() => {
+    adjustAssignmentBannerWidth();
+    adjustStageCounters();
+  }, 100);
+
+
 
   $('stars-display').addEventListener('click', () => { sfxClick(); showShopModal(); });
   $('btn-runway').addEventListener('click', onRunwayClick);
-  $('btn-achievements').addEventListener('click', () => { sfxClick(); showAchievementsModal(); });
-  $('achievements-close').addEventListener('click', () => { sfxClick(); $('achievements-modal').classList.add('hidden'); });
   $('shop-close').addEventListener('click', () => { sfxClick(); $('shop-modal').classList.add('hidden'); });
   $('btn-sound').addEventListener('click', toggleSound);
   $('btn-share-score').addEventListener('click', () => { sfxClick(); shareOutfit(); });
@@ -4350,170 +4317,669 @@ async function init() {
 // INTRO DIALOGUE
 // ────────────────────────────────────────────────────────────
 
-const INTRO_STEPS = {
-  ru: [
-    { text: 'Привет! Я Ю На из Eclipse! 👋\nМы только что дебютировали как K-Pop группа!' },
-    { text: 'Нас пока никто не знает... 😅\nНо мы будем публиковать посты каждый день и набирать подписчиков!' },
-    { text: 'Мне нужна твоя помощь! 💖\nБудь моим стилистом — помогай подбирать крутые образы для публикаций!' },
-    { text: 'Каждый пост — это шанс! 📱\nЗаписи, фотосессии, концерты... Чем лучше образ — тем больше фанатов!' },
-    { text: 'Наша мечта — 1 000 000 подписчиков! 👑\nОт полных ноунеймов до K-Pop легенд!' },
-    { text: 'Ну что, поможешь мне? 🔥💖\nДавай начнём нашу карьеру прямо сейчас!', last: true },
+const IntroDirector = {
+  phase: 1,
+  typingTimer: null,
+  
+  starterOutfit: [
+    { cat: 'hair',    id: 'blunt_bob_pink_headband' },
+    { cat: 'tops',    id: 'kpop_stage_top' },
+    { cat: 'bottoms',  id: 'silver_metallic_skirt' },
+    { cat: 'shoes',   id: 'silver_metallic_boots' }
   ],
-  en: [
-    { text: "Hi! I'm Yu Na from Eclipse! 👋\nWe just debuted as a K-Pop group!" },
-    { text: "Nobody knows us yet... 😅\nBut we're going to post every day and build our following!" },
-    { text: "I need your help! 💖\nBe my stylist — help me pick the best outfits for our posts!" },
-    { text: "Every post is a chance! 📱\nRecordings, photoshoots, concerts... Better looks = more fans!" },
-    { text: "Our dream is 1,000,000 followers! 👑\nFrom total nobodies to K-Pop legends!" },
-    { text: "So, will you help me? 🔥💖\nLet's start our career right now!", last: true },
+  stageOutfit: [
+    { cat: 'hair',    id: 'blunt_bob_pink_headband' },
+    { cat: 'tops',    id: 'pink_sequin_dress' },
+    { cat: 'bottoms',  id: 'bot_none' },
+    { cat: 'socks',   id: 'y2k_overknee_socks' },
+    { cat: 'shoes',   id: 'glam_high_heels' }
   ],
+
+  steps: {
+    ru: {
+      dream: 'Один вирусный пост может изменить всё...',
+      realityText: '...Но пока я об этом только мечтаю. 💭\nПривет! Я Хана из K-Pop группы Eclipse! 👋\nМы только что дебютировали, и о нас пока никто не знает 😅',
+      gameplayText: 'Мне нужен стилист — и это ты! 💖\nКаждый день мы публикуем посты о съемках клипов, фан-встречах, концертах...\nПодбирай образы под эти события — чем точнее попадёшь в стиль, тем больше подписчиков и лайков!\n(За лайки {heart} можно покупать новые вещи!)',
+      debutText: 'Наша мечта — 1 000 000 подписчиков! 👑\nОт полных нулей до K-Pop легенд!\nНу что, поможешь мне? 🔥',
+      btnNext: 'Далее ➤',
+      btnDebut: 'Начать карьеру!',
+      skipText: 'Пропустить',
+      followersLabel: 'Подписчиков'
+    },
+    en: {
+      dream: 'One viral post can change everything...',
+      realityText: "...But for now, I can only dream of it. 💭\nHi! I'm Hana from the K-Pop group Eclipse! 👋\nWe just debuted, and nobody knows us yet 😅",
+      gameplayText: "I need a stylist — and that's you! 💖\nEvery day we publish posts about music video shoots, fan meetings, concerts...\nMatch outfits to these events — the closer you get to the style, the more followers and likes we get!\n(With likes {heart} you can buy new clothes!)",
+      debutText: 'Our dream — 1,000,000 followers! 👑\nFrom total zeros to K-Pop legends!\nSo, will you help me? 🔥',
+      btnNext: 'Next ➤',
+      btnDebut: 'Start Career!',
+      skipText: 'Skip',
+      followersLabel: 'Followers'
+    }
+  },
+
+  start() {
+    this.phase = 1;
+    const overlay = $('intro-overlay');
+    overlay.classList.remove('hidden');
+
+    const tData = this.steps[lang] || this.steps.en;
+    $('intro-skip-btn').textContent = tData.skipText;
+    $('intro-follower-label').textContent = tData.followersLabel;
+
+    $('intro-skip-btn').onclick = (e) => {
+      e.stopPropagation();
+      this.skipIntro();
+    };
+
+    this.startParticles();
+    this.enterPhase1();
+  },
+
+  enterPhase1() {
+    this.phase = 1;
+    const tData = this.steps[lang] || this.steps.en;
+
+    document.documentElement.style.setProperty('--page-bg', 'none');
+    $('intro-bg').style.backgroundImage = "url('Background/grand_concert.jpg')";
+    $('intro-bg').style.filter = 'blur(10px) brightness(0.4)';
+    $('intro-bg').style.transform = 'scale(1.05)';
+    $('intro-spotlight').classList.add('active');
+
+    $('intro-dialogue').classList.remove('active');
+    $('intro-character').classList.remove('active');
+    $('intro-follower-counter').classList.remove('active');
+
+    const textEl = $('intro-dream-text');
+    textEl.innerHTML = '';
+    textEl.classList.add('active');
+
+    this.playSynthWhoosh();
+
+    let typingFinished = false;
+    let countingFinished = false;
+    let counterAnimationRef = null;
+    let transitionTimeoutRef = null;
+
+    const startCounterAnimation = () => {
+      textEl.classList.remove('active');
+      $('intro-follower-counter').classList.add('active');
+      this.renderCharacter(this.starterOutfit, $('intro-phone-char-stage'));
+
+      const countNumEl = $('intro-follower-num');
+      let startVal = 0;
+      const endVal = 1000000;
+      const duration = 2000;
+      const startTime = performance.now();
+
+      const spawnHeart = () => {
+        const btn = $('intro-phone-heart');
+        const counter = $('intro-follower-counter');
+        if (!btn || !counter) return;
+        const rect = btn.getBoundingClientRect();
+        const containerRect = counter.getBoundingClientRect();
+        
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.textContent = Math.random() > 0.35 ? '❤️' : (Math.random() > 0.5 ? '💖' : '👍');
+        
+        const x = rect.left - containerRect.left + rect.width / 2;
+        const y = rect.top - containerRect.top + rect.height / 2;
+        
+        heart.style.left = `${x}px`;
+        heart.style.top = `${y}px`;
+        
+        const rot = (Math.random() * 60 - 30) + 'deg';
+        heart.style.setProperty('--rot', rot);
+        
+        counter.appendChild(heart);
+        setTimeout(() => heart.remove(), 1200);
+      };
+
+      const countUp = (now) => {
+        if (countingFinished) return;
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const val = Math.floor(startVal + ease * (endVal - startVal));
+
+        countNumEl.textContent = formatFollowers(val);
+
+        if (Math.random() < 0.15 && progress < 0.95) {
+          spawnHeart();
+        }
+
+        if (progress < 1) {
+          counterAnimationRef = requestAnimationFrame(countUp);
+        } else {
+          countingFinished = true;
+          transitionTimeoutRef = setTimeout(() => {
+            if (this.phase === 1) this.enterPhase2();
+          }, 2500);
+        }
+      };
+
+      counterAnimationRef = requestAnimationFrame(countUp);
+    };
+
+    this.typewrite(textEl, tData.dream, () => {
+      typingFinished = true;
+      setTimeout(() => {
+        if (this.phase === 1 && !countingFinished) {
+          startCounterAnimation();
+        }
+      }, 1000);
+    }, 45);
+
+    $('intro-overlay').onclick = (e) => {
+      if (e.target.id === 'intro-skip-btn') return;
+
+      if (!typingFinished) {
+        this.clearTyping();
+        textEl.innerHTML = tData.dream;
+        typingFinished = true;
+        startCounterAnimation();
+      } else if (!countingFinished) {
+        countingFinished = true;
+        if (counterAnimationRef) cancelAnimationFrame(counterAnimationRef);
+        
+        $('intro-follower-counter').classList.add('active');
+        this.renderCharacter(this.starterOutfit, $('intro-phone-char-stage'));
+        $('intro-follower-num').textContent = formatFollowers(1000000);
+        
+        const counter = $('intro-follower-counter');
+        const btn = $('intro-phone-heart');
+        if (btn && counter) {
+          const rect = btn.getBoundingClientRect();
+          const containerRect = counter.getBoundingClientRect();
+          for (let k = 0; k < 6; k++) {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = Math.random() > 0.35 ? '❤️' : '💖';
+            const x = rect.left - containerRect.left + rect.width / 2 + (Math.random() * 20 - 10);
+            const y = rect.top - containerRect.top + rect.height / 2;
+            heart.style.left = `${x}px`;
+            heart.style.top = `${y}px`;
+            heart.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
+            counter.appendChild(heart);
+            setTimeout(() => heart.remove(), 1200);
+          }
+        }
+
+        transitionTimeoutRef = setTimeout(() => {
+          if (this.phase === 1) this.enterPhase2();
+        }, 2000);
+      } else {
+        if (transitionTimeoutRef) clearTimeout(transitionTimeoutRef);
+        this.enterPhase2();
+      }
+    };
+  },
+
+  enterPhase2() {
+    this.phase = 2;
+    const tData = this.steps[lang] || this.steps.en;
+    $('intro-bg').onclick = null;
+    $('intro-overlay').onclick = null;
+
+    $('intro-bg').style.backgroundImage = "url('Background/vlog.jpg')";
+    $('intro-bg').style.filter = 'blur(1px) brightness(0.6)';
+    $('intro-spotlight').classList.remove('active');
+    $('intro-follower-counter').classList.remove('active');
+    $('intro-dream-text').classList.remove('active');
+
+    const vlogOutfit = [
+      { cat: 'hair',    id: 'blunt_bob_pink_headband' },
+      { cat: 'tops',    id: 'pink_y2k_cardigan' },
+      { cat: 'bottoms',  id: 'y2k_cargo_pants' },
+      { cat: 'shoes',   id: 'pink_hightop_sneakers' }
+    ];
+    this.renderCharacter(vlogOutfit);
+
+    $('intro-character').classList.add('active');
+
+    const dialogueEl = $('intro-dialogue');
+    dialogueEl.classList.add('active');
+
+    $('intro-name-badge').textContent = lang === 'ru' ? 'Хана' : 'Hana';
+    $('intro-dots').style.display = 'flex';
+
+    this.buildDots(3, 0);
+
+    const btn = $('intro-next-btn');
+    btn.textContent = tData.btnNext;
+
+    const textEl = $('intro-text');
+    textEl.onclick = () => {
+      if (this.typingTimer) {
+        this.clearTyping();
+        textEl.innerHTML = this.formatText(tData.realityText);
+      }
+    };
+
+    this.typewrite(textEl, tData.realityText, null, 25);
+
+    btn.onclick = () => {
+      if (this.typingTimer) {
+        this.clearTyping();
+        textEl.innerHTML = this.formatText(tData.realityText);
+      } else {
+        this.enterPhase3();
+      }
+    };
+  },
+
+  enterPhase3() {
+    this.phase = 3;
+    const tData = this.steps[lang] || this.steps.en;
+
+    this.playSynthDressUp();
+
+    $('intro-bg').style.backgroundImage = "url('Background/photoshoot.jpg')";
+    $('intro-bg').style.filter = 'blur(1px) brightness(0.6)';
+
+    const photoshootOutfit = [
+      { cat: 'hair',    id: 'blunt_bob_pink_headband' },
+      { cat: 'tops',    id: 'top_dress_new_1' },
+      { cat: 'bottoms',  id: 'bot_none' },
+      { cat: 'shoes',   id: 'pink_mary_jane_shoes' }
+    ];
+    this.renderCharacter(photoshootOutfit);
+
+    this.buildDots(3, 1);
+
+    const btn = $('intro-next-btn');
+    btn.textContent = tData.btnNext;
+
+    const textEl = $('intro-text');
+    textEl.onclick = () => {
+      if (this.typingTimer) {
+        this.clearTyping();
+        textEl.innerHTML = this.formatText(tData.gameplayText);
+      }
+    };
+
+    this.typewrite(textEl, tData.gameplayText, null, 25);
+
+    btn.onclick = () => {
+      if (this.typingTimer) {
+        this.clearTyping();
+        textEl.innerHTML = this.formatText(tData.gameplayText);
+      } else {
+        this.enterPhase4();
+      }
+    };
+  },
+
+  enterPhase4() {
+    this.phase = 4;
+    const tData = this.steps[lang] || this.steps.en;
+
+    $('intro-bg').style.backgroundImage = "url('Background/live_stage.jpg')";
+    $('intro-bg').style.filter = 'blur(1px) brightness(0.7)';
+    $('intro-spotlight').classList.add('active');
+
+    this.renderCharacter(this.stageOutfit);
+
+    this.buildDots(3, 2);
+
+    const btn = $('intro-next-btn');
+    btn.textContent = tData.btnDebut;
+
+    const textEl = $('intro-text');
+    this.typewrite(textEl, tData.debutText, () => {
+      this.spawnConfettiFireworks();
+    }, 25);
+
+    btn.onclick = () => {
+      if (this.typingTimer) {
+        this.clearTyping();
+        textEl.innerHTML = this.formatText(tData.debutText);
+      } else {
+        this.finishIntro();
+      }
+    };
+  },
+
+  renderCharacter(outfit, stage = $('intro-char-stage')) {
+    if (!stage) return;
+    stage.innerHTML = '';
+
+    const shadowDiv = document.createElement('div');
+    shadowDiv.className = 'character-shadow';
+    stage.appendChild(shadowDiv);
+
+    const bodyImg = document.createElement('img');
+    bodyImg.src = 'Items/body/body_new.png';
+    bodyImg.alt = '';
+    bodyImg.draggable = false;
+    bodyImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;';
+    stage.appendChild(bodyImg);
+
+    const sorted = outfit
+      .map(({ cat, id }) => {
+        const item = findItem(cat, id);
+        const layerZ = LAYER_ORDER.find(l => l.key === cat)?.zIndex ?? 1;
+        const domOrder = LAYER_ORDER.findIndex(l => l.key === cat);
+        return { item, layerZ, domOrder };
+      })
+      .filter(({ item }) => item && item.src && item.pos)
+      .sort((a, b) => a.layerZ !== b.layerZ ? a.layerZ - b.layerZ : a.domOrder - b.domOrder);
+
+    sorted.forEach(({ item, layerZ }) => {
+      const { left, top, width } = item.pos;
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = '';
+      img.draggable = false;
+      img.style.cssText = `position:absolute;left:${left}%;top:${top}%;width:${width}%;height:auto;pointer-events:none;z-index:${layerZ};`;
+      stage.appendChild(img);
+    });
+  },
+
+  typewrite(el, text, onComplete, speed = 30) {
+    this.clearTyping();
+    el.innerHTML = '';
+
+    let i = 0;
+    const cursor = document.createElement('span');
+    cursor.className = 'intro-cursor';
+    el.appendChild(cursor);
+
+    const typeNext = () => {
+      if (i < text.length) {
+        if (text.substring(i, i + 7) === '{heart}') {
+          const img = document.createElement('img');
+          img.src = 'Items/UI/heart.png';
+          img.className = 'intro-inline-heart';
+          img.alt = 'heart';
+          el.insertBefore(img, cursor);
+          i += 7;
+          this.typingTimer = setTimeout(typeNext, speed);
+          return;
+        }
+
+        const ch = text[i++];
+        const tn = document.createTextNode(ch === '\n' ? '' : ch);
+        if (ch === '\n') {
+          el.insertBefore(document.createElement('br'), cursor);
+        } else {
+          el.insertBefore(tn, cursor);
+        }
+
+        if (i % 2 === 0) this.playSynthTick();
+
+        this.typingTimer = setTimeout(typeNext, ch === '\n' ? 120 : speed);
+      } else {
+        cursor.remove();
+        this.typingTimer = null;
+        if (onComplete) onComplete();
+      }
+    };
+
+    typeNext();
+  },
+
+  clearTyping() {
+    if (this.typingTimer) {
+      clearTimeout(this.typingTimer);
+      this.typingTimer = null;
+    }
+  },
+
+  formatText(txt) {
+    return txt
+      .replace(/\n/g, '<br>')
+      .replace(/{heart}/g, '<img src="Items/UI/heart.png" class="intro-inline-heart" alt="heart">');
+  },
+
+  buildDots(total, current) {
+    const dotsEl = $('intro-dots');
+    dotsEl.innerHTML = '';
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement('div');
+      d.className = 'intro-dot' + (i === current ? ' active' : '');
+      dotsEl.appendChild(d);
+    }
+  },
+
+  triggerFlash() {
+    const flash = $('intro-flash');
+    if (!flash) return;
+    flash.classList.add('active');
+    setTimeout(() => {
+      flash.classList.remove('active');
+    }, 150);
+  },
+
+  playSynthTick() {
+    if (!soundOn) return;
+    try {
+      const ctx = actx();
+      if (ctx.state === 'suspended') return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      gain.gain.setValueAtTime(0.015, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.05);
+
+      osc.connect(gain);
+      gain.connect(_masterGain || ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.05);
+    } catch(e) {}
+  },
+
+  playSynthFlash() {
+    if (!soundOn) return;
+    try {
+      const ctx = actx();
+      if (ctx.state === 'suspended') return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(200, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+
+      osc.connect(gain);
+      gain.connect(_masterGain || ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } catch(e) {}
+  },
+
+  playSynthWhoosh() {
+    if (!soundOn) return;
+    try {
+      const ctx = actx();
+      if (ctx.state === 'suspended') return;
+
+      const bufferSize = ctx.sampleRate * 0.4;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.Q.setValueAtTime(4, ctx.currentTime);
+      filter.frequency.setValueAtTime(200, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(1600, ctx.currentTime + 0.35);
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(_masterGain || ctx.destination);
+
+      noise.start();
+      noise.stop(ctx.currentTime + 0.4);
+    } catch(e) {}
+  },
+
+  playSynthDressUp() {
+    if (!soundOn) return;
+    try {
+      const ctx = actx();
+      if (ctx.state === 'suspended') return;
+      const notes = [261.63, 329.63, 392.00, 523.25];
+      notes.forEach((freq, idx) => {
+        const time = ctx.currentTime + idx * 0.06;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, time);
+        gain.gain.setValueAtTime(0.04, time);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
+        osc.connect(gain);
+        gain.connect(_masterGain || ctx.destination);
+        osc.start(time);
+        osc.stop(time + 0.12);
+      });
+    } catch(e) {}
+  },
+
+  startParticles() {
+    const container = $('intro-particles');
+    if (!container) return;
+    container.innerHTML = '';
+
+    for (let i = 0; i < 15; i++) {
+      this.spawnFloatStar(container);
+    }
+  },
+
+  spawnFloatStar(container) {
+    const p = document.createElement('div');
+    p.className = 'intro-particle';
+    const size = Math.random() * 4 + 2;
+    p.style.width = `${size}px`;
+    p.style.height = `${size}px`;
+    p.style.left = `${Math.random() * 100}%`;
+    p.style.top = `${Math.random() * 100}%`;
+    p.style.opacity = Math.random() * 0.4 + 0.1;
+    container.appendChild(p);
+
+    const anim = () => {
+      if (!document.getElementById('intro-overlay') || $('intro-overlay').classList.contains('hidden')) return;
+      let y = parseFloat(p.style.top);
+      y -= 0.05 + Math.random() * 0.05;
+      if (y < -5) {
+        y = 105;
+        p.style.left = `${Math.random() * 100}%`;
+      }
+      p.style.top = `${y}%`;
+      p.style.opacity = Math.sin(Date.now() / 600 + parseFloat(p.style.left)) * 0.2 + 0.3;
+      requestAnimationFrame(anim);
+    };
+    requestAnimationFrame(anim);
+  },
+
+  spawnConfettiFireworks() {
+    const container = $('intro-particles');
+    if (!container) return;
+
+    for (let k = 0; k < 40; k++) {
+      const p = document.createElement('div');
+      p.className = 'intro-particle';
+      const size = Math.random() * 6 + 4;
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+      p.style.left = '50%';
+      p.style.top = '40%';
+      p.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+
+      const colors = ['#ff007f', '#ffd700', '#00e5ff', '#ff00ff', '#e0f7fa'];
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.opacity = '1';
+      container.appendChild(p);
+
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 8 + 4;
+      let vx = Math.cos(angle) * speed;
+      let vy = Math.sin(angle) * speed - 2;
+      let px = window.innerWidth / 2;
+      let py = window.innerHeight * 0.4;
+      let op = 1;
+
+      const update = () => {
+        vy += 0.25;
+        px += vx;
+        py += vy;
+        op -= 0.015;
+
+        p.style.left = `${px}px`;
+        p.style.top = `${py}px`;
+        p.style.opacity = op;
+        p.style.transform = `rotate(${py * 1.5}deg)`;
+
+        if (op > 0) {
+          requestAnimationFrame(update);
+        } else {
+          p.remove();
+        }
+      };
+      requestAnimationFrame(update);
+    }
+  },
+
+  skipIntro() {
+    this.clearTyping();
+    this.finishIntro();
+  },
+
+  finishIntro() {
+    this.clearTyping();
+
+    equipped['socks'] = 'sock_none';
+    equipped['accessories'] = 'acc_none';
+
+    const photoshootOutfit = [
+      { cat: 'hair',    id: 'blunt_bob_pink_headband' },
+      { cat: 'tops',    id: 'top_dress_new_1' },
+      { cat: 'bottoms',  id: 'bot_none' },
+      { cat: 'shoes',   id: 'pink_mary_jane_shoes' }
+    ];
+    photoshootOutfit.forEach(({ cat, id }) => {
+      equipped[cat] = id;
+    });
+
+    saveOutfit();
+    localStorage.setItem('kpop_intro_done', '1');
+
+    const overlay = $('intro-overlay');
+    overlay.style.transition = 'opacity .6s ease';
+    overlay.style.opacity = '0';
+    overlay.addEventListener('transitionend', () => {
+      overlay.remove();
+
+      $('game').classList.remove('hidden');
+      renderAllLayers();
+      startSchoolMode();
+      checkDailyLogin();
+
+      addLikes(2000);
+      showToast(lang === 'ru' 
+        ? '🎉 Добро пожаловать! +2 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart">' 
+        : '🎉 Welcome! +2,000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart">'
+      );
+    }, { once: true });
+  }
 };
 
-let _introStep = 0;
-let _introTyping = null;
-
-function buildIntroCharacter() {
-  const stage = $('intro-char-stage');
-  stage.innerHTML = '';
-
-  const shadowDiv = document.createElement('div');
-  shadowDiv.className = 'character-shadow';
-  stage.appendChild(shadowDiv);
-
-  // Body (fills entire stage)
-  const bodyImg = document.createElement('img');
-  bodyImg.src = 'Items/body/body_new.png';
-  bodyImg.alt = '';
-  bodyImg.draggable = false;
-  bodyImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;';
-  stage.appendChild(bodyImg);
-
-  // Default intro outfit: hair + shirt + jeans + sneakers
-  const introOutfit = [
-    { cat: 'hair',       id: 'blunt_bob_pink_headband'  },
-    { cat: 'tops',       id: 'top_dress_new_1'  },
-    { cat: 'bottoms',    id: 'bot_none'   },
-    { cat: 'shoes',      id: 'shoe_none'      },
-  ];
-
-  // Сортируем по LAYER_ORDER перед рендером — так же как в основной игре
-  const sorted = introOutfit
-    .map(({ cat, id }) => {
-      const item = findItem(cat, id);
-      const layerZ = LAYER_ORDER.find(l => l.key === cat)?.zIndex ?? 1;
-      const domOrder = LAYER_ORDER.findIndex(l => l.key === cat);
-      return { item, layerZ, domOrder };
-    })
-    .filter(({ item }) => item && item.src && item.pos)
-    .sort((a, b) => a.layerZ !== b.layerZ ? a.layerZ - b.layerZ : a.domOrder - b.domOrder);
-
-  sorted.forEach(({ item, layerZ }) => {
-    const { left, top, width } = item.pos;
-    const img = document.createElement('img');
-    img.src = item.src;
-    img.alt = '';
-    img.draggable = false;
-    img.style.cssText = `position:absolute;left:${left}%;top:${top}%;width:${width}%;height:auto;pointer-events:none;z-index:${layerZ};`;
-    stage.appendChild(img);
-  });
-}
-
 function showIntro() {
-  _introStep = 0;
-  const overlay = $('intro-overlay');
-  overlay.classList.remove('hidden');
-  buildIntroCharacter();
-  renderIntroStep();
-}
-
-function renderIntroStep() {
-  const steps = INTRO_STEPS[lang] || INTRO_STEPS.en;
-  const step  = steps[_introStep];
-  const total = steps.length;
-
-  // Имя персонажа — без корейского, зависит от языка
-  const badge = $('intro-name-badge');
-  if (badge) badge.textContent = lang === 'ru' ? 'Ю На ✨' : 'Yu Na ✨';
-
-  // Dots
-  const dotsEl = $('intro-dots');
-  dotsEl.innerHTML = '';
-  for (let i = 0; i < total; i++) {
-    const d = document.createElement('div');
-    d.className = 'intro-dot' + (i === _introStep ? ' active' : '');
-    dotsEl.appendChild(d);
-  }
-
-  // Button label
-  const btn = $('intro-next-btn');
-  btn.textContent = step.last
-    ? (lang === 'ru' ? '🎉 Начнём!' : '🎉 Let\'s go!')
-    : (lang === 'ru' ? 'Далее ➤' : 'Next ➤');
-
-  // Type text animation
-  const textEl = $('intro-text');
-  textEl.innerHTML = '';
-  clearTimeout(_introTyping);
-
-  const fullText = step.text;
-  let i = 0;
-  const cursor = document.createElement('span');
-  cursor.className = 'intro-cursor';
-  textEl.appendChild(cursor);
-
-  function typeNext() {
-    if (i < fullText.length) {
-      const ch = fullText[i++];
-      const tn = document.createTextNode(ch === '\n' ? '' : ch);
-      if (ch === '\n') {
-        textEl.insertBefore(document.createElement('br'), cursor);
-      } else {
-        textEl.insertBefore(tn, cursor);
-      }
-      _introTyping = setTimeout(typeNext, ch === '\n' ? 80 : 28);
-    } else {
-      cursor.remove();
-    }
-  }
-  typeNext();
-
-  // Button click
-  btn.onclick = () => {
-    clearTimeout(_introTyping);
-    const steps2 = INTRO_STEPS[lang] || INTRO_STEPS.en;
-    if (_introStep < steps2.length - 1) {
-      _introStep++;
-      renderIntroStep();
-    } else {
-      finishIntro();
-    }
-  };
-
-  // Also allow clicking text area to skip typing / advance
-  $('intro-text').onclick = () => {
-    if (_introTyping) {
-      // Skip typing — show full text at once
-      clearTimeout(_introTyping);
-      _introTyping = null;
-      textEl.innerHTML = fullText.replace(/\n/g, '<br>');
-    }
-  };
-}
-
-function finishIntro() {
-  localStorage.setItem('kpop_intro_done', '1');
-  const overlay = $('intro-overlay');
-  overlay.style.transition = 'opacity .5s ease';
-  overlay.style.opacity = '0';
-  overlay.addEventListener('transitionend', () => {
-    overlay.remove();
-    $('game').classList.remove('hidden');
-    startSchoolMode();
-    checkDailyLogin();
-    // Small welcome reward
-    addLikes(2000);
-    showToast(lang === 'ru' ? '🎉 Добро пожаловать! +2 000 ❤️' : '🎉 Welcome! +2,000 ❤️');
-  }, { once: true });
+  IntroDirector.start();
 }
 
 function applyLoadingTranslations() {
