@@ -1,0 +1,959 @@
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (min-width: 600px) {
+  #main-layout { grid-template-columns: 1fr 76px 150px; grid-template-rows: auto 1fr; }
+  .btn { padding: .42rem .75rem; font-size: .78rem; }
+}
+@media (min-width: 640px) {
+  #main-layout { grid-template-columns: 1fr 84px 180px; grid-template-rows: auto 1fr; }
+  .cat-btn { width: 60px; height: 60px; font-size: .62rem; }
+  .cat-btn .cat-icon { font-size: 1.5rem; }
+}
+@media (min-width: 860px) {
+  #main-layout { grid-template-columns: 1fr 96px 220px; grid-template-rows: auto 1fr; }
+  .game-title { font-size: 1.2rem; }
+  .btn { padding: .48rem .95rem; font-size: .82rem; }
+  .cat-btn { font-size: .65rem; }
+}
+@media (min-width: 1100px) {
+  #main-layout { grid-template-columns: 1fr 108px 260px; grid-template-rows: auto 1fr; }
+}
+
+/* ── Большие экраны / 4K ── */
+@media (min-width: 1600px) {
+  #intro-character { height: 92vh; }
+  #intro-dialogue {
+    max-width: 720px;
+    padding: 1.5rem 2rem;
+  }
+  #intro-text { font-size: 1.15rem; min-height: 5em; }
+  #intro-name-badge { font-size: 1rem; padding: .3rem 1.2rem; }
+  #intro-next-btn { font-size: 1.05rem; padding: 0.8rem 2rem; }
+}
+
+/* ============================================================
+   МОБИЛЬНЫЙ ПОРТРЕТ — телефоны вертикально (< 480px)
+   Лейаут: header → banner → stage → category-tabs → items
+   ============================================================ */
+@media (max-width: 599px) {
+
+  /* ── Шапка ── */
+  #game-header { padding: .38rem .55rem; }
+  .game-title   { font-size: .78rem; letter-spacing: 0; }
+  .header-buttons { gap: .3rem; }
+  .btn { padding: .48rem .7rem; font-size: .75rem; min-height: 38px; }
+  .stars-btn { padding: .38rem .7rem; font-size: .82rem; min-height: 38px; }
+  .btn-runway-main { font-size: .78rem; padding: .45rem .9rem; min-height: 38px; }
+  .btn-sound { padding: .45rem .65rem; font-size: 1.1rem; min-height: 38px; }
+
+  /* ── Главный лейаут: вертикальный флекс ── */
+  #main-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: unset !important;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Сцена: верхняя часть ── */
+  #stage-wrap {
+    order: 1;
+    flex: 1 !important;
+    width: 100%;
+    overflow: hidden;
+    padding-bottom: 1%;
+    align-items: center;
+    justify-content: center;
+  }
+  #stage {
+    height: 90% !important;
+    width: auto !important;
+    max-width: 95% !important;
+    aspect-ratio: 768 / 1376 !important;
+  }
+
+  .items-sidebar {
+    order: 2;
+    width: 100% !important;
+    height: auto !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .sidebar-split-layout {
+    flex-direction: column !important;
+    height: auto !important;
+  }
+
+  /* ── Панель категорий: горизонтальные табы ── */
+  #category-panel {
+    order: 1;
+    flex-direction: row !important;
+    flex-shrink: 0;
+    width: 100% !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: .4rem .6rem !important;
+    gap: .45rem !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-top: 2px solid rgba(228, 174, 252, 0.45) !important;
+    border-bottom: 2px solid rgba(228, 174, 252, 0.45) !important;
+    justify-content: flex-start !important;
+    background: linear-gradient(to bottom, #e4aefc00, var(--main-4)) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    touch-action: pan-x !important;
+  }
+
+  #category-list {
+    flex-direction: row !important;
+    flex-shrink: 0 !important;
+    gap: .45rem !important;
+    width: auto !important;
+  }
+  .category-item, .cat-btn {
+    width: 54px !important; height: 54px !important;
+    flex-shrink: 0 !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: 0px 3px 0px var(--main-4), 0px 4px 8px rgba(161, 72, 200, 0.1) !important;
+  }
+  .category-item.active, .cat-btn.active {
+    box-shadow: 0px 3px 0px var(--purple), 0px 6px 12px rgba(161, 72, 200, 0.25) !important;
+    border-color: var(--purple) !important;
+  }
+  .category-icon, .cat-icon { font-size: 1.45rem !important; }
+
+  /* ── Панель вещей: компактная горизонтальная лента снизу ── */
+  #items-panel {
+    order: 2;
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border-left: none !important;
+    padding: .35rem .45rem .3rem !important;
+    width: 100% !important;
+    height: auto !important;
+    background: rgba(248, 240, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+  }
+
+
+  #items-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    touch-action: pan-x !important;
+    grid-template-columns: none !important;
+    gap: .38rem !important;
+    width: 100% !important;
+    padding: .15rem 1px .25rem !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(255, 42, 133, 0.45) rgba(255, 42, 133, 0.05) !important;
+  }
+  #items-grid::-webkit-scrollbar {
+    height: 6px !important;
+  }
+  #items-grid::-webkit-scrollbar-track {
+    background: rgba(255, 42, 133, 0.05) !important;
+    border-radius: 99px !important;
+  }
+  #items-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 42, 133, 0.45) !important;
+    border-radius: 99px !important;
+  }
+  #items-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 42, 133, 0.75) !important;
+  }
+
+  .item-card {
+    flex: 0 0 75px !important;
+    width: 75px !important;
+    height: 82px !important;
+    padding: .25rem .2rem .2rem !important;
+    gap: .1rem !important;
+    border-radius: 9px;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  .item-card img, .item-card .item-thumb-wrapper {
+    width: 48px !important;
+    height: 48px !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
+  }
+  .item-card .item-name {
+    font-size: .52rem !important;
+    line-height: 1.1 !important;
+    text-align: center !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin-top: auto !important;
+  }
+  .item-cost-badge, .item-deal-badge,
+  .item-ad-badge, .item-review-badge {
+    font-size: .52rem !important;
+    padding: .12rem .35rem !important;
+    bottom: 18px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  /* ── Buy bar ── */
+  .buy-bar { padding: .7rem .8rem 1rem; }
+  .buy-bar-name { font-size: .85rem; }
+  .buy-bar-btn { font-size: .78rem; padding: .42rem .8rem; min-height: 40px; }
+  .buy-bar-gem-hint { font-size: .72rem; padding: .3rem .6rem; margin-top: .35rem; }
+
+  /* ── Sub-tabs ── */
+  .sub-tabs { gap: .28rem; padding-bottom: .3rem; }
+  .sub-tab-btn { font-size: .66rem; padding: .26rem .4rem; }
+
+  /* ── Sparkles ── */
+  .sparkle { font-size: .9rem; }
+
+  /* ── Модальные окна: bottom-sheet стиль ── */
+  .modal-overlay { padding: .4rem; align-items: flex-end; }
+  .modal-box {
+    max-height: 92vh;
+    padding: .8rem .9rem 1rem;
+    border-radius: 22px 22px 14px 14px;
+    max-width: 100%;
+    overflow-y: auto;
+    gap: .5rem;
+  }
+
+  /* Score modal */
+  .score-box { border-radius: 22px 22px 14px 14px; }
+  #score-assignment-title { font-size: .95rem; }
+  #score-tag-info { font-size: .65rem; }
+  #judge-cards { gap: .28rem; }
+  .judge-card { padding: .35rem .22rem; }
+  .judge-emoji { font-size: 1.1rem; }
+  .judge-name  { font-size: .5rem; }
+  .judge-score-num { font-size: .88rem; }
+  /* Скрываем комментарии и бары — они занимают слишком много места */
+  .judge-comment { display: none; }
+  .judge-score-bar-wrap { display: none; }
+  .score-breakdown { gap: .3rem; }
+  .breakdown-label { font-size: .62rem; width: 72px; }
+  .breakdown-pts { font-size: .68rem; width: 38px; }
+  .score-total-row { padding: .45rem; margin-top: 0; }
+  .score-total-num { font-size: 1.8rem; }
+  .score-total-label { font-size: .72rem; }
+  .score-btn { padding: .48rem .8rem; font-size: .78rem; }
+  .score-btn-sm { font-size: .68rem; padding: .38rem .8rem; }
+  .btn-share-outfit { padding: .38rem .8rem; font-size: .72rem; }
+
+  /* Summary modal */
+  .summary-box { border-radius: 22px 22px 14px 14px; }
+  #summary-emoji-big { font-size: 2.4rem; margin-bottom: .2rem; }
+  #summary-title { font-size: 1rem; }
+  #summary-day-score { font-size: .78rem; }
+  .summary-lesson-row { padding: .3rem .5rem; font-size: .68rem; }
+  .summary-lesson-score { font-size: .78rem; }
+  #summary-rank-badge { font-size: .9rem; }
+  #summary-rank-next { font-size: .64rem; }
+
+
+
+  /* Shop — компактный для телефона */
+  .shop-box { border-radius: 18px 18px 12px 12px; max-height: 78vh; width: 96%; }
+  .shop-header { padding: .45rem .75rem; font-size: .8rem; }
+  .shop-subtitle { font-size: .63rem; padding: .2rem .65rem .1rem; }
+  #shop-packages { padding: .25rem .45rem .55rem; gap: .25rem; }
+
+  /* Одна колонка вместо сетки 2×2 */
+  .shop-grid { grid-template-columns: 1fr; gap: .22rem; }
+
+  /* Горизонтальный layout карточки: иконка | звёзды+бонус | цена */
+  .shop-card {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: .5rem; row-gap: 0;
+    padding: .38rem .5rem;
+    border-radius: 10px;
+    align-items: center;
+    text-align: left;
+  }
+  /* Бейдж "Popular" растягивается на всю ширину сверху */
+  .shop-card-badge {
+    position: static; transform: none; left: auto; top: auto;
+    grid-column: 1 / -1; width: fit-content;
+    margin-bottom: .1rem; font-size: .52rem; padding: .1rem .38rem;
+  }
+  .shop-card-icon, .shop-card-icon-img { grid-column: 1; grid-row: 1 / 3; font-size: 1.4rem; width: 1.8rem; height: 1.8rem; object-fit: contain; margin: 0; align-self: center; }
+  .shop-card-stars { grid-column: 2; grid-row: 1; font-size: .82rem; font-weight: 800; margin: 0; }
+  .shop-card-bonus { grid-column: 2; grid-row: 2; font-size: .6rem; margin: 0; min-height: 0; }
+  .shop-card-price { grid-column: 3; grid-row: 1 / 3; align-self: center; font-size: .7rem; padding: .22rem .5rem; display: inline-block; }
+
+  /* Ad row */
+  .shop-ad-card { padding: .35rem .5rem; gap: .4rem; }
+  .shop-ad-icon, .shop-ad-icon-img { font-size: 1.1rem; width: 1.5rem; height: 1.5rem; object-fit: contain; flex-shrink: 0; }
+  .shop-ad-text { font-size: .68rem; }
+  .shop-ad-btn  { font-size: .6rem; padding: .16rem .42rem; }
+
+
+
+  /* Toasts */
+  .game-toast { font-size: .76rem; }
+
+  .stars-gain-toast { top: 48px; right: 10px; font-size: .95rem; }
+
+  /* Context hints */
+  .ctx-hint { font-size: .73rem; max-width: 195px; padding: .45rem .8rem; }
+
+  /* Intro is handled in the main section */
+
+  /* Share camera & Random button */
+  .btn-share-stage, .stage-controls-left button { width: 38px; height: 38px; font-size: 1.1rem; }
+
+
+}
+
+/* Intro is handled in the main section */
+
+/* Mobile landscape */
+@media (max-height: 480px) and (orientation: landscape) {
+  #stage { height: 88%; }
+  #game-header { padding: .3rem .7rem; }
+  .game-title { font-size: .85rem; }
+}
+
+/* ============================================================
+   МОБИЛЬНЫЙ / ВСТРОЕННЫЙ ЛАНДШАФТ
+   Яндекс.Игры могут отдавать игре урезанный viewport из-за рекламы,
+   поэтому ориентируемся не только на высоту, но и на доступную ширину.
+   ============================================================ */
+@media (orientation: landscape) and (max-width: 1024px),
+       (orientation: landscape) and (max-height: 620px) {
+
+  /* ── Шапка: компактная ── */
+  #game-header {
+    padding: .18rem .5rem;
+    flex-wrap: nowrap;
+  }
+  .game-title {
+    font-size: .72rem;
+    letter-spacing: 0;
+  }
+  .header-buttons { gap: .22rem; }
+  #game-header { min-width: 0; }
+  .game-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .header-buttons {
+    flex: 0 0 auto;
+    margin-left: .35rem;
+  }
+  .btn {
+    padding: .22rem .45rem;
+    font-size: .65rem;
+    border-radius: 99px;
+  }
+  .stars-btn {
+    font-size: .75rem;
+    padding: .28rem .55rem;
+    min-height: 34px;
+  }
+  .btn-runway-main {
+    font-size: .75rem;
+    padding: .28rem .7rem;
+    min-height: 34px;
+  }
+  .btn-sound {
+    padding: .28rem .52rem;
+    font-size: .95rem;
+    min-height: 34px;
+  }
+  .btn {
+    min-height: 34px;
+  }
+
+  /* ── Баннер задания: однострочный ── */
+  #banner-inner { min-width: 0; font-size: .65rem; gap: .35rem; flex-wrap: nowrap; }
+  #banner-task {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #banner-tags  { display: none; }
+
+  /* ── Главный лейаут: категории шире, панель вещей шире ── */
+  #main-layout {
+    display: grid !important;
+    flex-direction: initial !important;
+    grid-template-columns: minmax(0, 1fr) clamp(48px, 8vw, 70px) clamp(120px, 23vw, 180px) !important;
+    grid-template-rows: auto 1fr !important;
+    min-height: 0;
+  }
+  #stage-wrap {
+    grid-row: 1 / 3 !important;
+    grid-column: 1 !important;
+  }
+  #panel-controls {
+    grid-row: 1 !important;
+    grid-column: 2 / 4 !important;
+    display: flex !important;
+    position: static !important;
+    padding: .35rem .5rem !important;
+    background: linear-gradient(90deg, var(--sec-a1), var(--main-1)) !important;
+    border-bottom: 3px solid rgba(168, 85, 247, 0.28) !important;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1) !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    z-index: 5 !important;
+  }
+  .items-sidebar {
+    grid-row: 2 !important;
+    grid-column: 2 / 4 !important;
+    min-width: 0 !important;
+    background: rgba(248, 240, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-left: none !important;
+    border: 1px solid var(--main-4) !important;
+    box-shadow: 0 8px 32px rgba(139, 63, 199, 0.08) !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .sidebar-split-layout {
+    display: flex !important;
+    flex-direction: row !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+
+  /* ── Панель категорий: скрыть лейбл, крупные кнопки ── */
+  #category-panel {
+    order: initial !important;
+    width: clamp(48px, 8vw, 70px) !important;
+    height: 100% !important;
+    flex-direction: column !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: .35rem .25rem !important;
+    gap: .55rem !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: 2px solid rgba(228, 174, 252, 0.5) !important;
+    background: linear-gradient(to bottom, #e4aefc00, var(--main-4)) !important;
+    backdrop-filter: none !important;
+    touch-action: pan-y !important;
+  }
+
+  #category-list {
+    flex-direction: column !important;
+    gap: .55rem !important;
+    width: 100% !important;
+  }
+  .category-item-label {
+    display: none !important;
+  }
+  .category-item, .cat-btn {
+    width: clamp(38px, 6.5vw, 56px) !important;
+    height: clamp(38px, 6.5vw, 56px) !important;
+    border-radius: 10px !important;
+    font-size: .52rem !important;
+    box-shadow: 0px 2px 0px #DDD6FE, 0px 3px 6px rgba(124, 58, 237, 0.1) !important;
+  }
+  .category-item.active, .cat-btn.active {
+    box-shadow: 0px 2px 0px var(--purple), 0px 4px 8px rgba(124, 58, 237, 0.25) !important;
+    border-color: var(--purple) !important;
+  }
+  .category-icon, .cat-icon { font-size: 1.35rem !important; }
+
+
+  /* ── Сцена: заполняет высоту ── */
+  #stage-wrap {
+    order: initial;
+    min-width: 0;
+    min-height: 0;
+    width: auto;
+    padding-bottom: 1%;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  #stage { height: 92%; }
+
+  /* ── Панель предметов: шире, нормальные карточки ── */
+  #items-panel {
+    order: initial !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border-left: none !important;
+    padding: .3rem .35rem !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    flex-grow: 1 !important;
+    height: 100% !important;
+  }
+
+  #items-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: .3rem;
+  }
+  .item-card {
+    padding: .25rem .2rem .18rem;
+    gap: .13rem;
+    border-radius: 8px;
+  }
+  .item-card .item-name { font-size: .52rem; }
+  .item-cost-badge, .item-deal-badge,
+  .item-ad-badge, .item-review-badge {
+    font-size: .5rem;
+    padding: .1rem .3rem;
+    bottom: 18px;
+  }
+
+  /* ── Buy bar ── */
+  .buy-bar { padding: .5rem .6rem .8rem; }
+  .buy-bar-name { font-size: .78rem; }
+  .buy-bar-btn { font-size: .72rem; padding: .35rem .7rem; min-height: 36px; }
+  .buy-bar-gem-hint { font-size: .65rem; padding: .25rem .5rem; margin-top: .28rem; }
+
+  /* ── Sub-tabs ── */
+  .sub-tabs { padding-bottom: .25rem; gap: .2rem; }
+  .sub-tab-btn { font-size: .6rem; padding: .2rem .3rem; }
+
+  /* ── Спарклы ── */
+  .sparkle { font-size: .8rem; }
+
+  /* ── Модальные окна: уже, скролл ── */
+  .modal-box {
+    max-height: 92vh;
+    padding: .7rem .9rem .9rem;
+    border-radius: 14px;
+    overflow-y: auto;
+    gap: .4rem;
+  }
+  .modal-overlay { align-items: center; }
+
+  /* Score modal — максимально компактно для ландшафта */
+  .score-box {
+    max-width: 94vw;
+    max-height: 96vh;
+    height: 94vh;
+  }
+  .score-left-col {
+    width: auto !important;
+    flex-shrink: 0 !important;
+    padding: 0.5rem !important;
+    gap: 4px !important;
+  }
+  .score-left-col .instagram-post {
+    height: 86vh !important;
+    max-height: 86vh !important;
+    width: calc(86vh * 768 / 1376) !important;
+    max-width: 100% !important;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .score-left-col .instagram-media-container {
+    height: 100% !important;
+    width: 100% !important;
+  }
+  .score-left-col .social-post-image-container {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+  }
+  .score-left-col .instagram-actions-left-row {
+    display: none !important;
+  }
+  .score-left-col .score-comment-overlay {
+    display: none !important;
+  }
+  .score-left-col .instagram-comments-container-left {
+    display: none !important;
+  }
+
+  .score-right-col {
+    padding: 0.6rem 0.8rem !important;
+    gap: 0.3rem !important;
+    justify-content: center;
+  }
+  .social-results-block {
+    gap: 2px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .score-status-title {
+    font-size: 0.85rem !important;
+    margin: 2px auto 4px auto !important;
+  }
+  .score-large-score {
+    font-size: 1.6rem !important;
+    margin: 0 auto 4px auto !important;
+  }
+  .score-breakdown {
+    padding: 6px 10px !important;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+    gap: 4px !important;
+    border-radius: 8px !important;
+  }
+  .score-breakdown-row {
+    font-size: 0.7rem !important;
+    gap: 6px !important;
+  }
+  .breakdown-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .breakdown-value, #score-items-value {
+    font-size: 0.75rem !important;
+  }
+  .score-rewards-block {
+    gap: 6px !important;
+    margin-bottom: 2px !important;
+  }
+  .score-reward-item {
+    padding: 4px 8px !important;
+    font-size: 0.7rem !important;
+    border-radius: 6px !important;
+    gap: 4px !important;
+  }
+  .reward-icon {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  .score-actions-row {
+    gap: 4px !important;
+  }
+  .score-actions-row-sub {
+    gap: 4px !important;
+  }
+  .score-actions-row .score-btn {
+    padding: 0.35rem 0.6rem !important;
+    font-size: 0.72rem !important;
+  }
+  .btn-share-outfit {
+    padding: 0.35rem 0.6rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  /* Summary modal */
+  .summary-box  { max-width: 94vw; }
+  #summary-emoji-big { font-size: 1.8rem; margin-bottom: .2rem; }
+  #summary-title     { font-size: 1rem; }
+
+
+
+  /* Shop */
+  .shop-box   { max-width: 94vw; max-height: 88vh; overflow-y: auto; }
+  .shop-header { padding: .6rem 1rem; font-size: .85rem; }
+  .shop-subtitle { padding: .4rem .8rem .2rem; font-size: .72rem; }
+  #shop-packages { padding: .4rem .8rem .8rem; gap: .4rem; }
+  .shop-grid { gap: .45rem; }
+  .shop-card { padding: .55rem .4rem; border-radius: 10px; }
+  .shop-card-icon  { font-size: 1.3rem; margin-bottom: .15rem; }
+  .shop-card-stars { font-size: .8rem; }
+  .shop-card-bonus { font-size: .58rem; }
+  .shop-card-price { font-size: .7rem; padding: .2rem .55rem; }
+  .shop-ad-card    { padding: .45rem .65rem; }
+  .shop-ad-icon    { font-size: 1.2rem; }
+  .shop-ad-text    { font-size: .75rem; }
+  .shop-ad-btn     { font-size: .65rem; padding: .2rem .55rem; }
+
+
+
+  /* Stars gain toast */
+  .stars-gain-toast { font-size: .75rem; }
+  .game-toast       { font-size: .72rem; padding: .3rem .65rem; }
+
+
+  /* Context hints — smaller on mobile */
+  .ctx-hint { font-size: .72rem; padding: .4rem .75rem; max-width: 180px; }
+
+
+
+  /* Intro is handled in the main section */
+
+
+}
+
+/* Очень маленькие и узкие ландшафты (напр. Galaxy Fold) */
+@media (max-height: 360px) and (max-width: 600px) and (orientation: landscape) {
+  .game-title {
+    display: block;
+    font-size: .58rem;
+    max-width: 150px;
+  }
+  #main-layout   { grid-template-columns: 42px 1fr 115px !important; }
+  .cat-btn       { width: 34px; height: 34px; }
+  .cat-btn .cat-icon { font-size: .95rem; }
+  .cat-btn .cat-icon svg, .cat-btn .cat-icon img { width: 14px; height: 14px; }
+
+  #stage         { height: 94%; }
+  .btn           { padding: .18rem .35rem; font-size: .6rem; }
+}
+
+@media (max-width: 599px) {
+  #main-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: unset !important;
+    grid-template-rows: unset !important;
+  }
+  
+  #panel-controls {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    z-index: 25 !important;
+    background: linear-gradient(90deg, var(--sec-a1), var(--main-1)) !important;
+    border-bottom: 2px solid rgba(161, 72, 200, 0.28) !important;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1) !important;
+    padding: 8px 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    order: -2 !important;
+    display: flex !important;
+    justify-content: stretch !important; /* Stretch on mobile */
+  }
+  
+  .assignment-card {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    z-index: 20 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1.5px solid rgba(255, 110, 180, 0.2) !important;
+    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.05) !important;
+    background: linear-gradient(90deg, rgba(255, 240, 247, 0.95), rgba(243, 232, 255, 0.95)) !important;
+    order: -1 !important;
+    margin: 0 !important;
+  }
+  
+  /* Inner container behaves normally on mobile */
+  .panel-controls-inner {
+    gap: 8px !important;
+    transform: none !important; /* Reset scaling on mobile */
+    width: 100% !important;
+  }
+  
+  #category-panel .btn-share-stage {
+    position: absolute !important;
+    right: 16px !important;
+    left: auto !important;
+    z-index: 10 !important;
+    margin: 0 !important;
+  }
+  #category-panel #btn-share-stage {
+    bottom: 60px !important;
+  }
+  #category-panel #btn-sound {
+    position: absolute !important;
+    bottom: 16px !important;
+    right: 16px !important;
+    left: auto !important;
+    top: auto !important;
+  }
+
+  .stage-counters-bar {
+    height: 38px !important;
+  }
+  .stage-counter-unit {
+    font-size: 0.82rem !important;
+    padding: 0 8px !important;
+  }
+
+  .btn-runway-main {
+    position: relative !important;
+    height: 38px !important;
+    padding: 0 1.95rem !important;
+    font-size: 0.82rem !important;
+    margin: 0 !important;
+    width: 100% !important;
+    flex-grow: 1 !important;
+  }
+}
+@media (max-width: 650px) {
+  .score-box {
+    flex-direction: column;
+    max-width: 400px;
+    max-height: 92vh;
+    overflow-y: auto;
+    gap: 0;
+    padding: 0;
+  }
+  .score-left-col {
+    width: 100%;
+    padding: 0.6rem;
+    background: #000000;
+  }
+  .score-left-col .instagram-post {
+    max-width: 340px;
+    margin: 0 auto;
+  }
+  .score-left-col .instagram-post .social-post-image-container {
+    max-width: 100% !important;
+    margin-bottom: 0;
+  }
+  .score-left-col .instagram-actions-left-row {
+    display: none !important;
+  }
+  .score-left-col .score-comment-overlay {
+    display: none !important;
+  }
+  .score-left-col .instagram-comments-container-left {
+    display: none !important;
+  }
+  .score-right-col {
+    width: 100% !important;
+    overflow-y: visible !important;
+    padding: 0.6rem 0.8rem !important;
+    background: var(--white) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+  .social-results-block {
+    gap: 2px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .score-status-title {
+    font-size: 0.85rem !important;
+    margin: 2px auto 4px auto !important;
+  }
+  .score-large-score {
+    font-size: 1.6rem !important;
+    margin: 0 auto 4px auto !important;
+  }
+  .score-breakdown {
+    padding: 4px 8px !important;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+    gap: 4px !important;
+    border-radius: 8px !important;
+  }
+  .score-breakdown-row {
+    font-size: 0.7rem !important;
+    padding: 2px 0 !important;
+  }
+  .score-rewards-block {
+    gap: 6px !important;
+    margin-bottom: 2px !important;
+  }
+  .score-reward-item {
+    padding: 4px 8px !important;
+    font-size: 0.7rem !important;
+    border-radius: 6px !important;
+    gap: 4px !important;
+  }
+  .score-rank-section {
+    padding: 4px 8px !important;
+    margin-top: 3px !important;
+    margin-bottom: 3px !important;
+  }
+  .score-rank-header {
+    margin-bottom: 3px !important;
+    font-size: 0.7rem !important;
+  }
+  #score-rank-badge {
+    font-size: 0.78rem !important;
+  }
+  .score-rank-progress-container {
+    gap: 6px !important;
+  }
+  .score-rank-progress-wrap {
+    height: 5px !important;
+    margin-bottom: 0px !important;
+  }
+  .score-gift-box {
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+  }
+  .score-milestone-subtext {
+    margin-top: 4px !important;
+    padding-top: 4px !important;
+  }
+  .milestone-subtext-title {
+    font-size: 0.72rem !important;
+  }
+  .milestone-subtext-reward {
+    font-size: 0.72rem !important;
+  }
+  .milestone-subtext-heart {
+    width: 0.85rem !important;
+    height: 0.85rem !important;
+  }
+  .social-eval-cards {
+    gap: 6px;
+  }
+  .eval-card {
+    padding: 6px 4px;
+  }
+  .eval-nick {
+    font-size: 0.52rem;
+  }
+  .eval-score {
+    font-size: 0.82rem;
+  }
+  .eval-text {
+    font-size: 0.58rem;
+    -webkit-line-clamp: 4;
+  }
+  .score-actions-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* Reduced motion preference query */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .loading-star {
+    animation: none !important;
+  }
+  #loading-screen {
+    animation: none !important;
+    background: var(--kpop-btn-gradient) !important;
+  }
+}
+
+

@@ -1,0 +1,218 @@
+/* ---------- ITEMS PANEL (right) ---------- */
+#items-panel {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  overflow: hidden;
+  min-width: 0;
+  background: transparent;
+  height: 100%;
+}
+
+.items-grid-container {
+  flex-grow: 1;
+  overflow: hidden;
+  padding-right: 4px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#items-grid {
+  min-width: 0;          /* fix CSS Grid overflow */
+  width: 100%;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  align-items: start;
+  align-content: start;
+  touch-action: pan-y;
+  gap: .4rem; overflow-y: auto; overflow-x: hidden; flex: 1;
+  padding-right: 4px;
+  /* Firefox scrollbar customization */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 58, 237, 0.45) rgba(124, 58, 237, 0.05);
+}
+#items-grid::-webkit-scrollbar {
+  width: 6px;
+}
+#items-grid::-webkit-scrollbar-track {
+  background: rgba(124, 58, 237, 0.05);
+  border-radius: 99px;
+}
+#items-grid::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.45);
+  border-radius: 99px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s ease;
+}
+#items-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.75);
+}
+
+/* Item card styling (unified lavender theme by default) */
+/* Item card styling (unified lavender theme - vinyl sticker logic) */
+.item-card {
+  --card-bg: rgb(228 174 252 / 21%);
+  --card-border: var(--main-2);
+  --card-shadow: rgba(58, 31, 102, 0.15);
+  --card-shadow-hover: rgba(161, 72, 200, 0.35);
+  --card-shadow-active: rgba(161, 72, 200, 0.15);
+  --card-inner-border: var(--main-4);
+  --card-inner-bg: #ffffff;
+  --card-check-bg: var(--main-3);
+  --card-text: var(--text);
+
+  position: relative;
+  min-width: 0;          /* fix CSS Grid overflow */
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  display: flex; flex-direction: column;
+  align-items: center; padding: .45rem .35rem .35rem;
+  gap: .3rem; cursor: pointer;
+  box-shadow: 2px 3px 0px var(--card-shadow);
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.2s ease,
+              box-shadow 0.2s cubic-bezier(0.25, 1, 0.5, 1), background 0.2s ease;
+  -webkit-user-select: none; user-select: none;
+}
+.item-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--purple);
+  box-shadow: 2px 5px 0px var(--card-shadow-hover);
+}
+.item-card:active {
+  transform: translateY(0px) scale(0.96);
+  box-shadow: 1px 1px 0px var(--card-shadow-active);
+  transition: transform 0.05s ease-out, box-shadow 0.05s ease-out;
+}
+
+/* Image Container */
+.item-card .item-thumb-wrapper {
+  position: relative;
+  flex-shrink: 0;        /* don't let image compress */
+  width: 100%; aspect-ratio: 1;
+  border-radius: 12px;
+  border: 1px solid var(--card-inner-border);
+  background: var(--card-inner-bg);
+  padding: 4px;
+  display: block;
+  overflow: visible !important;
+  box-sizing: border-box;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.item-card img, .item-card .item-thumb {
+  width: 100%; height: 100%;
+  border-radius: 8px;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.item-card:hover .item-thumb {
+  transform: scale(1.08);
+}
+
+.thumb-none {
+  flex-shrink: 0;        /* don't let thumb compress */
+  width: 100%; aspect-ratio: 1;
+  border-radius: 12px;
+  background: var(--card-inner-bg);
+  border: 1px solid var(--card-inner-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.35rem; color: var(--card-text);
+  box-sizing: border-box;
+}
+
+/* Item Selection Checkmark Badge */
+.equipped-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  background: var(--card-check-bg);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #ffffff;
+  font-size: 12px; font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  border: 2px solid #ffffff;
+  z-index: 5;
+  animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.item-card.equipped, .item-card.selected {
+  border-color: var(--purple) !important;
+  box-shadow: 2px 3px 0px rgba(161, 72, 200, 0.53) !important;
+  background: var(--main-4) !important;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+
+/* Item Name */
+.item-card .item-name {
+  font-size: .62rem; font-weight: 700; color: var(--card-text);
+  text-align: center; line-height: 1.2;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%;
+  transition: color var(--transition);
+}
+.item-card.selected .item-name { color: var(--card-text); }
+
+@media (max-width: 900px) {
+  .item-card {
+    border-radius: 12px;
+    box-shadow: 0 3px 0 var(--card-shadow);
+  }
+  .item-card:hover {
+    transform: none;
+    box-shadow: 0 3px 0 var(--card-shadow);
+  }
+  .item-card:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 0 var(--card-shadow);
+  }
+  .item-card .item-thumb-wrapper {
+    border-radius: 8px;
+    padding: 3px;
+  }
+  .equipped-indicator {
+    top: 3px;
+    right: 3px;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    border-width: 1.5px;
+  }
+}
+
+
+/* ---------- UI RASTER ICONS ---------- */
+.ui-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  mix-blend-mode: multiply; /* removes white background */
+  vertical-align: middle;
+  filter: contrast(1.05) saturate(1.05);
+}
+.ui-icon-btn {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  mix-blend-mode: multiply; /* removes white background */
+  display: block;
+  margin: auto;
+  transition: transform var(--transition);
+  filter: contrast(1.05) saturate(1.05);
+}
+.ui-icon-btn:hover {
+  transform: scale(1.15);
+}
+

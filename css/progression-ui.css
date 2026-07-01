@@ -1,0 +1,372 @@
+/* ---------- SPIN ---------- */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   PROGRESSION SYSTEM
+   ============================================================ */
+
+/* --- Stars Display (кликабельная кнопка → магазин) --- */
+.stars-btn {
+  display: flex; align-items: center; gap: .3rem;
+  background: linear-gradient(90deg, var(--pink-light), var(--sec-a4));
+  border: 2px solid var(--pink);
+  border-radius: 99px; padding: .3rem .75rem;
+  font-weight: 800; font-size: .9rem; color: var(--text-muted);
+  white-space: nowrap; cursor: pointer;
+  transition: transform .15s, filter .15s;
+}
+.stars-btn:hover  { filter: brightness(1.07); }
+.stars-btn:active { transform: scale(.93); }
+#stars-count { font-size: 1rem; }
+
+
+
+.stars-gain-toast {
+  position: fixed; top: 60px; right: 16px; z-index: 9999;
+  background: var(--yellow); color: #fff;
+  font-weight: 800; font-size: 1.1rem;
+  padding: .4rem .9rem; border-radius: 99px;
+  animation: gainPop .4s cubic-bezier(.34,1.56,.64,1) both,
+             gainFade 1.8s ease forwards;
+  pointer-events: none;
+}
+@keyframes gainPop  { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes gainFade { 0%,50%{ opacity:1; } 100%{ opacity:0; transform:translateY(-20px); } }
+
+/* --- Locked Items --- */
+.item-card.locked { opacity: .85; }
+.item-card.locked img, .item-card.locked .item-thumb-wrapper { filter: brightness(.65) saturate(.4); }
+.item-cost-badge, .item-deal-badge {
+  position: absolute; bottom: 22px; left: 50%;
+  transform: translateX(-50%);
+  font-size: .62rem; font-weight: 800;
+  padding: .15rem .45rem; border-radius: 99px;
+  white-space: nowrap; pointer-events: none;
+}
+.item-cost-badge {
+  background: rgba(0,0,0,.65); color: #fff;
+}
+.item-deal-badge {
+  background: var(--pink); color: #fff;
+  animation: dealPulse 1.4s ease-in-out infinite alternate;
+}
+.item-ad-badge {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: #fff;
+}
+.item-review-badge {
+  background: linear-gradient(135deg, var(--main-3), var(--sec-a3));
+  color: #fff;
+}
+@keyframes dealPulse { from{transform:translateX(-50%) scale(1);} to{transform:translateX(-50%) scale(1.08);} }
+
+
+/* --- Buy Bar (внутри items-panel снизу) --- */
+.buy-bar {
+  background: var(--white);
+  border-top: 2px solid var(--purple-light);
+  border-radius: 16px 16px 0 0;
+  padding: .9rem 1rem 1.1rem;
+  text-align: center;
+  box-shadow: 0 -4px 18px rgba(168,85,247,.18);
+  flex-shrink: 0;
+  animation: buyBarSlideUp .22s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes buyBarSlideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.buy-bar.hidden { display: none; }
+.buy-bar-name { font-weight: 700; font-size: .95rem; color: var(--purple); margin-bottom: .4rem; }
+.buy-bar-deal { font-size: .8rem; color: var(--pink); margin-bottom: .3rem; }
+.buy-bar-row { display: flex; gap: .5rem; justify-content: center; }
+.buy-bar-btn {
+  border: none; border-radius: 99px; padding: .5rem 1.2rem;
+  font-weight: 700; font-size: .85rem; cursor: pointer; min-height: 42px;
+}
+.buy-confirm { background: var(--purple); color: #fff; flex: 1; }
+.buy-confirm.cant-buy { background: var(--purple-light); color: rgba(178, 105, 209, 0.6); cursor: default; }
+.buy-cancel { background: #e5e7eb; color: #555; padding-left: .9rem; padding-right: .9rem; }
+.buy-ad-btn { background: linear-gradient(135deg, #ff6b35, #f7931e); color: #fff; }
+.buy-review-btn { background: linear-gradient(135deg, var(--main-3), var(--sec-a3)); color: #fff; }
+.buy-bar-ad-hint { font-size: .75rem; color: #777; margin-bottom: .4rem; }
+.buy-bar-gem-hint {
+  display: block; width: 100%; margin-top: .5rem;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  color: #fff; font-weight: 700; font-size: .8rem;
+  border: none; border-radius: 99px;
+  padding: .38rem .7rem; cursor: pointer; min-height: 38px;
+  transition: filter .15s;
+}
+.buy-bar-gem-hint:hover { filter: brightness(1.1); }
+
+/* ─── Context Hints ─── */
+.ctx-hint {
+  position: fixed;
+  z-index: 9998;
+  background: linear-gradient(135deg, var(--pink-light), var(--purple-light));
+  border: 2px solid var(--pink);
+  border-radius: 14px;
+  padding: .55rem 1rem;
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--text);
+  box-shadow: 0 6px 22px rgba(209, 71, 141, 0.25);
+  pointer-events: none;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 220px;
+  animation: ctxHintIn .35s cubic-bezier(.34,1.56,.64,1);
+}
+.ctx-hint::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: var(--arrow-left, 50%);
+  transform: translateX(-50%);
+  border: 9px solid transparent;
+  border-top: none;
+  border-bottom-color: var(--pink);
+}
+.ctx-hint.ctx-hint-out {
+  animation: ctxHintOut .3s ease forwards;
+}
+@keyframes ctxHintIn {
+  from { opacity: 0; transform: scale(.8) translateY(-6px); }
+  to   { opacity: 1; transform: scale(1)  translateY(0); }
+}
+@keyframes ctxHintOut {
+  to { opacity: 0; transform: scale(.85) translateY(-4px); }
+}
+
+/* ── Первый раз: яркий пульс на звёздах ── */
+@keyframes starsHintPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(251,191,36,.35); transform: scale(1); }
+  40%       { box-shadow: 0 0 0 5px rgba(251,191,36,.45), 0 0 18px rgba(251,191,36,.7); transform: scale(1.12); }
+}
+.stars-btn.hint-pulse {
+  animation: starsHintPulse .65s ease-in-out 4;
+}
+
+/* ── Повторные разы: мягкое покачивание звёзд ── */
+@keyframes starsNudge {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.07); }
+  60%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.stars-btn.hint-nudge {
+  animation: starsNudge .55s cubic-bezier(.34,1.56,.64,1) 3;
+}
+
+/* ── Первый раз: яркая вспышка на Runway ── */
+@keyframes runwayExtraPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255,110,180,.5); }
+  50%       { box-shadow: 0 0 28px rgba(255,110,180,1), 0 0 48px rgba(167,139,250,.7); transform: scale(1.07); }
+}
+.btn-runway-main.hint-extra-pulse {
+  animation: runwayExtraPulse .55s ease-in-out 5 !important;
+}
+
+/* ── Повторные разы: мягкое покачивание Runway ── */
+@keyframes runwayNudge {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.06); }
+  65%  { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+.btn-runway-main.hint-nudge {
+  animation: runwayNudge .6s cubic-bezier(.34,1.56,.64,1) 3 !important;
+}
+
+/* --- Toast --- */
+.game-toast {
+  position: fixed; top: 56px; right: 12px;
+  background: linear-gradient(90deg, var(--pink), var(--purple));
+  color: #fff;
+  padding: .38rem .85rem; border-radius: 99px;
+  font-size: .78rem; font-weight: 700; z-index: 9999;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(168,85,247,.35);
+  animation: toastIn .25s ease;
+}
+.game-toast.hidden { display: none; }
+@keyframes toastIn { from{opacity:0;transform:translateY(-6px);} to{opacity:1;transform:translateY(0);} }
+
+
+
+.modal-close-btn {
+  background: none; border: none; font-size: 1.1rem;
+  cursor: pointer; color: #888; padding: .2rem .4rem;
+}
+
+/* --- Gem/Shop button --- */
+.btn-gem {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  color: #fff;
+  font-size: 1rem;
+  min-width: unset;
+  padding: .38rem .6rem;
+  box-shadow: 0 0 10px rgba(251,191,36,.5);
+}
+.btn-gem:hover { filter: brightness(1.12); box-shadow: 0 0 16px rgba(251,191,36,.7); }
+
+/* --- Shop modal --- */
+.shop-box {
+  max-width: 380px; width: 94%;
+  padding: 0; overflow: hidden;
+}
+.shop-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(90deg, var(--sec-a1), var(--main-1));
+  color: #fff; font-weight: 800; font-size: 1rem;
+}
+.shop-header .modal-close-btn {
+  color: rgba(255,255,255,0.85);
+  font-size: 1.2rem;
+  padding: .25rem .5rem;
+}
+.shop-header .modal-close-btn:hover { color: #fff; }
+.shop-subtitle {
+  text-align: center; font-size: .82rem;
+  color: var(--text-muted); padding: .7rem 1rem .3rem;
+}
+#shop-packages {
+  display: flex; flex-direction: column;
+  gap: .6rem; padding: .6rem 1rem 1.2rem;
+}
+.shop-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+}
+
+/* --- Ad row in shop --- */
+.shop-ad-card {
+  display: flex; align-items: center; gap: .6rem;
+  background: linear-gradient(90deg, var(--pink-light), var(--purple-light));
+  border: 2px solid var(--pink);
+  border-radius: 12px; padding: .65rem .9rem;
+  cursor: pointer; transition: transform .15s, box-shadow .15s;
+}
+.shop-ad-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(209, 71, 141, 0.25); }
+.shop-ad-card:active { transform: scale(.97); }
+.shop-ad-card.loading { opacity: .6; pointer-events: none; }
+.shop-ad-icon { font-size: 1.5rem; flex-shrink: 0; }
+.shop-ad-text { flex: 1; font-size: .85rem; color: var(--text); }
+.shop-ad-btn {
+  background: var(--kpop-btn-gradient);
+  color: #fff; font-weight: 800; font-size: .75rem;
+  border-radius: 99px; padding: .28rem .7rem;
+  white-space: nowrap; flex-shrink: 0;
+}
+
+.shop-card {
+  border: 2px solid var(--purple-light);
+  border-radius: 14px; padding: .85rem .6rem;
+  text-align: center; cursor: pointer;
+  background: #fff;
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+  position: relative;
+}
+.shop-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(161, 72, 200, 0.22);
+  border-color: var(--purple);
+}
+.shop-card:active { transform: scale(.96); }
+.shop-card.popular {
+  border-color: var(--pink);
+  box-shadow: 0 4px 14px rgba(209, 71, 141, 0.25);
+}
+.shop-card-badge {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  background: var(--pink); color: #fff;
+  font-size: .6rem; font-weight: 800;
+  padding: .18rem .55rem; border-radius: 99px;
+  white-space: nowrap;
+}
+.shop-card-icon { font-size: 1.8rem; margin-bottom: .3rem; }
+.shop-card-icon-img {
+  height: 3.2rem;
+  object-fit: contain;
+  margin: 0 auto .4rem;
+  display: block;
+}
+.shop-header-title-container {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.shop-header-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+.shop-ad-icon-img {
+  width: 2.2rem;
+  height: 2.2rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.inline-heart {
+  width: 0.95rem !important;
+  height: 0.95rem !important;
+  object-fit: contain !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  margin-left: 2px !important;
+  position: relative !important;
+  top: -1px !important;
+}
+.item-card.locked .inline-heart {
+  filter: none !important;
+}
+.shop-card-stars {
+  font-size: 1rem; font-weight: 800;
+  color: var(--text); margin-bottom: .2rem;
+}
+.shop-card-bonus {
+  font-size: .68rem; color: var(--pink); font-weight: 700;
+  margin-bottom: .4rem; min-height: 1rem;
+}
+.shop-card-price {
+  background: var(--kpop-btn-gradient);
+  color: #fff; font-weight: 800; font-size: .82rem;
+  border-radius: 99px; padding: .28rem .7rem;
+  display: inline-block;
+}
+.shop-card.loading { opacity: .6; pointer-events: none; }
+
+/* --- Share button --- */
+.btn-share {
+  background: var(--kpop-btn-gradient);
+  color: #fff;
+}
+.btn-share:hover { filter: brightness(1.1); }
+.btn-share:active { transform: scale(.95); }
+.btn-share.loading { opacity: .6; pointer-events: none; }
+
+/* --- Share generating overlay --- */
+#share-generating {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,.55);
+  display: flex; align-items: center; justify-content: center;
+}
+#share-generating.hidden { display: none; }
+#share-generating-box {
+  background: #fff; border-radius: 18px;
+  padding: 1.6rem 2rem; text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+}
+#share-generating-box .sg-icon { font-size: 2.2rem; margin-bottom: .5rem; }
+#share-generating-box p { font-size: .9rem; color: var(--text); font-weight: 600; }
+
+/* --- Sound button --- */
+.btn-sound {
+  background: var(--teal-light); color: var(--teal);
+  border: 2px solid var(--teal); min-width: unset;
+  padding: .38rem .6rem; font-size: 1rem;
+}
+.btn-sound:hover { background: var(--teal); color: #fff; }
+

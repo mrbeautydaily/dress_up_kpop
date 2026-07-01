@@ -1,0 +1,90 @@
+/* ============================================================
+   K-POP ОХОТНИЦЫ НА ДЕМОНОВ — stylesheet
+   Dark Idol / Demon Hunter aesthetic
+   ============================================================ */
+
+/* ---------- CSS VARIABLES ---------- */
+:root {
+  /* --- DESIGN CODE PALETTE --- */
+  /* Основной Цвет (Lavender/Purple) */
+  --main-1: #C168E8;
+  --main-2: #B269D1;
+  --main-3: #A148C8;
+  --main-4: #E4AEFC;
+  --main-5: #F3DEFC;
+
+  /* Вторичный Цвет А (Magenta/Pink) */
+  --sec-a1: #F366AE;
+  --sec-a2: #DA69A3;
+  --sec-a3: #D1478D;
+  --sec-a4: #FDABD5;
+  --sec-a5: #FDDEEE;
+
+  /* Вторичный Цвет В (Periwinkle/Blue-Purple) */
+  --sec-b1: #9271E9;
+  --sec-b2: #8C71D2;
+  --sec-b3: #704EC9;
+  --sec-b4: #C7B3FC;
+  --sec-b5: #E8E0FC;
+
+  /* Base theme mappings */
+  --pink:        var(--sec-a3);
+  --pink-light:  var(--sec-a5);
+  --purple:      var(--main-3);
+  --purple-light:var(--main-5);
+  --teal:        var(--sec-b3);
+  --teal-light:  var(--sec-b5);
+  --yellow:      #fbbf24; /* Golden Yellow for Stars */
+  --yellow-light:#fefbeb;
+  --bg:          var(--main-5);
+  --bg2:         var(--main-4);
+  --text:        #3b0764; /* Soft dark plum text */
+  --text-muted:  #701a75; /* Plummy muted text */
+  --white:       #ffffff;
+  --shadow:      0 8px 32px rgba(161, 72, 200, 0.08); /* Based on --main-3 (161, 72, 200) */
+  --radius:      16px;
+  --radius-sm:   12px;
+  --transition:  .25s cubic-bezier(.34,1.56,.64,1);
+  --char-scale:  1.15;
+  --char-y:      30px;
+  --bg-scale:    0.95;
+  --bg-y:        0px;
+  --bg-blur:     1.5px;
+  
+  /* Neon glows & K-Pop gradients */
+  --glow-pink:   0 0 15px rgba(209, 71, 141, 0.4); /* Based on --sec-a3 (209, 71, 141) */
+  --glow-purple: 0 0 15px rgba(161, 72, 200, 0.4); /* Based on --main-3 (161, 72, 200) */
+  --glow-yellow: 0 0 15px rgba(251, 191, 36, 0.5);
+  --glass-bg:    rgba(255, 255, 255, 0.65);
+  --glass-border:rgba(255, 255, 255, 0.8);
+  --kpop-gradient: linear-gradient(135deg, var(--main-3) 0%, var(--sec-b3) 50%, var(--sec-a3) 100%);
+  --kpop-btn-gradient: linear-gradient(135deg, var(--main-3), var(--sec-b3));
+}
+
+/* ---------- RESET & BASE ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  font-family: 'Outfit', 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+  color: var(--text);
+  overflow: hidden;
+  /* п. 1.10.2 — запрет браузерной прокрутки и swipe-to-refresh */
+  overscroll-behavior: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  /* п. 1.6.2.7 — запрет выделения текста */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  /* запрет callout (iOS long-press меню) */
+  -webkit-touch-callout: none;
+}
+html { background: var(--bg); }
+body {
+  background: linear-gradient(135deg, var(--main-5) 0%, var(--sec-b5) 50%, var(--sec-a5) 100%);
+}
+button { cursor: pointer; border: none; font-family: inherit; }
+.hidden { display: none !important; }
+
