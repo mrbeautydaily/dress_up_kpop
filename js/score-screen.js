@@ -889,23 +889,34 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         trendLabel.style.alignItems = 'center';
         trendLabel.style.flexWrap = 'wrap';
 
+        const isFree = (result && result.isFreePost) || (assignment && assignment.isFree);
         if (lang === 'ru') {
-          let html = `<span>Тренд: ${result.trendMatches} совпад.</span>`;
-          if (result.matchedTrendTags && result.matchedTrendTags.length > 0) {
-            const badges = result.matchedTrendTags.map(t => {
-              const label = TAG_NAMES_RU[t] || t;
-              return `<span class="hashtag-badge tag-matched" style="margin-left: 6px; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 4px;">#${label} ✅</span>`;
-            }).join('');
-            html += badges;
+          let html = '';
+          if (isFree) {
+            html = `<span>Тренд: Свободный стиль ✅</span>`;
+          } else {
+            html = `<span>Тренд: ${result.trendMatches} совпад.</span>`;
+            if (result.matchedTrendTags && result.matchedTrendTags.length > 0) {
+              const badges = result.matchedTrendTags.map(t => {
+                const label = TAG_NAMES_RU[t] || t;
+                return `<span class="hashtag-badge tag-matched" style="margin-left: 6px; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 4px;">#${label} ✅</span>`;
+              }).join('');
+              html += badges;
+            }
           }
           trendLabel.innerHTML = html;
         } else {
-          let html = `<span>Trend: ${result.trendMatches} match${result.trendMatches !== 1 ? 'es' : ''}</span>`;
-          if (result.matchedTrendTags && result.matchedTrendTags.length > 0) {
-            const badges = result.matchedTrendTags.map(t => {
-              return `<span class="hashtag-badge tag-matched" style="margin-left: 6px; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 4px;">#${t} ✅</span>`;
-            }).join('');
-            html += badges;
+          let html = '';
+          if (isFree) {
+            html = `<span>Trend: Free style ✅</span>`;
+          } else {
+            html = `<span>Trend: ${result.trendMatches} match${result.trendMatches !== 1 ? 'es' : ''}</span>`;
+            if (result.matchedTrendTags && result.matchedTrendTags.length > 0) {
+              const badges = result.matchedTrendTags.map(t => {
+                return `<span class="hashtag-badge tag-matched" style="margin-left: 6px; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 4px;">#${t} ✅</span>`;
+              }).join('');
+              html += badges;
+            }
           }
           trendLabel.innerHTML = html;
         }

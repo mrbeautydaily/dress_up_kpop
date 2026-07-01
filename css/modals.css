@@ -334,8 +334,8 @@
   overflow: hidden;
 }
 .score-gift-box {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
   object-fit: contain;
   transition: transform 0.3s ease, opacity 0.3s ease;
   cursor: default;
