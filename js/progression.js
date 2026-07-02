@@ -297,36 +297,14 @@ function checkRunwayHint() {
     _markHintShown('runway');
     _nudgeBtn(btn, 'hint-extra-pulse');
     const text = lang === 'ru'
-      ? '✨ Образ собран!<br>Нажми <b>🌟 На подиум!</b>'
-      : '✨ Outfit ready!<br>Tap <b>🌟 Runway!</b>';
+      ? 'Образ собран!<br>Нажми <b>Опубликовать</b>'
+      : 'Outfit ready!<br>Tap <b>Publish Post</b>';
     showCtxHint('btn-runway', text, 5000);
   } else {
     _nudgeBtn(btn, 'hint-nudge');
   }
 }
 
-// Stars hint: тултип в первый раз, мягкое покачивание в следующие разы
-function triggerStarsHint() {
-  const starsBtn = $('stars-display');
-
-  if (!_hintShown('stars')) {
-    // Первый раз — яркий пульс + тултип
-    _markHintShown('stars');
-    _nudgeBtn(starsBtn, 'hint-pulse');
-    const hasAdOption = [...AD_ITEMS].some(id => !isUnlocked(id));
-    const text = hasAdOption
-      ? (lang === 'ru'
-          ? '💡 Нажми <b><img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> чтобы купить лайки<br>или получи вещи <b>бесплатно</b> за рекламу!'
-          : '💡 Tap <b><img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> to buy Likes<br>or get items <b>free</b> by watching ads!')
-      : (lang === 'ru'
-          ? '💡 Нажми <b><img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> чтобы купить лайки!'
-          : '💡 Tap <b><img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> to buy more Likes!');
-    showCtxHint('stars-display', text, 5000);
-  } else {
-    // Повторные разы — мягкое покачивание без тултипа
-    _nudgeBtn(starsBtn, 'hint-nudge');
-  }
-}
 
 function unlockItemFree(category, itemId) {
   _buyPending = null;
@@ -358,7 +336,7 @@ function showAdForItem(category, itemId) {
         onError: () => {
           _adShowing = false;
           if (_actx && soundOn) _actx.resume(); resumeBGM();
-          showToast(lang === 'ru' ? 'Реклама недоступна' : 'Ad unavailable');
+          showToast(lang === 'ru' ? 'Реклама недоступна' : 'Ad unavailable', 'error');
         },
       },
     });
@@ -375,7 +353,7 @@ function showReviewForItem(category, itemId) {
           if (feedbackSent) {
             unlockItemFree(category, itemId);
           } else {
-            showToast(lang === 'ru' ? 'Отзыв не отправлен' : 'Review not submitted');
+            showToast(lang === 'ru' ? 'Отзыв не отправлен' : 'Review not submitted', 'error');
           }
         });
       } else {
@@ -384,7 +362,7 @@ function showReviewForItem(category, itemId) {
           : (lang === 'ru' ? 'Отзыв недоступен' : 'Review not available');
         // If already reviewed previously, still reward (user was honest)
         if (reason === 'GAME_RATED') unlockItemFree(category, itemId);
-        else showToast(msg);
+        else showToast(msg, 'info');
       }
     });
   } else {
@@ -393,11 +371,12 @@ function showReviewForItem(category, itemId) {
   }
 }
 
-function showToast(msg) {
+function showToast(msg, type) {
+  type = type || 'info';
   let el = $('game-toast');
   if (!el) { el = document.createElement('div'); el.id = 'game-toast'; document.body.appendChild(el); }
   el.innerHTML = msg;
-  el.className = 'game-toast';
+  el.className = 'game-toast game-toast-' + type;
   clearTimeout(el._t);
   el._t = setTimeout(() => el.className = 'game-toast hidden', 2000);
 }
@@ -412,9 +391,6 @@ function getDailyDealId() {
   return ids[dateHash(todayStr()) % ids.length];
 }
 
-function getDailyDealCost(itemId) {
-  return itemId === getDailyDealId() ? Math.ceil(itemCost(itemId) / 2) : itemCost(itemId);
-}
 
 function getDailyDealLikesCost(itemId) {
   return itemId === getDailyDealId() ? Math.ceil(itemLikesCost(itemId) / 2) : itemLikesCost(itemId);

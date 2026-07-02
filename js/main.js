@@ -215,21 +215,7 @@ async function init() {
   $('btn-next-bg').addEventListener('click', () => { sfxClick(); changeBackground(1); });
   updateLikesDisplay();
   initAudio();
-  $('btn-new-day').addEventListener('click', () => {
-    $('summary-modal').classList.add('hidden');
-    school.day++;
-    school.lessonIndex  = 0;
-    school.lessonScores = [];
-    school.dayFollowersGained = 0;
-    buildDaySchedule();
-    showAssignmentBanner();
-    resetOutfit();
-    saveSchoolProgress();
-  });
-  $('btn-exit-school').addEventListener('click', () => {
-    exitSchoolMode();
-    updateOutfitName();
-  });
+
 
   // Initialize developer tools panel
   initDevPanel();

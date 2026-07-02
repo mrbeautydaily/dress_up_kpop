@@ -389,19 +389,6 @@ function buildHashtagsHTML(assignment, result) {
   }).join(' ');
 }
 
-function getStarsHTML(starsNum) {
-  let html = '';
-  for (let i = 1; i <= 5; i++) {
-    if (starsNum >= i) {
-      html += '<span class="star-item filled">★</span>';
-    } else if (starsNum >= i - 0.5) {
-      html += '<span class="star-item half">☆</span>';
-    } else {
-      html += '<span class="star-item empty">☆</span>';
-    }
-  }
-  return html;
-}
 
 const PROMO_ACTIVITIES = [
   { id:'recording',
@@ -503,21 +490,8 @@ function assignmentDesc(a)  { return lang === 'ru' ? a.desc_ru  : a.desc;  }
 // Likes = followers × random(min..max)
 const LIKE_MULTIPLIER = [6, 10];
 
-// Ranks by total followers
-const RANKS = [
-  { key:'trainee', minFollowers:0,       nextAt:1500,    nameKey:'rankTrainee', emoji:'🌱' },
-  { key:'debut',   minFollowers:1500,    nextAt:25000,   nameKey:'rankDebut',   emoji:'⭐' },
-  { key:'idol',    minFollowers:25000,   nextAt:150000,  nameKey:'rankIdol',    emoji:'🌟' },
-  { key:'star',    minFollowers:150000,  nextAt:1000000, nameKey:'rankStar',    emoji:'👑' },
-];
-
 const GOAL_FOLLOWERS = 1000000; // 1M = game finale
 
-function getRank(totalFollowers) {
-  for (let i = RANKS.length - 1; i >= 0; i--)
-    if (totalFollowers >= RANKS[i].minFollowers) return RANKS[i];
-  return RANKS[0];
-}
 
 // ────────────────────────────────────────────────────────────
 // GAME STATE
@@ -569,7 +543,8 @@ const BACKGROUNDS = [
   'Background/fans_qa.jpg',
   'Background/dance_challenge.jpg',
   'Background/live_stage.jpg',
-  'Background/grand_concert.jpg'
+  'Background/grand_concert.jpg',
+  'Background/free_style.jpg'
 ];
 let currentBackgroundIndex = 2; // Default to 'Background/photoshoot.jpg'
 

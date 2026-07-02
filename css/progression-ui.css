@@ -19,20 +19,6 @@
 .stars-btn:active { transform: scale(.93); }
 #stars-count { font-size: 1rem; }
 
-
-
-.stars-gain-toast {
-  position: fixed; top: 60px; right: 16px; z-index: 9999;
-  background: var(--yellow); color: #fff;
-  font-weight: 800; font-size: 1.1rem;
-  padding: .4rem .9rem; border-radius: 99px;
-  animation: gainPop .4s cubic-bezier(.34,1.56,.64,1) both,
-             gainFade 1.8s ease forwards;
-  pointer-events: none;
-}
-@keyframes gainPop  { from { transform: scale(0); } to { transform: scale(1); } }
-@keyframes gainFade { 0%,50%{ opacity:1; } 100%{ opacity:0; transform:translateY(-20px); } }
-
 /* --- Locked Items --- */
 .item-card.locked { opacity: .85; }
 .item-card.locked img, .item-card.locked .item-thumb-wrapper { filter: brightness(.65) saturate(.4); }
@@ -181,17 +167,44 @@
 
 /* --- Toast --- */
 .game-toast {
-  position: fixed; top: 56px; right: 12px;
-  background: linear-gradient(90deg, var(--pink), var(--purple));
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
   color: #fff;
-  padding: .38rem .85rem; border-radius: 99px;
-  font-size: .78rem; font-weight: 700; z-index: 9999;
+  padding: .45rem 1rem;
+  border-radius: 99px;
+  font-size: .8rem;
+  font-weight: 700;
+  z-index: 9999;
   white-space: nowrap;
-  box-shadow: 0 4px 14px rgba(168,85,247,.35);
-  animation: toastIn .25s ease;
+  pointer-events: none;
+  animation: toastSlideIn .3s cubic-bezier(.34,1.56,.64,1);
 }
 .game-toast.hidden { display: none; }
-@keyframes toastIn { from{opacity:0;transform:translateY(-6px);} to{opacity:1;transform:translateY(0);} }
+
+/* Default / info — нейтральный фиолетовый */
+.game-toast-info {
+  background: linear-gradient(90deg, var(--pink), var(--purple));
+  box-shadow: 0 4px 14px rgba(168, 85, 247, .35);
+}
+
+/* Reward — золотисто-розовый, яркий */
+.game-toast-reward {
+  background: linear-gradient(90deg, #f59e0b, var(--pink));
+  box-shadow: 0 4px 18px rgba(245, 158, 11, .45);
+}
+
+/* Error — тёмный красноватый */
+.game-toast-error {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, .35);
+}
+
+@keyframes toastSlideIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(.9); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
 
 
 
@@ -318,6 +331,16 @@
   margin-left: 2px !important;
   position: relative !important;
   top: -1px !important;
+}
+.inline-tv {
+  width: 1.6rem !important;
+  height: 1.6rem !important;
+  object-fit: contain !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  margin-right: 6px !important;
+  position: relative !important;
+  top: -2px !important;
 }
 .item-card.locked .inline-heart {
   filter: none !important;

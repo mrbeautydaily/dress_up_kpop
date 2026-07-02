@@ -262,15 +262,7 @@
   .score-btn-sm { font-size: .68rem; padding: .38rem .8rem; }
   .btn-share-outfit { padding: .38rem .8rem; font-size: .72rem; }
 
-  /* Summary modal */
-  .summary-box { border-radius: 22px 22px 14px 14px; }
-  #summary-emoji-big { font-size: 2.4rem; margin-bottom: .2rem; }
-  #summary-title { font-size: 1rem; }
-  #summary-day-score { font-size: .78rem; }
-  .summary-lesson-row { padding: .3rem .5rem; font-size: .68rem; }
-  .summary-lesson-score { font-size: .78rem; }
-  #summary-rank-badge { font-size: .9rem; }
-  #summary-rank-next { font-size: .64rem; }
+
 
 
 
@@ -313,9 +305,7 @@
 
 
   /* Toasts */
-  .game-toast { font-size: .76rem; }
-
-  .stars-gain-toast { top: 48px; right: 10px; font-size: .95rem; }
+  .game-toast { font-size: .74rem; top: 8px; padding: .35rem .8rem; }
 
   /* Context hints */
   .ctx-hint { font-size: .73rem; max-width: 195px; padding: .45rem .8rem; }
@@ -664,10 +654,7 @@
     font-size: 0.72rem !important;
   }
 
-  /* Summary modal */
-  .summary-box  { max-width: 94vw; }
-  #summary-emoji-big { font-size: 1.8rem; margin-bottom: .2rem; }
-  #summary-title     { font-size: 1rem; }
+
 
 
 
@@ -690,9 +677,8 @@
 
 
 
-  /* Stars gain toast */
-  .stars-gain-toast { font-size: .75rem; }
-  .game-toast       { font-size: .72rem; padding: .3rem .65rem; }
+  /* Toasts */
+  .game-toast       { font-size: .72rem; padding: .3rem .65rem; top: 6px; }
 
 
   /* Context hints — smaller on mobile */

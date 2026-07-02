@@ -146,7 +146,7 @@ async function buyStarPackage(pkg, cardEl) {
       const inCatalog = _catalog.find(c => c.id === pkg.id);
       if (!inCatalog) {
         console.error(`[Payments] product "${pkg.id}" not found in catalog. Catalog IDs:`, _catalog.map(c => c.id));
-        showToast(lang === 'ru' ? '⚠️ Продукт не настроен в консоли' : '⚠️ Product not set up in console');
+        showToast(lang === 'ru' ? '⚠️ Продукт не настроен в консоли' : '⚠️ Product not set up in console', 'error');
         return;
       }
       const purchase = await _payments.purchase({ id: pkg.id });
@@ -160,7 +160,7 @@ async function buyStarPackage(pkg, cardEl) {
   } catch (e) {
     console.error('[Payments] purchase error:', e);
     if (e && e.code !== 'UserCanceled') {
-      showToast(lang === 'ru' ? 'Ошибка покупки' : 'Purchase failed');
+      showToast(lang === 'ru' ? 'Ошибка покупки' : 'Purchase failed', 'error');
     }
   } finally {
     cardEl.classList.remove('loading');
@@ -176,7 +176,7 @@ function grantStarPackage(pkg) {
   const msg = pkg.bonus > 0
     ? (lang === 'ru' ? `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> и +${formatLikes(pkg.bonus)} бонус!` : `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> + ${formatLikes(pkg.bonus)} bonus!`)
     : `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`;
-  showToast(msg);
+  showToast(msg, 'reward');
 }
 
 function showShopModal() {
@@ -213,18 +213,18 @@ function showShopModal() {
             _adShowing = false;
             adCard.classList.remove('loading');
             if (_actx && soundOn) _actx.resume(); resumeBGM();
-            if (_rewarded) { addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart">'); }
+            if (_rewarded) { addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart">', 'reward'); }
           },
           onError: () => {
             _adShowing = false;
             adCard.classList.remove('loading');
             if (_actx && soundOn) _actx.resume(); resumeBGM();
-            showToast(lang === 'ru' ? 'Реклама недоступна' : 'Ad unavailable');
+            showToast(lang === 'ru' ? 'Реклама недоступна' : 'Ad unavailable', 'error');
           },
         },
       });
     } else {
-      addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> (dev)');
+      addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> (dev)', 'reward');
       adCard.classList.remove('loading');
     }
   });

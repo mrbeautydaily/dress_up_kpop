@@ -59,20 +59,7 @@ const T = {
     scoreNaked:      'Forgot to get dressed? 😮',
     scoreFreePost:   'Free Style Day! Dress however you like! 💕',
     btnNextClass:    '➡ Next Post',
-    btnSeeResults:   '🌟 Day Results!',
-    // Summary
-    summaryTitle:    'Post #{d} Complete!',
-    summaryDayScore: 'New followers: +{s}',
-    summaryRankLine: '{pts} followers',
-    summaryNextRank: 'Next goal: {at}',
-    summaryMaxRank:  '👑 1 MILLION! K-Pop Legends!',
     btnNewDay:       '➡ Next Post',
-    btnExitSchool:   '🎨 Free Style Mode',
-    // Ranks
-    rankTrainee:     '🌱 Nugu (Rookies)',
-    rankDebut:       '💖 Rising Stars',
-    rankIdol:        '🌟 Chart Toppers',
-    rankStar:        '👑 K-Pop Legends',
     // Milestone progress subtext
     milestoneSubtextLeft: '{milestone} Followers! ✅',
     // Outfit names (free mode)
@@ -110,20 +97,7 @@ const T = {
     scoreNaked:      'Забыла одеться? 😮',
     scoreFreePost:   'День свободного стиля! Одевайся как хочешь! 💕',
     btnNextClass:    '➡ Следующий пост',
-    btnSeeResults:   '🌟 Итоги дня!',
-    // Summary
-    summaryTitle:    'Пост #{d} завершен!',
-    summaryDayScore: 'Новые подписчики: +{s}',
-    summaryRankLine: '{pts} подписчиков',
-    summaryNextRank: 'Цель: {at}',
-    summaryMaxRank:  '👑 1 МИЛЛИОН! Легенды K-Pop!',
     btnNewDay:       '➡ Следующий пост',
-    btnExitSchool:   '🎨 Свободный стиль',
-    // Ranks
-    rankTrainee:     '🌱 Nugu (Новички)',
-    rankDebut:       '💖 Восходящие звёзды',
-    rankIdol:        '🌟 Лидеры чартов',
-    rankStar:        '👑 K-Pop Легенды',
     // Milestone progress subtext
     milestoneSubtextLeft: '{milestone} подписчиков! ✅',
     // Outfit names (free mode)

@@ -129,16 +129,6 @@ function changeBackground(direction) {
   updateStageBackground();
 }
 
-function exitSchoolMode() {
-  school.active = false;
-  updateStageBackground('photoshoot');
-  $('assignment-banner').classList.add('hidden');
-  updateRunwayBtn();
-  $('outfit-name-display').textContent = '';
-  $('summary-modal').classList.add('hidden');
-  $('score-modal').classList.add('hidden');
-}
-
 function showAssignmentBanner() {
   const a = school.schedule[school.lessonIndex];
   if (!a) return; // guard: schedule not ready yet

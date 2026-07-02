@@ -138,19 +138,15 @@
 .btn-share-outfit:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(45,212,191,.5); }
 .btn-share-outfit:active { transform: scale(.95); }
 
-/* Next post / New day buttons hover and active states (same as share outfit button) */
-#btn-next-lesson, #btn-new-day {
+/* Next post hover and active states (same as share outfit button) */
+#btn-next-lesson {
   transition: transform .15s, box-shadow .15s, background-color .15s !important;
 }
 #btn-next-lesson:hover {
   transform: scale(1.03) !important;
   box-shadow: 0 4px 14px rgba(161, 72, 200, 0.45) !important;
 }
-#btn-new-day:hover {
-  transform: scale(1.03) !important;
-  box-shadow: 0 4px 14px rgba(209, 71, 141, 0.45) !important;
-}
-#btn-next-lesson:active, #btn-new-day:active {
+#btn-next-lesson:active {
   transform: scale(.95) !important;
 }
 
@@ -204,43 +200,7 @@
 }
 .stage-controls-left button:active { transform: scale(.9); }
 
-/* Summary modal */
-.summary-box { gap: .6rem; }
-#summary-emoji-big { text-align: center; font-size: 3rem; }
-#summary-title { text-align: center; font-size: 1.2rem; font-weight: 900; color: var(--purple); }
-#summary-day-score {
-  text-align: center; font-size: .85rem; color: var(--text-muted);
-}
-#summary-lessons-list { display: flex; flex-direction: column; gap: .3rem; }
-.summary-lesson-row {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--bg); border-radius: var(--radius-sm);
-  padding: .35rem .6rem; font-size: .72rem;
-}
-.summary-lesson-name { font-weight: 700; color: var(--text); flex: 1; }
-.summary-lesson-score {
-  font-weight: 900; font-size: .85rem;
-  color: var(--purple); min-width: 45px; text-align: right;
-}
 
-/* Rank section */
-#summary-rank-section { background: var(--bg); border-radius: var(--radius-sm); padding: .7rem; }
-#summary-rank-badge {
-  text-align: center; font-size: 1.05rem; font-weight: 900;
-  color: var(--purple); margin-bottom: .4rem;
-}
-#summary-rank-progress-wrap {
-  width: 100%; height: 10px;
-  background: var(--bg2); border-radius: 99px; overflow: hidden;
-  margin-bottom: .3rem;
-}
-#summary-rank-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--yellow), var(--pink), var(--purple));
-  border-radius: 99px;
-  transition: width 1.2s cubic-bezier(.22,.61,.36,1); width: 0;
-}
-#summary-rank-next { font-size: .7rem; color: var(--text-muted); text-align: center; }
 /* Milestone subtext under progress bar */
 .score-milestone-subtext {
   display: flex;

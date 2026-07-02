@@ -24,7 +24,8 @@ const IntroDirector = {
     ru: {
       dream: 'Один вирусный пост может изменить всё...',
       realityText: '...Но пока я об этом только мечтаю. 💭\nПривет! Я Хана из K-Pop группы Eclipse! 👋\nМы только что дебютировали, и о нас пока никто не знает 😅',
-      gameplayText: 'Мне нужен стилист — и это ты! 💖\nКаждый день мы публикуем посты о съемках клипов, фан-встречах, концертах...\nПодбирай образы под эти события — чем точнее попадёшь в стиль, тем больше подписчиков и лайков!\n(За лайки {heart} можно покупать новые вещи!)',
+      gameplayText1: 'Мне нужен стилист — и это ты! 💖\nКаждый день мы публикуем посты о съемках клипов, фан-встречах, концертах...',
+      gameplayText2: 'Подбирай образы под эти события — чем точнее попадёшь в стиль, тем больше подписчиков и лайков!\n(За лайки {heart} можно покупать новые вещи!)',
       debutText: 'Наша мечта — 1 000 000 подписчиков! 👑\nОт полных нулей до K-Pop легенд!\nНу что, поможешь мне? 🔥',
       btnNext: 'Далее ➤',
       btnDebut: 'Начать карьеру!',
@@ -34,7 +35,8 @@ const IntroDirector = {
     en: {
       dream: 'One viral post can change everything...',
       realityText: "...But for now, I can only dream of it. 💭\nHi! I'm Hana from the K-Pop group Eclipse! 👋\nWe just debuted, and nobody knows us yet 😅",
-      gameplayText: "I need a stylist — and that's you! 💖\nEvery day we publish posts about music video shoots, fan meetings, concerts...\nMatch outfits to these events — the closer you get to the style, the more followers and likes we get!\n(With likes {heart} you can buy new clothes!)",
+      gameplayText1: "I need a stylist — and that's you! 💖\nEvery day we publish posts about music video shoots, fan meetings, concerts...",
+      gameplayText2: "Match outfits to these events — the closer you get to the style, the more followers and likes we get!\n(With likes {heart} you can buy new clothes!)",
       debutText: 'Our dream — 1,000,000 followers! 👑\nFrom total zeros to K-Pop legends!\nSo, will you help me? 🔥',
       btnNext: 'Next ➤',
       btnDebut: 'Start Career!',
@@ -229,7 +231,7 @@ const IntroDirector = {
     $('intro-name-badge').textContent = lang === 'ru' ? 'Хана' : 'Hana';
     $('intro-dots').style.display = 'flex';
 
-    this.buildDots(3, 0);
+    this.buildDots(4, 0);
 
     const btn = $('intro-next-btn');
     btn.textContent = tData.btnNext;
@@ -271,7 +273,7 @@ const IntroDirector = {
     ];
     this.renderCharacter(photoshootOutfit);
 
-    this.buildDots(3, 1);
+    this.buildDots(4, 1);
 
     const btn = $('intro-next-btn');
     btn.textContent = tData.btnNext;
@@ -280,16 +282,16 @@ const IntroDirector = {
     textEl.onclick = () => {
       if (this.typingTimer) {
         this.clearTyping();
-        textEl.innerHTML = this.formatText(tData.gameplayText);
+        textEl.innerHTML = this.formatText(tData.gameplayText1);
       }
     };
 
-    this.typewrite(textEl, tData.gameplayText, null, 25);
+    this.typewrite(textEl, tData.gameplayText1, null, 25);
 
     btn.onclick = () => {
       if (this.typingTimer) {
         this.clearTyping();
-        textEl.innerHTML = this.formatText(tData.gameplayText);
+        textEl.innerHTML = this.formatText(tData.gameplayText1);
       } else {
         this.enterPhase4();
       }
@@ -300,13 +302,53 @@ const IntroDirector = {
     this.phase = 4;
     const tData = this.steps[lang] || this.steps.en;
 
+    $('intro-bg').style.backgroundImage = "url('Background/photoshoot.jpg')";
+    $('intro-bg').style.filter = 'blur(1px) brightness(0.6)';
+
+    const photoshootOutfit = [
+      { cat: 'hair',    id: 'blunt_bob_pink_headband' },
+      { cat: 'tops',    id: 'top_dress_new_1' },
+      { cat: 'bottoms',  id: 'bot_none' },
+      { cat: 'shoes',   id: 'pink_mary_jane_shoes' }
+    ];
+    this.renderCharacter(photoshootOutfit);
+
+    this.buildDots(4, 2);
+
+    const btn = $('intro-next-btn');
+    btn.textContent = tData.btnNext;
+
+    const textEl = $('intro-text');
+    textEl.onclick = () => {
+      if (this.typingTimer) {
+        this.clearTyping();
+        textEl.innerHTML = this.formatText(tData.gameplayText2);
+      }
+    };
+
+    this.typewrite(textEl, tData.gameplayText2, null, 25);
+
+    btn.onclick = () => {
+      if (this.typingTimer) {
+        this.clearTyping();
+        textEl.innerHTML = this.formatText(tData.gameplayText2);
+      } else {
+        this.enterPhase5();
+      }
+    };
+  },
+
+  enterPhase5() {
+    this.phase = 5;
+    const tData = this.steps[lang] || this.steps.en;
+
     $('intro-bg').style.backgroundImage = "url('Background/live_stage.jpg')";
     $('intro-bg').style.filter = 'blur(1px) brightness(0.7)';
     $('intro-spotlight').classList.add('active');
 
     this.renderCharacter(this.stageOutfit);
 
-    this.buildDots(3, 2);
+    this.buildDots(4, 3);
 
     const btn = $('intro-next-btn');
     btn.textContent = tData.btnDebut;
@@ -654,11 +696,6 @@ const IntroDirector = {
       startSchoolMode();
       checkDailyLogin();
 
-      addLikes(2000);
-      showToast(lang === 'ru' 
-        ? '🎉 Добро пожаловать! +2 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart">' 
-        : '🎉 Welcome! +2,000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart">'
-      );
     }, { once: true });
   }
 };

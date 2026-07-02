@@ -180,7 +180,7 @@ async function shareOutfit() {
     link.click();
 
   } catch (e) {
-    showToast(lang === 'ru' ? 'Не удалось создать изображение' : 'Could not create image');
+    showToast(lang === 'ru' ? 'Не удалось создать изображение' : 'Could not create image', 'error');
   } finally {
     overlay.classList.add('hidden');
   }
@@ -192,9 +192,6 @@ async function shareOutfit() {
 // SCHOOL MODE — SCORE SCREEN
 // ────────────────────────────────────────────────────────────
 
-function animateBar(el, pct, delay = 0) {
-  setTimeout(() => { el.style.width = pct + '%'; }, delay);
-}
 
 // Smoothly count up raw numbers (e.g. total points, followers)
 function animateCounter(el, target, duration = 1000, prefix = '', suffix = '', format = false) {
@@ -239,138 +236,7 @@ function animateCounter(el, target, duration = 1000, prefix = '', suffix = '', f
   requestAnimationFrame(update);
 }
 
-// Smoothly count up stats, supporting "K" formatting for thousands of likes
-function animateStatsCounter(el, targetVal, isLikes = false) {
-  if (!el) return;
-  const duration = 1200; // 1.2 seconds
-  const startTime = (window.performance && window.performance.now) ? performance.now() : Date.now();
-  
-  function update() {
-    const now = (window.performance && window.performance.now) ? performance.now() : Date.now();
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const easeProgress = progress * (2 - progress); // ease out quad
-    
-    const current = Math.floor(easeProgress * targetVal);
-    
-    if (isLikes && targetVal >= 1000) {
-      el.textContent = (current / 1000).toFixed(1) + 'K';
-    } else {
-      el.textContent = current;
-    }
-    
-    if (progress < 1) {
-      requestAnimationFrame(update);
-    } else {
-      if (isLikes && targetVal >= 1000) {
-        el.textContent = (targetVal / 1000).toFixed(1) + 'K';
-      } else {
-        el.textContent = targetVal;
-      }
-    }
-  }
-  
-  requestAnimationFrame(update);
-}
 
-// Render the outfit on canvas with the current studio background (clean without game brandings)
-async function captureOutfitImage() {
-  try {
-    const stageEl = $('stage');
-    const stageRect = stageEl.getBoundingClientRect();
-    const srcW = stageRect.width  || 300;
-    const srcH = stageRect.height || 500;
-
-    const SHARE_W = 420;
-    const SHARE_H = Math.round(srcH / srcW * SHARE_W);
-    const TOP_PAD = Math.round(0.05 * SHARE_H); // 5% padding for high-sitting hair items
-    const CANVAS_H = SHARE_H + TOP_PAD;
-
-    const canvas = document.createElement('canvas');
-    canvas.width  = SHARE_W;
-    canvas.height = CANVAS_H;
-    const ctx = canvas.getContext('2d');
-
-    // 1. Draw base gradient background
-    const grad = ctx.createLinearGradient(0, 0, SHARE_W, CANVAS_H);
-    grad.addColorStop(0, '#ffd6ec');
-    grad.addColorStop(0.5, '#ede9fe');
-    grad.addColorStop(1, '#ccfbf1');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, SHARE_W, CANVAS_H);
-
-    // 2. Draw current background image with opacity
-    const bgImg = await loadImageForCanvas(BACKGROUNDS[currentBackgroundIndex]);
-    if (bgImg) {
-      ctx.globalAlpha = 0.45;
-      ctx.drawImage(bgImg, 0, 0, SHARE_W, CANVAS_H);
-      ctx.globalAlpha = 1;
-    }
-
-    // 3. Draw character shadow oval
-    ctx.save();
-    const cx = SHARE_W * 0.52;
-    const cy = TOP_PAD + SHARE_H * 0.95;
-    const rx = SHARE_W * 0.3;
-    const ry = SHARE_H * 0.0225;
-    
-    ctx.translate(cx, cy);
-    ctx.scale(1, ry / rx);
-    const shadowGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-    shadowGrad.addColorStop(0, 'rgba(0, 0, 0, 0.45)');
-    shadowGrad.addColorStop(0.84, 'rgba(0, 0, 0, 0.15)');
-    shadowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = shadowGrad;
-    ctx.beginPath();
-    ctx.arc(0, 0, rx, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    // 4. Draw character body
-    const bodyImg = await loadImageForCanvas('Items/body/body_new.png');
-    if (bodyImg) ctx.drawImage(bodyImg, 0, TOP_PAD, SHARE_W, SHARE_H);
-
-    // 5. Draw clothes in z-order
-    const sortedLayers = LAYER_ORDER
-      .filter(l => l.key !== 'body')
-      .map(layer => {
-        const itemId = equipped[layer.key];
-        const item   = itemId ? findItem(layer.key, itemId) : null;
-        const effectiveZ = (item && item.z !== undefined) ? item.z : layer.zIndex;
-        const domOrder   = LAYER_ORDER.findIndex(l => l.key === layer.key);
-        return { layer, item, effectiveZ, domOrder };
-      })
-      .sort((a, b) => a.effectiveZ !== b.effectiveZ
-        ? a.effectiveZ - b.effectiveZ
-        : a.domOrder  - b.domOrder);
-
-    for (const { item } of sortedLayers) {
-      if (!item || !item.src || !item.pos) continue;
-      const img = await loadImageForCanvas(item.src);
-      if (!img) continue;
-
-      const { left, top, width } = item.pos;
-      const x = left  / 100 * SHARE_W;
-      const y = top   / 100 * SHARE_H + TOP_PAD;
-      const w = width / 100 * SHARE_W;
-      const h = w * (img.naturalHeight / img.naturalWidth);
-
-      if (item.filter) {
-        ctx.save();
-        ctx.filter = item.filter;
-        ctx.drawImage(img, x, y, w, h);
-        ctx.restore();
-      } else {
-        ctx.drawImage(img, x, y, w, h);
-      }
-    }
-
-    return canvas.toDataURL('image/png');
-  } catch (e) {
-    console.error("Failed to capture outfit image:", e);
-    return '';
-  }
-}
 
 // Get a stylized post caption based on the activity type
 function getPostTextForActivity(activityId) {
@@ -885,9 +751,13 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         trendRowEl.classList.remove('has-trend');
       }
       if (trendLabel) {
-        trendLabel.style.display = 'inline-flex';
-        trendLabel.style.alignItems = 'center';
-        trendLabel.style.flexWrap = 'wrap';
+        trendLabel.style.setProperty('display', 'inline-flex', 'important');
+        trendLabel.style.setProperty('align-items', 'center', 'important');
+        trendLabel.style.setProperty('flex-wrap', 'nowrap', 'important');
+        trendLabel.style.setProperty('white-space', 'nowrap', 'important');
+        trendLabel.style.setProperty('flex', '1', 'important');
+        trendLabel.style.setProperty('min-width', '0', 'important');
+        trendLabel.style.setProperty('width', 'auto', 'important');
 
         const isFree = (result && result.isFreePost) || (assignment && assignment.isFree);
         if (lang === 'ru') {
@@ -899,7 +769,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             if (result.matchedTrendTags && result.matchedTrendTags.length > 0) {
               const badges = result.matchedTrendTags.map(t => {
                 const label = TAG_NAMES_RU[t] || t;
-                return `<span class="hashtag-badge tag-matched" style="margin-left: 6px; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 4px;">#${label} ✅</span>`;
+                return `<span class="hashtag-badge tag-matched" style="margin-left: 0.5em; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 0.3em;">#${label} ✅</span>`;
               }).join('');
               html += badges;
             }
@@ -913,7 +783,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             html = `<span>Trend: ${result.trendMatches} match${result.trendMatches !== 1 ? 'es' : ''}</span>`;
             if (result.matchedTrendTags && result.matchedTrendTags.length > 0) {
               const badges = result.matchedTrendTags.map(t => {
-                return `<span class="hashtag-badge tag-matched" style="margin-left: 6px; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 4px;">#${t} ✅</span>`;
+                return `<span class="hashtag-badge tag-matched" style="margin-left: 0.5em; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 0.3em;">#${t} ✅</span>`;
               }).join('');
               html += badges;
             }
@@ -1051,7 +921,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             }
             alertEl.classList.remove('hidden');
           }
-          showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`);
+          showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`, 'reward');
           
           if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
         }, 1500);
@@ -1115,7 +985,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
               }
               alertEl.classList.remove('hidden');
             }
-            showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`);
+            showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`, 'reward');
             
             // Update total followers display badge early to reflect progress
             if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
@@ -1422,8 +1292,8 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   if (!isFree && result.trendMatches >= 1) {
     let doubled = false;
     dblBtn.innerHTML = lang === 'ru'
-      ? `📺 Удвоить награду (+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">)`
-      : `📺 Double reward (+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">)`;
+      ? `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Удвоить награду (+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">)`
+      : `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Double reward (+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">)`;
     dblBtn.classList.remove('hidden');
     dblBtn.onclick = () => {
       if (doubled || _adShowing) return;
@@ -1432,7 +1302,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         dblBtn.classList.add('hidden');
         addLikes(earned);
         spawnSparkles(12);
-        showToast(`✨ +${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> × 2!`);
+        showToast(`+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> × 2!`, 'reward');
       };
       if (ysdk) {
         _adShowing = true;
@@ -1450,7 +1320,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             onError: () => {
               _adShowing = false;
               if (_actx && soundOn) _actx.resume(); resumeBGM();
-              showToast(lang === 'ru' ? 'Реклама недоступна' : 'Ad unavailable');
+              showToast(lang === 'ru' ? 'Реклама недоступна' : 'Ad unavailable', 'error');
             },
           },
         });
@@ -1463,66 +1333,69 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   }
 
   $('score-modal').classList.remove('hidden');
+
+  // Adjust trend label font size to fit tags without wrapping
+  if (trendLabel) {
+    adjustTrendLabelFontSize(trendLabel);
+    setTimeout(() => adjustTrendLabelFontSize(trendLabel), 300);
+    setTimeout(() => adjustTrendLabelFontSize(trendLabel), 900);
+  }
 }
 
-// ────────────────────────────────────────────────────────────
-// SCHOOL MODE — DAILY SUMMARY
-// ────────────────────────────────────────────────────────────
+/**
+ * Dynamically adjusts the font size of the trend label element to ensure
+ * all hashtag tags fit on a single line without wrapping.
+ * @param {HTMLElement} trendLabel - The element containing the trend label and tags.
+ */
+function adjustTrendLabelFontSize(trendLabel) {
+  if (!trendLabel) return;
 
-function showDailySummary() {
-  const avgScore = school.lessonScores.length > 0 
-    ? Math.round(school.lessonScores.reduce((a, b) => a + b, 0) / school.lessonScores.length)
-    : 0;
-  saveSchoolProgress();
+  // Reset font size so we measure at base style
+  trendLabel.style.fontSize = '';
 
-  const rank     = getRank(school.totalFollowers);
-  const nextRank = RANKS[RANKS.indexOf(rank) + 1] || null;
-  const gradeEmoji = avgScore >= 200 ? '👑' : avgScore >= 100 ? '🌟' : avgScore >= 60 ? '⭐' : avgScore >= 30 ? '💜' : '🌱';
+  const parent = trendLabel.parentElement;
+  if (!parent) return;
 
-  $('summary-emoji-big').textContent = gradeEmoji;
-  $('summary-title').textContent     = tf('summaryTitle',    { d: school.day });
-  $('summary-day-score').textContent = tf('summaryDayScore', { s: formatFollowers(school.dayFollowersGained) });
-
-  const list = $('summary-lessons-list');
-  list.innerHTML = '';
-  school.schedule.forEach((a, i) => {
-    const row = document.createElement('div');
-    row.className = 'summary-lesson-row';
-    const starsNum = school.lessonScores[i] || 0;
-    const iconName = getActivityIcon(a.id);
-    row.innerHTML = `
-      <span class="summary-lesson-name" style="display:inline-flex; align-items:center; gap:6px;">
-        <img src="Items/UI/activities/${iconName}" class="ui-icon" style="width:16px; height:16px;" alt="">
-        ${assignmentTitle(a)}
-      </span>
-      <span class="summary-lesson-score" style="font-weight:700; color:#a855f7;">${starsNum} ${lang === 'ru' ? 'очк.' : 'pts'}</span>
-    `;
-    list.appendChild(row);
-  });
-
-  $('summary-rank-badge').textContent = tf('summaryRankLine', {
-    rank: t(rank.nameKey),
-    pts:  formatFollowers(school.totalFollowers),
-  });
-
-  if (school.totalFollowers >= GOAL_FOLLOWERS) {
-    $('summary-emoji-big').textContent = '🏆';
-    $('summary-rank-bar').style.width = '100%';
-    const congradText = lang === 'ru' 
-      ? '🎉 1 МИЛЛИОН ПОДПИСЧИКОВ! 🎉<br>Вы стали легендами K-Pop!' 
-      : '🎉 1 MILLION FOLLOWERS! 🎉<br>You are now ultimate K-Pop Legends!';
-    $('summary-rank-next').innerHTML = `<span style="color: #d97706; font-weight: 800; font-size: 1.1rem;">${congradText}</span>`;
-  } else if (nextRank) {
-    const progress = (school.totalFollowers - rank.minFollowers) / (nextRank.minFollowers - rank.minFollowers);
-    setTimeout(() => { $('summary-rank-bar').style.width = Math.min(progress * 100, 100) + '%'; }, 400);
-    $('summary-rank-next').textContent = tf('summaryNextRank', { name: t(nextRank.nameKey), at: formatFollowers(nextRank.minFollowers) });
-  } else {
-    $('summary-rank-bar').style.width = '100%';
-    $('summary-rank-next').textContent = t('summaryMaxRank');
+  // Calculate the total width of all sibling elements
+  let siblingsWidth = 0;
+  for (let child of parent.children) {
+    if (child !== trendLabel) {
+      siblingsWidth += child.getBoundingClientRect().width;
+    }
   }
 
-  $('btn-new-day').textContent    = t('btnNewDay');
-  $('btn-exit-school').textContent= t('btnExitSchool');
-  $('summary-modal').classList.remove('hidden');
+  // Get parent's usable width (excluding padding)
+  const parentStyle = window.getComputedStyle(parent);
+  const paddingLeft = parseFloat(parentStyle.paddingLeft) || 0;
+  const paddingRight = parseFloat(parentStyle.paddingRight) || 0;
+  const parentUsableWidth = parent.clientWidth - paddingLeft - paddingRight;
+
+  // Get gap between elements
+  const gap = parseFloat(parentStyle.gap) || 8;
+  const gapCount = parent.children.length - 1;
+  const totalGap = gap * gapCount;
+
+  // Available width for the trend label
+  const availableWidth = parentUsableWidth - siblingsWidth - totalGap - 4; // 4px safety buffer
+
+  if (availableWidth > 0) {
+    const contentWidth = trendLabel.scrollWidth;
+    if (contentWidth > availableWidth) {
+      const scale = availableWidth / contentWidth;
+      // Set lower boundary to prevent it from becoming microscopic
+      const finalScale = Math.max(0.6, scale);
+      trendLabel.style.fontSize = `${finalScale}em`;
+    }
+  }
 }
+
+// Add global window resize handler to adjust font size dynamically
+window.addEventListener('resize', () => {
+  const trendLabel = document.getElementById('score-trend-label');
+  const scoreModal = document.getElementById('score-modal');
+  if (trendLabel && scoreModal && !scoreModal.classList.contains('hidden')) {
+    adjustTrendLabelFontSize(trendLabel);
+  }
+});
+
 

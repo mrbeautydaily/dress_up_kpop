@@ -41,20 +41,6 @@ function sfxUnlock() {
     .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
 }
 function sfxClick() { tone(1100,.1,.06); }
-
-function sfxRunway() {
-  if (!soundOn) return;
-  const c = actx();
-  const o = c.createOscillator();
-  const g = c.createGain();
-  o.type = 'sine';
-  o.frequency.setValueAtTime(300, c.currentTime);
-  o.frequency.exponentialRampToValueAtTime(1200, c.currentTime + 0.35);
-  g.gain.setValueAtTime(0.22, c.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.45);
-  o.connect(g); g.connect(_masterGain);
-  o.start(); o.stop(c.currentTime + 0.46);
-}
 function sfxScore(trendMatches) {
   if (trendMatches >= 2) {
     [[523,.28,.18,0],[659,.28,.18,.09],[784,.28,.18,.18],
@@ -142,8 +128,6 @@ function initAudio() {
 // ────────────────────────────────────────────────────────────
 // SPARKLE EFFECT
 // ────────────────────────────────────────────────────────────
-
-const SPARKLE_EMOJIS = ['✨','⭐','💫','🌟','💖','💕','💗','💓','🩷','💝','❤️','🌸'];
 
 function spawnSparkles(count = 6, targetEl = null) {
   const modal = $('score-modal');
