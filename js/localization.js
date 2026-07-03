@@ -34,32 +34,16 @@ const T = {
     loadingText:   'Loading...',
     // Header
     gameTitle:     '✨ K-Pop Star Maker ✨',
-    btnRandom:     '🎲 Random',
-    btnReset:      '🔄 Reset',
-    btnSave:       '💾 Save',
-    btnSaved:      '✅ Saved!',
-    btnSchool:     '🌟 Career',
-    btnSchoolOn:   '🌟 Career ON',
     btnRunway:     'Publish Post',
     // Panels
-    categoryLabel: 'Category',
-    itemsLabel:    'Items',
     catHair:       'Hair',
     catTops:       'Tops',
     catBottoms:    'Bottoms',
     catShoes:      'Shoes',
     catSocks:      'Socks',
     catAcc:        'Acc.',
-    // Banner
-    bannerDayLesson: '#{d}',
     // Score screen
     scoreResults:    '📍 {title}',
-    scoreRequired:   'Outfit: {f}/{t} slots · Trend: {tags} ({m}/{r})',
-    scoreRepeat:     'Same outfit? Fans noticed! 👀',
-    scoreNaked:      'Forgot to get dressed? 😮',
-    scoreFreePost:   'Free Style Day! Dress however you like! 💕',
-    btnNextClass:    '➡ Next Post',
-    btnNewDay:       '➡ Next Post',
     // Milestone progress subtext
     milestoneSubtextLeft: '{milestone} Followers! ✅',
     // Outfit names (free mode)
@@ -72,32 +56,16 @@ const T = {
     loadingText:   'Загрузка...',
     // Header
     gameTitle:     '✨ K-Pop: Путь к славе ✨',
-    btnRandom:     '🎲 Случайно',
-    btnReset:      '🔄 Сброс',
-    btnSave:       '💾 Сохранить',
-    btnSaved:      '✅ Сохранено!',
-    btnSchool:     '🌟 Карьера',
-    btnSchoolOn:   '🌟 Карьера ВКЛ',
     btnRunway:     'Опубликовать',
     // Panels
-    categoryLabel: 'Категория',
-    itemsLabel:    'Вещи',
     catHair:       'Волосы',
     catTops:       'Топы',
     catBottoms:    'Низ',
     catShoes:      'Обувь',
     catSocks:      'Носки',
     catAcc:        'Акс.',
-    // Banner
-    bannerDayLesson: '#{d}',
     // Score screen
     scoreResults:    '📍 {title}',
-    scoreRequired:   'Образ: {f}/{t} слотов · Тренд: {tags} ({m}/{r})',
-    scoreRepeat:     'Тот же наряд? Фанаты заметили! 👀',
-    scoreNaked:      'Забыла одеться? 😮',
-    scoreFreePost:   'День свободного стиля! Одевайся как хочешь! 💕',
-    btnNextClass:    '➡ Следующий пост',
-    btnNewDay:       '➡ Следующий пост',
     // Milestone progress subtext
     milestoneSubtextLeft: '{milestone} подписчиков! ✅',
     // Outfit names (free mode)

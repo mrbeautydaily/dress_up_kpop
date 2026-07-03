@@ -105,14 +105,7 @@
   animation: ctxHintIn .35s cubic-bezier(.34,1.56,.64,1);
 }
 .ctx-hint::before {
-  content: '';
-  position: absolute;
-  top: -9px;
-  left: var(--arrow-left, 50%);
-  transform: translateX(-50%);
-  border: 9px solid transparent;
-  border-top: none;
-  border-bottom-color: var(--pink);
+  display: none;
 }
 .ctx-hint.ctx-hint-out {
   animation: ctxHintOut .3s ease forwards;
