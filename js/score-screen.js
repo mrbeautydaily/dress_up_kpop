@@ -38,46 +38,43 @@ async function shareOutfit() {
     // Волосы имеют top: ~-1.2% (выходят за верхний край stage).
     // Добавляем отступ сверху чтобы они не обрезались в канвасе.
     const TOP_PAD = Math.round(0.05 * SHARE_H); // 5% высоты
-    const CANVAS_H = SHARE_H + TOP_PAD;
+    const IMAGE_H = SHARE_H + TOP_PAD;
+    const BAR_H = 44;
+    const CANVAS_H = IMAGE_H + BAR_H;
 
     const canvas = document.createElement('canvas');
     canvas.width  = SHARE_W;
     canvas.height = CANVAS_H;
     const ctx = canvas.getContext('2d');
 
-    // — Фон: градиент (на весь canvas включая TOP_PAD)
-    const grad = ctx.createLinearGradient(0, 0, SHARE_W, CANVAS_H);
+    // — Фон: градиент (на случай, если картинка не загрузится)
+    const grad = ctx.createLinearGradient(0, 0, SHARE_W, IMAGE_H);
     grad.addColorStop(0, '#ffd6ec');
     grad.addColorStop(0.5, '#ede9fe');
     grad.addColorStop(1, '#ccfbf1');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, SHARE_W, CANVAS_H);
+    ctx.fillRect(0, 0, SHARE_W, IMAGE_H);
 
-    // — Фоновая картинка (студия) с прозрачностью (временно background_1.jpeg)
+    // — Фоновая картинка (студия) с полной непрозрачностью и обрезкой по размеру (cover)
     const bgImg = await loadImageForCanvas(BACKGROUNDS[currentBackgroundIndex]);
     if (bgImg) {
-      ctx.globalAlpha = 0.35;
-      ctx.drawImage(bgImg, 0, 0, SHARE_W, CANVAS_H);
-      ctx.globalAlpha = 1;
-    }
+      const imgW = bgImg.naturalWidth;
+      const imgH = bgImg.naturalHeight;
+      const aspectImg = imgW / imgH;
+      const aspectTarget = SHARE_W / IMAGE_H;
 
-    // — Декоративная рамка
-    ctx.save();
-    ctx.strokeStyle = 'rgba(168,85,247,0.6)';
-    ctx.lineWidth = 5;
-    const r = 18;
-    ctx.beginPath();
-    ctx.moveTo(r, 0); ctx.lineTo(SHARE_W - r, 0);
-    ctx.arcTo(SHARE_W, 0, SHARE_W, r, r);
-    ctx.lineTo(SHARE_W, CANVAS_H - r);
-    ctx.arcTo(SHARE_W, CANVAS_H, SHARE_W - r, CANVAS_H, r);
-    ctx.lineTo(r, CANVAS_H);
-    ctx.arcTo(0, CANVAS_H, 0, CANVAS_H - r, r);
-    ctx.lineTo(0, r);
-    ctx.arcTo(0, 0, r, 0, r);
-    ctx.closePath();
-    ctx.stroke();
-    ctx.restore();
+      let sx = 0, sy = 0, sWidth = imgW, sHeight = imgH;
+      if (aspectImg > aspectTarget) {
+        // Картинка шире целевого соотношения сторон — обрезаем по бокам
+        sWidth = imgH * aspectTarget;
+        sx = (imgW - sWidth) / 2;
+      } else {
+        // Картинка выше целевого соотношения сторон — обрезаем сверху/снизу
+        sHeight = imgW / aspectTarget;
+        sy = (imgH - sHeight) / 2;
+      }
+      ctx.drawImage(bgImg, sx, sy, sWidth, sHeight, 0, 0, SHARE_W, IMAGE_H);
+    }
 
     // — Тень персонажа (овал под ногами)
     ctx.save();
@@ -145,33 +142,138 @@ async function shareOutfit() {
       }
     }
 
-    // — Нижняя плашка с названием игры (локализованная)
-    const barH = 48;
-    const barY = CANVAS_H - barH;
-    ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,0.82)';
+    // — НАЛОЖЕНИЕ ШАПКИ (HEADER) INSTAGRAM (поверх картинки сверху)
+    const authorName = $('score-author-name-left')?.textContent || 'eclipse';
+    const locationText = $('score-location-left')?.textContent || 'Seoul, South Korea';
+    const timeText = $('score-meta-time-text')?.textContent || (lang === 'ru' ? '2ч' : '2h');
+
+    // 1. Аватарка с цветным градиентным кольцом
+    const avatarX = 26;
+    const avatarY = 26;
+    const ringR = 15;
+    
+    const ringGrad = ctx.createLinearGradient(avatarX - ringR, avatarY + ringR, avatarX + ringR, avatarY - ringR);
+    ringGrad.addColorStop(0, '#f9ce34');
+    ringGrad.addColorStop(0.5, '#ee2a7b');
+    ringGrad.addColorStop(1, '#6228d7');
+    ctx.fillStyle = ringGrad;
     ctx.beginPath();
-    ctx.moveTo(0, barY + 14);
-    ctx.arcTo(0, barY, 14, barY, 14);
-    ctx.lineTo(SHARE_W - 14, barY);
-    ctx.arcTo(SHARE_W, barY, SHARE_W, barY + 14, 14);
-    ctx.lineTo(SHARE_W, CANVAS_H);
-    ctx.lineTo(0, CANVAS_H);
-    ctx.closePath();
+    ctx.arc(avatarX, avatarY, ringR, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Белый внутренний круг
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(avatarX, avatarY, 13.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Обрезаем и рисуем саму аватарку
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(avatarX, avatarY, 12.5, 0, Math.PI * 2);
+    ctx.clip();
+    const avatarImg = await loadImageForCanvas(document.querySelector('.instagram-avatar-img')?.src || 'Items/UI/profile_image.jpg');
+    if (avatarImg) {
+      ctx.drawImage(avatarImg, avatarX - 12.5, avatarY - 12.5, 25, 25);
+    }
+    ctx.restore();
+
+    // 2. Текст шапки: Имя автора, Галочка, Точка, Время
+    ctx.save();
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+    ctx.shadowBlur = 3;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 1;
+    ctx.font = 'bold 13px sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText(authorName, 50, 22);
+
+    const authorWidth = ctx.measureText(authorName).width;
+    const badgeX = 50 + authorWidth + 4;
+    
+    // Синий значок верификации
+    ctx.fillStyle = '#0095f6';
+    ctx.beginPath();
+    ctx.arc(badgeX + 6, 17, 6, 0, Math.PI * 2);
+    ctx.fill();
+    // Белая галочка внутри значка
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(badgeX + 3.5, 17);
+    ctx.lineTo(badgeX + 5.5, 19);
+    ctx.lineTo(badgeX + 9, 15);
+    ctx.stroke();
+
+    // Точка и время
+    const dotX = badgeX + 16;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillText('•', dotX, 22);
+    const dotWidth = ctx.measureText('•').width;
+    
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    ctx.font = '500 12px sans-serif';
+    ctx.fillText(timeText, dotX + dotWidth + 4, 22);
+
+    // Локация
+    ctx.font = '500 11px sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.fillText(locationText, 50, 36);
+    ctx.restore();
+
+    // 3. Три точки меню справа
+    ctx.save();
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+    ctx.shadowBlur = 3;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 1;
+    const dotR = 1.8;
+    const dotsY = 26;
+    const centerDotX = SHARE_W - 24;
+    ctx.beginPath();
+    ctx.arc(centerDotX - 6, dotsY, dotR, 0, Math.PI * 2);
+    ctx.arc(centerDotX,     dotsY, dotR, 0, Math.PI * 2);
+    ctx.arc(centerDotX + 6, dotsY, dotR, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
-    // Текст плашки — берём локализованное название из переводов
+    // — НИЖНЯЯ БРЕНДОВАЯ ПЛАШКА (GAME BRANDING BAR)
+    // Рисуем белую подложку
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, IMAGE_H, SHARE_W, BAR_H);
+
+    // Тонкий разделитель между фото и плашкой
+    ctx.strokeStyle = '#efefef';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, IMAGE_H);
+    ctx.lineTo(SHARE_W, IMAGE_H);
+    ctx.stroke();
+
+    // Минималистичный премиальный текст названия игры в центре
     ctx.save();
-    ctx.font = 'bold 15px sans-serif';
+    ctx.fillStyle = '#1f2937'; // Elegant dark charcoal (gray-800)
+    ctx.font = 'bold 13px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const gradient2 = ctx.createLinearGradient(0, 0, SHARE_W, 0);
-    gradient2.addColorStop(0, '#ff6eb4');
-    gradient2.addColorStop(1, '#a855f7');
-    ctx.fillStyle = gradient2;
-    ctx.fillText(t('gameTitle'), SHARE_W / 2, barY + barH / 2);
+    if ('letterSpacing' in ctx) {
+      ctx.letterSpacing = '4px';
+    }
+    // Очищаем название игры от смайликов-искр, которые вшиты в локализацию
+    const titleText = t('gameTitle').replace(/[✨]/g, '').trim().toUpperCase();
+    ctx.fillText(titleText, SHARE_W / 2, IMAGE_H + BAR_H / 2);
     ctx.restore();
+
+    // Окантовка всего поста для аккуратности
+    ctx.strokeStyle = '#dbdbdb';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(0, 0, SHARE_W, CANVAS_H);
 
     // — Скачать
     const link = document.createElement('a');
@@ -323,8 +425,8 @@ function generateSocialComments(result, assignment) {
           : 'Free style day! Looks great! 💕';
       } else if (result && result.isNaked) {
         text = lang === 'ru'
-          ? 'Разве тренды разрешают ходить раздетой? 😮'
-          : 'Do trends allow going naked? 😮';
+          ? 'Эм... Образ явно не закончен. Где низ/верх? 😅'
+          : 'Um... The look is clearly unfinished. Where is the rest? 😅';
       } else {
         const trendMatches = c.val;
         const poolRu = trendMatches >= 2
@@ -368,13 +470,8 @@ function generateSocialComments(result, assignment) {
       if (c.isFreeMode) {
         text = lang === 'ru' ? 'Очень эстетично выглядит! ✨' : 'Looks very aesthetic! ✨';
       } else if (result && result.isNaked) {
-        const poolRu = ['Забыла одеться? Кто-нибудь, дайте ей пальто! 😮', 'Эм... почему наряд такой пустой? Мы голые? 😮', 'Где юбка/брюки? Образ абсолютно не завершен.'];
-        const poolEn = ['Forgot to get dressed? Someone give her a coat! 😮', 'Um... why so empty? Are we naked? 😮', 'Where is the skirt/pants? Cohesion is missing.'];
-        const pool = lang === 'ru' ? poolRu : poolEn;
-        text = pool[Math.floor(Math.random() * pool.length)];
-      } else if (result && result.isRepeat) {
-        const poolRu = ['Этот образ мы уже видели! Повторяешься 👀', 'Опять то же самое? Фанаты заметили! 👀', 'Нужно больше разнообразия, не пости одно и то же!'];
-        const poolEn = ['We have already seen this outfit! Repeating yourself 👀', 'Same outfit again? Fans noticed! 👀', 'Need more variety, don\'t post the same look twice!'];
+        const poolRu = ['Забыла одеться? Кто-нибудь, дайте ей пальто! 😮', 'Эм... почему наряд такой пустой? 😮', 'Где верх и низ (или платье)? Образ абсолютно не завершен.'];
+        const poolEn = ['Forgot to get dressed? Someone give her a coat! 😮', 'Um... why so empty? 😮', 'Where are the top and bottom (or dress)? The look is incomplete.'];
         const pool = lang === 'ru' ? poolRu : poolEn;
         text = pool[Math.floor(Math.random() * pool.length)];
       } else if (result && result.isFreePost) {
@@ -479,8 +576,8 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     setTimeout(() => animateCounter(likesCountEl, currentLikesVal, 900, '', '', true), 800);
   }
 
-  // Set shares/reposts count (random number from 15 to 85)
-  let currentSharesVal = isFree ? Math.floor(Math.random() * 20) + 5 : Math.floor(Math.random() * 70) + 15;
+  // Set shares/reposts count (proportional to likes, e.g. ~1-3% of likes, minimum 5)
+  let currentSharesVal = Math.max(5, Math.floor(currentLikesVal * (0.01 + Math.random() * 0.02)));
   const sharesCountEl = $('instagram-shares-count-new');
   if (sharesCountEl) {
     sharesCountEl.textContent = '0';
@@ -661,10 +758,10 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
   const socialComments = generateSocialComments(result, assignment);
   
-  // Set comments count (which is socialComments.length, usually 3)
+  // Set comments count (proportional to likes, e.g. ~4-7% of likes, minimum 3)
   const commentsCountEl = $('instagram-comments-count-new');
   if (commentsCountEl) {
-    const commentCount = socialComments ? socialComments.length : 3;
+    const commentCount = Math.max(3, Math.floor(currentLikesVal * (0.04 + Math.random() * 0.03)));
     commentsCountEl.textContent = '0';
     setTimeout(() => animateCounter(commentsCountEl, commentCount, 900, '', '', true), 800);
   }
@@ -1096,7 +1193,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
       if (likeBtn) {
         if (state.liked) {
-          likeBtn.innerHTML = '<img src="Items/UI/heart.png" class="inline-heart" alt="heart">';
+          likeBtn.textContent = '❤️';
           likeBtn.classList.add('liked');
         } else {
           likeBtn.textContent = lang === 'ru' ? 'Нравится' : 'Like';

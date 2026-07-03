@@ -39,7 +39,7 @@ function scoreOutfit(assignment) {
   if (isNaked) {
     return { totalPoints:0, filledPoints:0, trendPoints:0, trendMatches:0, matchedTrendTags: [],
              filled, totalSlots, req:assignment.requiredTags,
-             isNaked:true, isRepeat:false, isFreePost:false };
+             isNaked:true, isFreePost:false };
   }
 
   // ── Filled points (up to 50) ──
@@ -65,7 +65,7 @@ function scoreOutfit(assignment) {
 
   return { totalPoints, filledPoints, trendPoints, trendMatches, matchedTrendTags,
            filled, totalSlots, req,
-           isNaked:false, isRepeat:false, isFreePost:!!assignment.isFree };
+           isNaked:false, isFreePost:!!assignment.isFree };
 }
 
 // ────────────────────────────────────────────────────────────

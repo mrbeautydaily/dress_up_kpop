@@ -288,9 +288,9 @@ function initDevPanel() {
   const savedCharY = localStorage.getItem('dev_char_y') || '30';
   const savedBgScale = localStorage.getItem('dev_bg_scale') || '0.95';
   const savedBgY = localStorage.getItem('dev_bg_y') || '0';
-  const savedBgBlur = localStorage.getItem('dev_bg_blur') || '1.5';
-  const savedBgDim = localStorage.getItem('dev_bg_dim') || '15';
-  const savedAuraOpacity = localStorage.getItem('dev_aura-opacity') || '70';
+  const savedBgBlur = localStorage.getItem('dev_bg_blur') || '1';
+  const savedBgDim = localStorage.getItem('dev_bg_dim') || '5';
+  const savedAuraOpacity = localStorage.getItem('dev_aura-opacity') || '40';
   const savedAuraColor = localStorage.getItem('dev_aura-color') || 'warm';
 
   // Apply scales and values initially
@@ -389,9 +389,9 @@ function initDevPanel() {
     applyCharY('30');
     applyBgScale('0.95');
     applyBgY('0');
-    applyBgBlur('1.5');
-    applyBgDim('15');
-    applyAuraOpacity('70');
+    applyBgBlur('1');
+    applyBgDim('5');
+    applyAuraOpacity('40');
     applyAuraColor('warm');
     
     charSlider.value = '1.15';
@@ -406,14 +406,14 @@ function initDevPanel() {
     bgYSlider.value = '0';
     bgYVal.textContent = '0px';
 
-    bgBlurSlider.value = '1.5';
-    bgBlurVal.textContent = '1.5px';
+    bgBlurSlider.value = '1';
+    bgBlurVal.textContent = '1.0px';
 
-    bgDimSlider.value = '15';
-    bgDimVal.textContent = '15%';
+    bgDimSlider.value = '5';
+    bgDimVal.textContent = '5%';
 
-    auraOpacitySlider.value = '70';
-    auraOpacityVal.textContent = '70%';
+    auraOpacitySlider.value = '40';
+    auraOpacityVal.textContent = '40%';
 
     auraColorSelect.value = 'warm';
     
@@ -421,9 +421,9 @@ function initDevPanel() {
     localStorage.setItem('dev_char_y', '30');
     localStorage.setItem('dev_bg_scale', '0.95');
     localStorage.setItem('dev_bg_y', '0');
-    localStorage.setItem('dev_bg_blur', '1.5');
-    localStorage.setItem('dev_bg_dim', '15');
-    localStorage.setItem('dev_aura-opacity', '70');
+    localStorage.setItem('dev_bg_blur', '1');
+    localStorage.setItem('dev_bg_dim', '5');
+    localStorage.setItem('dev_aura-opacity', '40');
     localStorage.setItem('dev_aura-color', 'warm');
   });
 

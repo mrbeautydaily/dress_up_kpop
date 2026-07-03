@@ -49,13 +49,6 @@ function selectCategory(key) {
     }
   });
 
-  // Reset scroll position when switching categories
-  const grid = $('items-grid');
-  if (grid) {
-    grid.scrollTop = 0;
-    grid.scrollLeft = 0;
-  }
-
   buildItemsGrid(key);
 }
 
@@ -205,7 +198,309 @@ function drawItemThumbnail(canvas, frontSrc, backSrc) {
   }
 }
 
+let blockDragClick = false;
+let inertiaFrameId = null;
+
+function stopInertia() {
+  if (inertiaFrameId) {
+    cancelAnimationFrame(inertiaFrameId);
+    inertiaFrameId = null;
+  }
+}
+
+function startInertia(velocityY) {
+  const grid = document.getElementById('items-grid');
+  if (!grid) return;
+
+  // Limit max velocity so the list doesn't fly off too rapidly
+  const maxVelocity = 2.5; 
+  if (velocityY > maxVelocity) velocityY = maxVelocity;
+  if (velocityY < -maxVelocity) velocityY = -maxVelocity;
+
+  let currentVelocityY = velocityY * 16; // Translate px/ms into px/frame
+  const friction = 0.94; // Decay rate
+
+  function step() {
+    if (Math.abs(currentVelocityY) < 0.1) {
+      inertiaFrameId = null;
+      return;
+    }
+
+    grid.scrollTop -= currentVelocityY;
+    currentVelocityY *= friction;
+    
+    inertiaFrameId = requestAnimationFrame(step);
+  }
+
+  stopInertia();
+  inertiaFrameId = requestAnimationFrame(step);
+}
+
+function initCardDragAndDrop(card, category, itemId) {
+  let startX = 0;
+  let startY = 0;
+  let dragDetected = false;
+  let scrollDetected = false;
+  let dragActive = false;
+  let cloneEl = null;
+  let longPressTimeout = null;
+  
+  const stageWrap = document.getElementById('stage-wrap');
+  
+  function isOverStage(clientX, clientY) {
+    if (!stageWrap) return false;
+    const rect = stageWrap.getBoundingClientRect();
+    return (
+      clientX >= rect.left &&
+      clientX <= rect.right &&
+      clientY >= rect.top &&
+      clientY <= rect.bottom
+    );
+  }
+
+  function handleStart(clientX, clientY, isTouch) {
+    stopInertia();
+    
+    startX = clientX;
+    startY = clientY;
+    dragDetected = false;
+    scrollDetected = false;
+    dragActive = false;
+    cloneEl = null;
+
+    if (isTouch) {
+      longPressTimeout = setTimeout(() => {
+        if (!scrollDetected && !dragDetected) {
+          dragDetected = true;
+          
+          if (navigator.vibrate) {
+            try { navigator.vibrate(15); } catch (e) {}
+          }
+          
+          dragActive = true;
+          card.classList.add('is-dragged');
+          
+          cloneEl = card.cloneNode(true);
+          cloneEl.classList.add('drag-clone');
+          
+          const origRect = card.getBoundingClientRect();
+          cloneEl.style.width = origRect.width + 'px';
+          cloneEl.style.height = origRect.height + 'px';
+          cloneEl.style.left = startX + 'px';
+          cloneEl.style.top = startY + 'px';
+          
+          const origCanvas = card.querySelector('.item-thumb');
+          const cloneCanvas = cloneEl.querySelector('.item-thumb');
+          if (origCanvas && cloneCanvas) {
+            const ctx = cloneCanvas.getContext('2d');
+            ctx.drawImage(origCanvas, 0, 0);
+          }
+          
+          document.body.appendChild(cloneEl);
+          
+          if (isOverStage(startX, startY)) {
+            stageWrap.classList.add('drag-hover');
+          }
+        }
+      }, 220);
+    }
+  }
+
+  function handleMove(clientX, clientY, preventDefaultFn) {
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+
+    if (!dragDetected && !scrollDetected) {
+      if (absDx > 8 || absDy > 8) {
+        if (absDx > absDy) {
+          dragDetected = true;
+          if (longPressTimeout) {
+            clearTimeout(longPressTimeout);
+            longPressTimeout = null;
+          }
+        } else {
+          scrollDetected = true;
+          if (longPressTimeout) {
+            clearTimeout(longPressTimeout);
+            longPressTimeout = null;
+          }
+        }
+      }
+    }
+
+    if (dragDetected) {
+      if (typeof preventDefaultFn === 'function') preventDefaultFn();
+      
+      if (!dragActive) {
+        dragActive = true;
+        card.classList.add('is-dragged');
+        
+        cloneEl = card.cloneNode(true);
+        cloneEl.classList.add('drag-clone');
+        
+        const origRect = card.getBoundingClientRect();
+        cloneEl.style.width = origRect.width + 'px';
+        cloneEl.style.height = origRect.height + 'px';
+        cloneEl.style.left = clientX + 'px';
+        cloneEl.style.top = clientY + 'px';
+        
+        const origCanvas = card.querySelector('.item-thumb');
+        const cloneCanvas = cloneEl.querySelector('.item-thumb');
+        if (origCanvas && cloneCanvas) {
+          const ctx = cloneCanvas.getContext('2d');
+          ctx.drawImage(origCanvas, 0, 0);
+        }
+        
+        document.body.appendChild(cloneEl);
+      }
+      
+      if (cloneEl) {
+        cloneEl.style.left = clientX + 'px';
+        cloneEl.style.top = clientY + 'px';
+      }
+      
+      if (isOverStage(clientX, clientY)) {
+        if (stageWrap) stageWrap.classList.add('drag-hover');
+      } else {
+        if (stageWrap) stageWrap.classList.remove('drag-hover');
+      }
+    }
+  }
+
+  function handleEnd(clientX, clientY) {
+    if (longPressTimeout) {
+      clearTimeout(longPressTimeout);
+      longPressTimeout = null;
+    }
+
+    const wasDragging = dragActive;
+    const wasScrolling = scrollDetected;
+
+    if (dragActive) {
+      card.classList.remove('is-dragged');
+      if (cloneEl) {
+        cloneEl.remove();
+        cloneEl = null;
+      }
+      
+      const overStage = isOverStage(clientX, clientY);
+      if (stageWrap) stageWrap.classList.remove('drag-hover');
+      
+      if (overStage) {
+        tryEquipOrBuy(category, itemId);
+      }
+    }
+
+    if (wasDragging || wasScrolling) {
+      blockDragClick = true;
+      setTimeout(() => { blockDragClick = false; }, 100);
+      return true;
+    }
+    return false;
+  }
+
+  card.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return;
+    handleStart(e.clientX, e.clientY, false);
+    let lastY = e.clientY;
+    let lastTime = performance.now();
+    let velocityY = 0;
+    
+    function onMouseMove(moveEvent) {
+      const clientY = moveEvent.clientY;
+      const clientX = moveEvent.clientX;
+      const now = performance.now();
+      const deltaTime = now - lastTime;
+      
+      handleMove(clientX, clientY);
+      
+      const deltaY = clientY - lastY;
+      if (scrollDetected) {
+        const grid = document.getElementById('items-grid');
+        if (grid) {
+          grid.scrollTop -= deltaY;
+        }
+      }
+      
+      if (deltaTime > 0) {
+        const instantVelocityY = deltaY / deltaTime;
+        velocityY = velocityY * 0.4 + instantVelocityY * 0.6;
+      }
+      
+      lastY = clientY;
+      lastTime = now;
+    }
+    
+    function onMouseUp(upEvent) {
+      const timeSinceLastMove = performance.now() - lastTime;
+      if (timeSinceLastMove > 80) {
+        velocityY = 0;
+      }
+      
+      const isDragEnded = handleEnd(upEvent.clientX, upEvent.clientY);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      
+      if (scrollDetected && velocityY !== 0) {
+        startInertia(velocityY);
+      }
+      
+      if (isDragEnded) {
+        upEvent.preventDefault();
+        upEvent.stopPropagation();
+      }
+    }
+    
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  });
+
+  card.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) return;
+    const touch = e.touches[0];
+    handleStart(touch.clientX, touch.clientY, true);
+    
+    function onTouchMove(moveEvent) {
+      if (moveEvent.touches.length > 1) return;
+      const t = moveEvent.touches[0];
+      handleMove(t.clientX, t.clientY, () => {
+        if (moveEvent.cancelable) {
+          moveEvent.preventDefault();
+        }
+      });
+    }
+    
+    function onTouchEnd(endEvent) {
+      const t = endEvent.changedTouches[0] || endEvent.touches[0];
+      const isDragEnded = handleEnd(t.clientX, t.clientY);
+      
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchcancel', onTouchEnd);
+      
+      if (isDragEnded) {
+        if (endEvent.cancelable) {
+          endEvent.preventDefault();
+        }
+        endEvent.stopPropagation();
+      }
+    }
+    
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd, { passive: false });
+    window.addEventListener('touchcancel', onTouchEnd, { passive: false });
+  }, { passive: true });
+}
+
 function buildItemsGrid(category) {
+  stopInertia();
+  const grid = $('items-grid');
+  if (grid) {
+    grid.scrollTop = 0;
+    grid.scrollLeft = 0;
+  }
   const subs = CATEGORY_SUBS[category];
   if (subs) {
     buildSubTabs(category);
@@ -213,7 +508,6 @@ function buildItemsGrid(category) {
     hideSubTabs();
   }
 
-  const grid = $('items-grid');
   grid.innerHTML = '';
 
   const allItems = clothes[category] || [];
@@ -290,9 +584,17 @@ function buildItemsGrid(category) {
       card.appendChild(check);
     }
 
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      if (blockDragClick) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
       tryEquipOrBuy(category, item.id);
     });
+
+    initCardDragAndDrop(card, category, item.id);
+
     grid.appendChild(card);
   });
 }

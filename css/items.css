@@ -160,7 +160,13 @@
 .item-card .item-name {
   font-size: .62rem; font-weight: 700; color: var(--card-text);
   text-align: center; line-height: 1.2;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%;
+  overflow: hidden; text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  height: 2.4em; /* line-height 1.2 * 2 = 2.4em to maintain consistent grid heights */
+  width: 100%;
   transition: color var(--transition);
 }
 .item-card.selected .item-name { color: var(--card-text); }
@@ -215,4 +221,50 @@
 .ui-icon-btn:hover {
   transform: scale(1.15);
 }
+
+/* Drag & Drop */
+.item-card.is-dragged {
+  opacity: 0.45;
+  transform: scale(0.95);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.drag-clone {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.85;
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow: 0 10px 25px rgba(58, 31, 102, 0.35);
+  transition: none !important;
+  background: var(--card-bg) !important;
+  border: 2.5px solid var(--purple) !important;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .45rem .35rem .35rem;
+  gap: .3rem;
+  box-sizing: border-box;
+}
+
+.drag-clone .item-thumb-wrapper {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 1px solid var(--card-inner-border);
+  background: var(--card-inner-bg);
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.drag-clone .item-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--card-text);
+  text-align: center;
+  line-height: 1.15;
+  display: block;
+}
+
 

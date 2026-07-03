@@ -344,7 +344,7 @@
   -webkit-backdrop-filter: none !important;
   border: none !important;
   padding: 8px 10px !important;
-  min-height: 72px !important;
+  height: 82px !important;
   display: flex;
   align-items: center;
   width: 100%;

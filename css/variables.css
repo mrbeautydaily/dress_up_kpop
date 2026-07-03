@@ -49,7 +49,7 @@
   --char-y:      30px;
   --bg-scale:    0.95;
   --bg-y:        0px;
-  --bg-blur:     1.5px;
+  --bg-blur:     1px;
   
   /* Neon glows & K-Pop gradients */
   --glow-pink:   0 0 15px rgba(209, 71, 141, 0.4); /* Based on --sec-a3 (209, 71, 141) */
