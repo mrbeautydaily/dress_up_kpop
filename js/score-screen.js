@@ -684,8 +684,14 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       });
       
       // Strip the layer-animate class to make sure images are not stuck at opacity 0
-      clonedStage.querySelectorAll('.layer-animate').forEach(img => {
-        img.classList.remove('layer-animate');
+      clonedStage.querySelectorAll('img').forEach(img => {
+        const classesToRemove = [];
+        img.classList.forEach(cls => {
+          if (cls.startsWith('layer-animate')) {
+            classesToRemove.push(cls);
+          }
+        });
+        classesToRemove.forEach(cls => img.classList.remove(cls));
       });
       
       // Remove sparkles from the post picture (they are animated and might look weird static)

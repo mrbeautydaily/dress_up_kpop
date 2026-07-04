@@ -24,7 +24,7 @@ function buildCategoryPanel() {
     label.textContent = cat.label;
 
     // 4. Click event handler
-    btn.addEventListener('click', () => selectCategory(cat.key));
+    btn.addEventListener('click', () => { sfxClick(); selectCategory(cat.key); });
 
     wrapper.appendChild(btn);
     wrapper.appendChild(label);
@@ -68,6 +68,7 @@ function buildSubTabs(category) {
     btn.className = 'sub-tab-btn' + (activeSub[category] === sub.key ? ' active' : '');
     btn.innerHTML = sub.icon + '<span>' + subLabel(sub) + '</span>';
     btn.addEventListener('click', () => {
+      sfxClick();
       activeSub[category] = sub.key;
       buildSubTabs(category);
       buildItemsGrid(category);

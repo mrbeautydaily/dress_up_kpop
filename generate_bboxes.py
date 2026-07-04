@@ -46,5 +46,5 @@ def generate_bboxes(root_dir, output_js_path, threshold=10):
         f.write(";\n")
 
 if __name__ == '__main__':
-    generate_bboxes('.', './bboxes.js')
-    print("Bounding boxes generated successfully in bboxes.js")
+    generate_bboxes('.', './js/bboxes.js')
+    print("Bounding boxes generated successfully in js/bboxes.js")

@@ -33,6 +33,12 @@ function buildCharacterLayers() {
   });
 }
 
+let currentEquipAnimation = localStorage.getItem('dev_equip_animation') || 'softPopIn';
+
+window.setEquipAnimation = function(val) {
+  currentEquipAnimation = val;
+};
+
 function updateLayer(category, item, animate = true) {
   const layerEl = $(`layer-${category}`);
   if (!layerEl) return;
@@ -49,9 +55,10 @@ function updateLayer(category, item, animate = true) {
   img.alt = item.name;
   img.draggable = false;
   img.style.cssText = `position:absolute;left:${left}%;top:${top}%;width:${width}%;height:auto;pointer-events:none;`;
-  if (animate) {
-    img.classList.add('layer-animate');
-    img.addEventListener('animationend', () => img.classList.remove('layer-animate'), { once:true });
+  if (animate && currentEquipAnimation !== 'none') {
+    const animClass = `layer-animate-${currentEquipAnimation}`;
+    img.classList.add(animClass);
+    img.addEventListener('animationend', () => img.classList.remove(animClass), { once:true });
   }
   layerEl.appendChild(img);
 }

@@ -33,24 +33,33 @@ function tone(freq, vol, dur, delay = 0, type = 'sine') {
 // ── Sound effects ────────────────────────────────────────────
 
 function sfxEquip() {
-  [[523,.22,.18,0],[659,.18,.18,.07],[784,.15,.2,.14],[1046,.13,.28,.21]]
-    .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
+  // Classic UI click (1100 Hz +/- 50 Hz, sine wave) for equipping clothing
+  const freq = 1050 + Math.random() * 100;
+  tone(freq, .15, .03, 0, 'sine');
 }
 function sfxUnlock() {
-  [[880,.28,.13,0],[1108,.24,.13,.06],[1318,.2,.18,.12],[1760,.16,.32,.18]]
+  // Balanced middle-high register magical progression
+  [[440,.22,.15,0],[587,.18,.15,.05],[659,.16,.15,.10],[880,.14,.20,.15],[1046,.11,.30,.20]]
     .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
 }
-function sfxClick() { tone(1100,.1,.06); }
+function sfxClick() { 
+  // High-pitch micro tick (2000 Hz +/- 100 Hz, sine wave) for category shifts and UI clicks
+  const freq = 1900 + Math.random() * 200;
+  tone(freq, .10, .01, 0, 'sine'); 
+}
 function sfxScore(trendMatches) {
   if (trendMatches >= 2) {
-    [[523,.28,.18,0],[659,.28,.18,.09],[784,.28,.18,.18],
-     [1046,.32,.15,.28],[1318,.28,.4,.36]]
+    // Balanced G-major arpeggio for high scores
+    [[392,.24,.18,0],[494,.24,.18,.09],[587,.24,.18,.18],
+     [784,.26,.15,.28],[988,.24,.40,.36]]
       .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
   } else if (trendMatches === 1) {
-    [[523,.22,.18,0],[659,.22,.18,.09],[784,.22,.28,.18]]
+    // Balanced warm G-major triad
+    [[392,.20,.18,0],[494,.20,.18,.09],[587,.20,.28,.18]]
       .forEach(([f,v,d,dt]) => tone(f,v,d,dt));
   } else {
-    [[350,.18,.28,0],[294,.18,.38,.14]].forEach(([f,v,d,dt]) => tone(f,v,d,dt));
+    // Balanced mild disappointment slide (D4 to A3)
+    [[294,.16,.28,0],[220,.16,.38,.14]].forEach(([f,v,d,dt]) => tone(f,v,d,dt));
   }
 }
 
@@ -61,7 +70,7 @@ let _bgmGain   = null;   // gain-нода для громкости BGM
 let _bgmRawAB  = null;   // сырой ArrayBuffer (загружен заранее)
 
 // Загружаем MP3 как байты заранее, без AudioContext
-fetch('sound.mp3').then(r => r.arrayBuffer()).then(ab => { _bgmRawAB = ab; }).catch(() => {});
+fetch('audio/sound.mp3').then(r => r.arrayBuffer()).then(ab => { _bgmRawAB = ab; }).catch(() => {});
 
 async function _decodeBGM() {
   if (_bgmBuffer) return true;

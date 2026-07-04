@@ -681,21 +681,32 @@ const ITEM_BBOXES = {
   "Items/UI/accessories.png": {
     "x": 0,
     "y": 0,
-    "w": 173,
-    "h": 203
+    "w": 196,
+    "h": 94
   },
-
-  "Items/UI/blouses.png": {
+  "Items/UI/achievements.png": {
     "x": 0,
     "y": 0,
-    "w": 214,
-    "h": 218
+    "w": 187,
+    "h": 185
+  },
+  "Items/UI/blouses.png": {
+    "x": 2,
+    "y": 28,
+    "w": 212,
+    "h": 163
   },
   "Items/UI/bottoms.png": {
     "x": 0,
     "y": 0,
     "w": 187,
     "h": 205
+  },
+  "Items/UI/calendar.png": {
+    "x": 0,
+    "y": 0,
+    "w": 190,
+    "h": 201
   },
   "Items/UI/camera.png": {
     "x": 0,
@@ -706,14 +717,32 @@ const ITEM_BBOXES = {
   "Items/UI/dresses.png": {
     "x": 0,
     "y": 0,
+    "w": 1022,
+    "h": 1024
+  },
+  "Items/UI/dresses_old_fabric_roll.png": {
+    "x": 0,
+    "y": 0,
     "w": 237,
     "h": 194
+  },
+  "Items/UI/fire.png": {
+    "x": 0,
+    "y": 0,
+    "w": 126,
+    "h": 139
   },
   "Items/UI/followers.png": {
     "x": 0,
     "y": 0,
-    "w": 167,
-    "h": 166
+    "w": 151,
+    "h": 170
+  },
+  "Items/UI/gift_box.png": {
+    "x": 158,
+    "y": 141,
+    "w": 708,
+    "h": 736
   },
   "Items/UI/hair.png": {
     "x": 0,
@@ -721,167 +750,23 @@ const ITEM_BBOXES = {
     "w": 199,
     "h": 227
   },
+  "Items/UI/hanger.png": {
+    "x": 0,
+    "y": 0,
+    "w": 154,
+    "h": 125
+  },
   "Items/UI/heart.png": {
-    "x": 22,
-    "y": 39,
-    "w": 157,
-    "h": 141
-  },
-  "Items/UI/icon_01.png": {
     "x": 0,
     "y": 0,
-    "w": 199,
-    "h": 227
-  },
-  "Items/UI/icon_02.png": {
-    "x": 0,
-    "y": 0,
-    "w": 214,
-    "h": 218
-  },
-  "Items/UI/icon_03.png": {
-    "x": 0,
-    "y": 0,
-    "w": 187,
-    "h": 205
-  },
-  "Items/UI/icon_04.png": {
-    "x": 0,
-    "y": 0,
-    "w": 214,
-    "h": 172
-  },
-  "Items/UI/icon_05.png": {
-    "x": 0,
-    "y": 0,
-    "w": 170,
-    "h": 213
-  },
-  "Items/UI/icon_06.png": {
-    "x": 0,
-    "y": 0,
-    "w": 173,
-    "h": 203
-  },
-  "Items/UI/icon_07.png": {
-    "x": 0,
-    "y": 0,
-    "w": 237,
-    "h": 194
-  },
-  "Items/UI/icon_08.png": {
-    "x": 0,
-    "y": 0,
-    "w": 119,
-    "h": 215
-  },
-  "Items/UI/icon_09.png": {
-    "x": 0,
-    "y": 0,
-    "w": 218,
-    "h": 168
-  },
-  "Items/UI/icon_10.png": {
-    "x": 0,
-    "y": 0,
-    "w": 199,
-    "h": 169
-  },
-  "Items/UI/icon_11.png": {
-    "x": 0,
-    "y": 0,
-    "w": 190,
-    "h": 200
-  },
-  "Items/UI/icon_13.png": {
-    "x": 0,
-    "y": 0,
-    "w": 167,
-    "h": 166
-  },
-  "Items/UI/icon_14.png": {
-    "x": 0,
-    "y": 0,
-    "w": 187,
-    "h": 185
-  },
-  "Items/UI/icon_15.png": {
-    "x": 0,
-    "y": 0,
-    "w": 185,
-    "h": 186
-  },
-  "Items/UI/icon_16.png": {
-    "x": 0,
-    "y": 0,
-    "w": 182,
-    "h": 181
-  },
-  "Items/UI/icon_17.png": {
-    "x": 0,
-    "y": 0,
-    "w": 174,
-    "h": 173
-  },
-  "Items/UI/icon_18.png": {
-    "x": 0,
-    "y": 0,
-    "w": 174,
-    "h": 173
-  },
-  "Items/UI/icon_19.png": {
-    "x": 0,
-    "y": 0,
-    "w": 180,
-    "h": 174
-  },
-  "Items/UI/icon_21.png": {
-    "x": 0,
-    "y": 0,
-    "w": 182,
-    "h": 161
+    "w": 137,
+    "h": 120
   },
   "Items/UI/pants.png": {
     "x": 44,
     "y": 29,
     "w": 112,
     "h": 142
-  },
-  "Items/UI/quest_0.png": {
-    "x": 0,
-    "y": 0,
-    "w": 185,
-    "h": 186
-  },
-  "Items/UI/quest_1.png": {
-    "x": 0,
-    "y": 0,
-    "w": 119,
-    "h": 215
-  },
-  "Items/UI/quest_2.png": {
-    "x": 0,
-    "y": 0,
-    "w": 199,
-    "h": 169
-  },
-  "Items/UI/quest_3.png": {
-    "x": 0,
-    "y": 0,
-    "w": 190,
-    "h": 200
-  },
-  "Items/UI/quest_4.png": {
-    "x": 0,
-    "y": 0,
-    "w": 167,
-    "h": 166
-  },
-  "Items/UI/quest_5.png": {
-    "x": 0,
-    "y": 0,
-    "w": 218,
-    "h": 168
   },
   "Items/UI/random.png": {
     "x": 0,
@@ -894,6 +779,36 @@ const ITEM_BBOXES = {
     "y": 0,
     "w": 214,
     "h": 172
+  },
+  "Items/UI/shop_ad_tv.png": {
+    "x": 157,
+    "y": 100,
+    "w": 701,
+    "h": 834
+  },
+  "Items/UI/shop_heart_1.png": {
+    "x": 195,
+    "y": 236,
+    "w": 624,
+    "h": 607
+  },
+  "Items/UI/shop_heart_2.png": {
+    "x": 125,
+    "y": 208,
+    "w": 774,
+    "h": 694
+  },
+  "Items/UI/shop_heart_3.png": {
+    "x": 151,
+    "y": 121,
+    "w": 716,
+    "h": 784
+  },
+  "Items/UI/shop_heart_4.png": {
+    "x": 43,
+    "y": 118,
+    "w": 944,
+    "h": 782
   },
   "Items/UI/skirts.png": {
     "x": 14,
@@ -914,9 +829,81 @@ const ITEM_BBOXES = {
     "h": 186
   },
   "Items/UI/tops.png": {
+    "x": 2,
+    "y": 28,
+    "w": 212,
+    "h": 163
+  },
+  "Items/UI/activities/dance_challenge.png": {
+    "x": 9,
+    "y": 0,
+    "w": 45,
+    "h": 64
+  },
+  "Items/UI/activities/dance_practice.png": {
+    "x": 0,
+    "y": 2,
+    "w": 64,
+    "h": 60
+  },
+  "Items/UI/activities/fansign.png": {
+    "x": 0,
+    "y": 2,
+    "w": 64,
+    "h": 59
+  },
+  "Items/UI/activities/fans_qa.png": {
+    "x": 6,
+    "y": 1,
+    "w": 52,
+    "h": 63
+  },
+  "Items/UI/activities/fitness.png": {
+    "x": 0,
+    "y": 10,
+    "w": 64,
+    "h": 44
+  },
+  "Items/UI/activities/free_style.png": {
+    "x": 0,
+    "y": 8,
+    "w": 64,
+    "h": 47
+  },
+  "Items/UI/activities/grand_concert.png": {
+    "x": 8,
+    "y": 0,
+    "w": 48,
+    "h": 64
+  },
+  "Items/UI/activities/live_stage.png": {
+    "x": 6,
+    "y": 1,
+    "w": 52,
+    "h": 63
+  },
+  "Items/UI/activities/photoshoot.png": {
+    "x": 3,
+    "y": 0,
+    "w": 58,
+    "h": 64
+  },
+  "Items/UI/activities/recording.png": {
+    "x": 14,
+    "y": 1,
+    "w": 35,
+    "h": 63
+  },
+  "Items/UI/activities/variety_show.png": {
     "x": 0,
     "y": 0,
-    "w": 214,
-    "h": 218
+    "w": 64,
+    "h": 63
+  },
+  "Items/UI/activities/vlog.png": {
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 63
   }
 };

@@ -44,6 +44,7 @@ const T = {
     catAcc:        'Acc.',
     // Score screen
     scoreResults:    '📍 {title}',
+    btnNewDay:       '➡ Next Post',
     // Milestone progress subtext
     milestoneSubtextLeft: '{milestone} Followers! ✅',
     // Outfit names (free mode)
@@ -66,6 +67,7 @@ const T = {
     catAcc:        'Акс.',
     // Score screen
     scoreResults:    '📍 {title}',
+    btnNewDay:       '➡ Следующий пост',
     // Milestone progress subtext
     milestoneSubtextLeft: '{milestone} подписчиков! ✅',
     // Outfit names (free mode)

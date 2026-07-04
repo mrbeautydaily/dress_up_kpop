@@ -264,8 +264,10 @@ function initDevPanel() {
   const auraOpacitySlider = $('dev-aura-opacity');
   const auraOpacityVal = $('dev-aura-opacity-val');
   const auraColorSelect = $('dev-aura-color');
+  const animSelect = $('dev-equip-animation');
+  const animTestBtn = $('dev-btn-test-anim');
 
-  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider || !bgDimSlider || !auraOpacitySlider || !auraColorSelect) return;
+  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider || !bgDimSlider || !auraOpacitySlider || !auraColorSelect || !animSelect || !animTestBtn) return;
 
   // Toggle dev panel view
   trigger.addEventListener('click', () => {
@@ -292,6 +294,10 @@ function initDevPanel() {
   const savedBgDim = localStorage.getItem('dev_bg_dim') || '5';
   const savedAuraOpacity = localStorage.getItem('dev_aura-opacity') || '40';
   const savedAuraColor = localStorage.getItem('dev_aura-color') || 'warm';
+  let savedAnim = localStorage.getItem('dev_equip_animation') || 'softPopIn';
+  if (!['popIn', 'softPopIn', 'smoothPopIn', 'fadeIn', 'none'].includes(savedAnim)) {
+    savedAnim = 'softPopIn';
+  }
 
   // Apply scales and values initially
   applyCharScale(savedCharScale);
@@ -302,6 +308,7 @@ function initDevPanel() {
   applyBgDim(savedBgDim);
   applyAuraOpacity(savedAuraOpacity);
   applyAuraColor(savedAuraColor);
+  applyEquipAnimation(savedAnim);
 
   // Sync sliders
   charSlider.value = savedCharScale;
@@ -326,6 +333,7 @@ function initDevPanel() {
   auraOpacityVal.textContent = savedAuraOpacity + '%';
 
   auraColorSelect.value = savedAuraColor;
+  animSelect.value = savedAnim;
 
   // Slider change listeners
   charSlider.addEventListener('input', (e) => {
@@ -383,6 +391,31 @@ function initDevPanel() {
     localStorage.setItem('dev_aura-color', val);
   });
 
+  animSelect.addEventListener('change', (e) => {
+    const val = e.target.value;
+    applyEquipAnimation(val);
+  });
+
+  animTestBtn.addEventListener('click', () => {
+    const activeAnim = localStorage.getItem('dev_equip_animation') || 'softPopIn';
+    if (activeAnim === 'none') return;
+    const animClass = `layer-animate-${activeAnim}`;
+    document.querySelectorAll('#character-layers .char-layer img').forEach(img => {
+      // Remove any existing anim classes
+      const classesToRemove = [];
+      img.classList.forEach(cls => {
+        if (cls.startsWith('layer-animate')) {
+          classesToRemove.push(cls);
+        }
+      });
+      classesToRemove.forEach(cls => img.classList.remove(cls));
+
+      void img.offsetWidth; // Trigger reflow to restart animation
+      img.classList.add(animClass);
+      img.addEventListener('animationend', () => img.classList.remove(animClass), { once: true });
+    });
+  });
+
   // Reset function
   resetBtn.addEventListener('click', () => {
     applyCharScale('1.15');
@@ -393,6 +426,7 @@ function initDevPanel() {
     applyBgDim('5');
     applyAuraOpacity('40');
     applyAuraColor('warm');
+    applyEquipAnimation('softPopIn');
     
     charSlider.value = '1.15';
     charVal.textContent = '1.15x';
@@ -425,6 +459,7 @@ function initDevPanel() {
     localStorage.setItem('dev_bg_dim', '5');
     localStorage.setItem('dev_aura-opacity', '40');
     localStorage.setItem('dev_aura-color', 'warm');
+    localStorage.setItem('dev_equip_animation', 'softPopIn');
   });
 
   function applyCharScale(val) {
@@ -471,6 +506,14 @@ function initDevPanel() {
       gradient = 'radial-gradient(ellipse at center, rgba(16, 4, 28, 0.6) 0%, rgba(30, 8, 50, 0.3) 45%, rgba(30, 8, 50, 0.1) 70%, transparent 85%)';
     }
     document.documentElement.style.setProperty('--char-aura-gradient', gradient);
+  }
+
+  function applyEquipAnimation(val) {
+    if (window.setEquipAnimation) {
+      window.setEquipAnimation(val);
+    }
+    animSelect.value = val;
+    localStorage.setItem('dev_equip_animation', val);
   }
 }
 
