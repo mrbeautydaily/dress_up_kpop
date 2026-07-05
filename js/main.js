@@ -79,6 +79,9 @@ async function runLoadingScreen() {
   // Контекстное меню (правая кнопка / long-press)
   document.addEventListener('contextmenu', e => e.preventDefault());
 
+  // Запрещаем перетаскивание элементов (ghost image drag)
+  document.addEventListener('dragstart', e => e.preventDefault());
+
   // touchmove с passive:false позволяет вызывать preventDefault,
   // что блокирует pull-to-refresh и вертикальный overscroll браузера.
   // Скролл внутри .scrollable-zone разрешён через touch-action: pan-y в CSS.
@@ -285,8 +288,11 @@ function initDevPanel() {
   const auraColorSelect = $('dev-aura-color');
   const animSelect = $('dev-equip-animation');
   const animTestBtn = $('dev-btn-test-anim');
+  const dustToggle = $('dev-dust-toggle');
+  const breathToggle = $('dev-breath-toggle');
+  const blinkToggle = $('dev-blink-toggle');
 
-  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider || !bgDimSlider || !auraOpacitySlider || !auraColorSelect || !animSelect || !animTestBtn) return;
+  if (!trigger || !panel || !closeBtn || !charSlider || !charYSlider || !bgSlider || !bgYSlider || !bgBlurSlider || !bgDimSlider || !auraOpacitySlider || !auraColorSelect || !animSelect || !animTestBtn || !dustToggle || !breathToggle || !blinkToggle) return;
 
   // Toggle dev panel view
   trigger.addEventListener('click', () => {
@@ -317,6 +323,9 @@ function initDevPanel() {
   if (!['popIn', 'softPopIn', 'smoothPopIn', 'fadeIn', 'none'].includes(savedAnim)) {
     savedAnim = 'softPopIn';
   }
+  const savedDustEnabled = localStorage.getItem('dev_dust_enabled') === 'true';
+  const savedBreathEnabled = localStorage.getItem('dev_breath_enabled') === 'true';
+  const savedBlinkEnabled = localStorage.getItem('dev_blink_enabled') === 'true';
 
   // Apply scales and values initially
   applyCharScale(savedCharScale);
@@ -328,6 +337,9 @@ function initDevPanel() {
   applyAuraOpacity(savedAuraOpacity);
   applyAuraColor(savedAuraColor);
   applyEquipAnimation(savedAnim);
+  applyDustEnabled(savedDustEnabled);
+  applyBreathEnabled(savedBreathEnabled);
+  applyBlinkEnabled(savedBlinkEnabled);
 
   // Sync sliders
   charSlider.value = savedCharScale;
@@ -353,6 +365,10 @@ function initDevPanel() {
 
   auraColorSelect.value = savedAuraColor;
   animSelect.value = savedAnim;
+
+  dustToggle.checked = savedDustEnabled;
+  breathToggle.checked = savedBreathEnabled;
+  blinkToggle.checked = savedBlinkEnabled;
 
   // Slider change listeners
   charSlider.addEventListener('input', (e) => {
@@ -415,6 +431,24 @@ function initDevPanel() {
     applyEquipAnimation(val);
   });
 
+  dustToggle.addEventListener('change', (e) => {
+    const val = e.target.checked;
+    applyDustEnabled(val);
+    localStorage.setItem('dev_dust_enabled', val ? 'true' : 'false');
+  });
+
+  breathToggle.addEventListener('change', (e) => {
+    const val = e.target.checked;
+    applyBreathEnabled(val);
+    localStorage.setItem('dev_breath_enabled', val ? 'true' : 'false');
+  });
+
+  blinkToggle.addEventListener('change', (e) => {
+    const val = e.target.checked;
+    applyBlinkEnabled(val);
+    localStorage.setItem('dev_blink_enabled', val ? 'true' : 'false');
+  });
+
   animTestBtn.addEventListener('click', () => {
     const activeAnim = localStorage.getItem('dev_equip_animation') || 'softPopIn';
     if (activeAnim === 'none') return;
@@ -446,6 +480,9 @@ function initDevPanel() {
     applyAuraOpacity('40');
     applyAuraColor('warm');
     applyEquipAnimation('softPopIn');
+    applyDustEnabled(false);
+    applyBreathEnabled(false);
+    applyBlinkEnabled(false);
     
     charSlider.value = '1.15';
     charVal.textContent = '1.15x';
@@ -470,6 +507,10 @@ function initDevPanel() {
 
     auraColorSelect.value = 'warm';
     
+    dustToggle.checked = false;
+    breathToggle.checked = false;
+    blinkToggle.checked = false;
+    
     localStorage.setItem('dev_char_scale', '1.15');
     localStorage.setItem('dev_char_y', '30');
     localStorage.setItem('dev_bg_scale', '0.95');
@@ -479,6 +520,9 @@ function initDevPanel() {
     localStorage.setItem('dev_aura-opacity', '40');
     localStorage.setItem('dev_aura-color', 'warm');
     localStorage.setItem('dev_equip_animation', 'softPopIn');
+    localStorage.setItem('dev_dust_enabled', 'false');
+    localStorage.setItem('dev_breath_enabled', 'false');
+    localStorage.setItem('dev_blink_enabled', 'false');
   });
 
   function applyCharScale(val) {
@@ -534,6 +578,32 @@ function initDevPanel() {
     animSelect.value = val;
     localStorage.setItem('dev_equip_animation', val);
   }
+
+  function applyDustEnabled(enabled) {
+    const el = document.getElementById('stage-particles');
+    if (el) {
+      el.style.display = enabled ? 'block' : 'none';
+    }
+  }
+
+  function applyBreathEnabled(enabled) {
+    const el = document.getElementById('character-breath-wrapper');
+    if (el) {
+      if (enabled) {
+        el.classList.remove('no-breath');
+      } else {
+        el.classList.add('no-breath');
+      }
+    }
+  }
+
+  function applyBlinkEnabled(enabled) {
+    document.querySelectorAll('.body-blink-overlay').forEach(el => {
+      if (!enabled) {
+        el.classList.remove('blink-active');
+      }
+    });
+  }
 }
 
 // ────────────────────────────────────────────────────────────
@@ -548,6 +618,10 @@ const GameParticles = {
     if (!this.container) return;
     this.container.innerHTML = '';
     this.active = true;
+
+    // Respect dust particle toggle setting
+    const isDustEnabled = localStorage.getItem('dev_dust_enabled') === 'true';
+    this.container.style.display = isDustEnabled ? 'block' : 'none';
 
     for (let i = 0; i < 15; i++) {
       this.spawnFloatStar(true);

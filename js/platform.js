@@ -7,6 +7,41 @@ let _player    = null;
 let _adShowing = false;
 let _gameReadySent = false;
 
+let deviceType = 'desktop';
+let isMobileDevice = false;
+
+function detectDevice() {
+  const ua = navigator.userAgent.toLowerCase();
+  
+  if (/mobile|android|iphone|ipad|phone/i.test(ua)) {
+    deviceType = 'mobile';
+  } else if (/tablet|playbook|silk/i.test(ua)) {
+    deviceType = 'tablet';
+  }
+
+  const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (hasTouch && (window.innerWidth <= 1024 || window.innerHeight <= 1024)) {
+    if (deviceType === 'desktop') {
+      deviceType = 'mobile';
+    }
+  }
+
+  document.body.classList.remove('device-desktop', 'device-mobile', 'device-tablet', 'device-tv', 'is-mobile', 'is-desktop');
+  document.body.classList.add('device-' + deviceType);
+  if (deviceType === 'mobile' || deviceType === 'tablet') {
+    document.body.classList.add('is-mobile');
+    isMobileDevice = true;
+  } else {
+    document.body.classList.add('is-desktop');
+    isMobileDevice = false;
+  }
+  
+  console.log('[Device] Initial detection:', deviceType, '| is-mobile:', isMobileDevice);
+}
+
+// Run immediately since script is at the bottom of the body
+detectDevice();
+
 function markGameReady() {
   if (_gameReadySent) return;
   _gameReadySent = true;
@@ -20,6 +55,29 @@ async function initYandexSDK() {
   }
   try {
     ysdk = await YaGames.init();
+
+    // Refine device detection using Yandex SDK
+    if (ysdk && ysdk.deviceInfo) {
+      let type = ysdk.deviceInfo.type; // 'desktop', 'mobile', 'tablet', 'tv'
+      
+      // Override YSDK detection if the user agent is explicitly mobile (e.g. Chrome Device Emulator)
+      const ua = navigator.userAgent.toLowerCase();
+      const isUAMobile = /mobile|android|iphone|ipad|phone/i.test(ua);
+      if (isUAMobile && (type === 'desktop' || type === 'tv')) {
+        type = 'mobile';
+      }
+
+      console.log('[Device] YSDK detected type:', type);
+      document.body.classList.remove('device-desktop', 'device-mobile', 'device-tablet', 'device-tv', 'is-mobile', 'is-desktop');
+      document.body.classList.add('device-' + type);
+      if (type === 'mobile' || type === 'tablet') {
+        document.body.classList.add('is-mobile');
+        isMobileDevice = true;
+      } else {
+        document.body.classList.add('is-desktop');
+        isMobileDevice = false;
+      }
+    }
 
     const i18n    = ysdk.environment.i18n;
     const sdkLang = i18n && i18n.lang ? i18n.lang : '';

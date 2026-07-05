@@ -30,18 +30,20 @@ const IntroDirector = {
       btnNext: 'Далее ➤',
       btnDebut: 'Начать карьеру!',
       skipText: 'Пропустить',
-      followersLabel: 'Подписчиков'
+      followersLabel: 'Подписчиков',
+      postCaption: 'Дебютный сингл Eclipse уже в сети! Слушайте на всех платформах! 🎧✨'
     },
     en: {
       dream: 'One viral post can change everything...',
       realityText: "...But for now, I can only dream of it. 💭\nHi! I'm Hana from the K-Pop group Eclipse! 👋\nWe just debuted, and nobody knows us yet 😅",
       gameplayText1: "I need a stylist — and that's you! 💖\nEvery day we publish posts about music video shoots, fan meetings, concerts...",
-      gameplayText2: "Match outfits to these events — the closer you get to the style, the more followers and likes we get!\n(With likes {heart} you can buy new clothes!)",
+      gameplayText2: "Match outfits to these events — the closer you get to the style, the more followers and likes we get!\n(With likes {heart}, you can buy new clothes!)",
       debutText: 'Our dream — 1,000,000 followers! 👑\nFrom total zeros to K-Pop legends!\nSo, will you help me? 🔥',
       btnNext: 'Next ➤',
       btnDebut: 'Start Career!',
       skipText: 'Skip',
-      followersLabel: 'Followers'
+      followersLabel: 'Followers',
+      postCaption: "Eclipse's debut single is out now! Listen on all platforms! 🎧✨"
     }
   },
 
@@ -53,9 +55,13 @@ const IntroDirector = {
     const tData = this.steps[lang] || this.steps.en;
     $('intro-skip-btn').textContent = tData.skipText;
     $('intro-follower-label').textContent = tData.followersLabel;
+    
+    const captionEl = $('intro-post-caption');
+    if (captionEl) captionEl.textContent = tData.postCaption;
 
     $('intro-skip-btn').onclick = (e) => {
       e.stopPropagation();
+      sfxClick();
       this.skipIntro();
     };
 
@@ -169,33 +175,8 @@ const IntroDirector = {
       } else if (!countingFinished) {
         countingFinished = true;
         if (counterAnimationRef) cancelAnimationFrame(counterAnimationRef);
-        
-        $('intro-follower-counter').classList.add('active');
-        this.renderCharacter(this.starterOutfit, $('intro-phone-char-stage'));
-        $('intro-follower-num').textContent = formatFollowers(1000000);
-        
-        const counter = $('intro-follower-counter');
-        const btn = $('intro-phone-heart');
-        if (btn && counter) {
-          const rect = btn.getBoundingClientRect();
-          const containerRect = counter.getBoundingClientRect();
-          for (let k = 0; k < 6; k++) {
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.textContent = Math.random() > 0.35 ? '❤️' : '💖';
-            const x = rect.left - containerRect.left + rect.width / 2 + (Math.random() * 20 - 10);
-            const y = rect.top - containerRect.top + rect.height / 2;
-            heart.style.left = `${x}px`;
-            heart.style.top = `${y}px`;
-            heart.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
-            counter.appendChild(heart);
-            setTimeout(() => heart.remove(), 1200);
-          }
-        }
-
-        transitionTimeoutRef = setTimeout(() => {
-          if (this.phase === 1) this.enterPhase2();
-        }, 2000);
+        if (transitionTimeoutRef) clearTimeout(transitionTimeoutRef);
+        this.enterPhase2();
       } else {
         if (transitionTimeoutRef) clearTimeout(transitionTimeoutRef);
         this.enterPhase2();
@@ -247,6 +228,7 @@ const IntroDirector = {
     this.typewrite(textEl, tData.realityText, null, 25);
 
     btn.onclick = () => {
+      sfxClick();
       if (this.typingTimer) {
         this.clearTyping();
         textEl.innerHTML = this.formatText(tData.realityText);
@@ -259,8 +241,6 @@ const IntroDirector = {
   enterPhase3() {
     this.phase = 3;
     const tData = this.steps[lang] || this.steps.en;
-
-    this.playSynthDressUp();
 
     $('intro-bg').style.backgroundImage = "url('Background/photoshoot.jpg')";
     $('intro-bg').style.filter = 'blur(1px) brightness(0.6)';
@@ -289,6 +269,7 @@ const IntroDirector = {
     this.typewrite(textEl, tData.gameplayText1, null, 25);
 
     btn.onclick = () => {
+      sfxClick();
       if (this.typingTimer) {
         this.clearTyping();
         textEl.innerHTML = this.formatText(tData.gameplayText1);
@@ -329,6 +310,7 @@ const IntroDirector = {
     this.typewrite(textEl, tData.gameplayText2, null, 25);
 
     btn.onclick = () => {
+      sfxClick();
       if (this.typingTimer) {
         this.clearTyping();
         textEl.innerHTML = this.formatText(tData.gameplayText2);
@@ -359,6 +341,7 @@ const IntroDirector = {
     }, 25);
 
     btn.onclick = () => {
+      sfxClick();
       if (this.typingTimer) {
         this.clearTyping();
         textEl.innerHTML = this.formatText(tData.debutText);

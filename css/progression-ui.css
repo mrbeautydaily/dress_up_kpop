@@ -323,6 +323,26 @@
   object-fit: contain;
   flex-shrink: 0;
 }
+.badge-tv {
+  width: 1.1rem !important;
+  height: 1.1rem !important;
+  object-fit: contain !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  margin-right: 4px !important;
+  position: relative !important;
+  top: -1.5px !important;
+}
+.badge-calendar {
+  width: 0.95rem !important;
+  height: 0.95rem !important;
+  object-fit: contain !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  margin-right: 4px !important;
+  position: relative !important;
+  top: -1px !important;
+}
 .inline-heart {
   width: 0.95rem !important;
   height: 0.95rem !important;
@@ -343,6 +363,8 @@
   position: relative !important;
   top: -2px !important;
 }
+.item-card.locked .badge-tv,
+.item-card.locked .badge-calendar,
 .item-card.locked .inline-heart {
   filter: none !important;
 }

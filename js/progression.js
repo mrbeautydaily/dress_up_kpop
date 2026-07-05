@@ -122,8 +122,6 @@ function showBuyBar(category, itemId, cost) {
     $('items-panel').appendChild(bar);
   }
   const item = findItem(category, itemId);
-  const isDeal = itemId === getDailyDealId();
-  const origCost = itemLikesCost(itemId);
   const isAd = AD_ITEMS.has(itemId);
   const isReview = itemId === REVIEW_ITEM;
 
@@ -131,11 +129,11 @@ function showBuyBar(category, itemId, cost) {
 
   if (isAd) {
     bar.innerHTML = `
-      <div class="buy-bar-name">📺 ${iName(item)}</div>
-      <div class="buy-bar-ad-hint">${lang === 'ru' ? 'Смотри рекламу — получи вещь бесплатно!' : 'Watch an ad — get this item for free!'}</div>
+      <div class="buy-bar-name"><img src="Items/UI/shop_ad_tv.png" class="badge-tv" alt="TV"> ${iName(item)}</div>
+      <div class="buy-bar-ad-hint">${lang === 'ru' ? 'За просмотр рекламы — вещь бесплатно!' : 'Watch ad — get it for free!'}</div>
       <div class="buy-bar-row">
         <button class="buy-bar-btn buy-confirm buy-ad-btn" id="buy-bar-yes">
-          ${lang === 'ru' ? '📺 Смотреть рекламу' : '📺 Watch Ad'}
+          <img src="Items/UI/shop_ad_tv.png" class="badge-tv" alt="TV"> ${lang === 'ru' ? 'Смотреть рекламу' : 'Watch Ad'}
         </button>
         <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
       </div>`;
@@ -145,11 +143,11 @@ function showBuyBar(category, itemId, cost) {
     };
   } else if (isReview) {
     bar.innerHTML = `
-      <div class="buy-bar-name">✍️ ${iName(item)}</div>
-      <div class="buy-bar-ad-hint">${lang === 'ru' ? 'Эксклюзив! Оставь отзыв — получи вещь!' : 'Exclusive! Leave a review — get this item!'}</div>
+      <div class="buy-bar-name"><img src="Items/UI/calendar.png" class="badge-calendar" alt="Calendar"> ${iName(item)}</div>
+      <div class="buy-bar-ad-hint">${lang === 'ru' ? 'Напиши отзыв — забери вещь!' : 'Write a review — claim this item!'}</div>
       <div class="buy-bar-row">
         <button class="buy-bar-btn buy-confirm buy-review-btn" id="buy-bar-yes">
-          ${lang === 'ru' ? '✍️ Оставить отзыв' : '✍️ Leave Review'}
+          <img src="Items/UI/calendar.png" class="badge-calendar" alt="Calendar"> ${lang === 'ru' ? 'Оставить отзыв' : 'Leave Review'}
         </button>
         <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
       </div>`;
@@ -165,8 +163,7 @@ function showBuyBar(category, itemId, cost) {
          </button>`
       : '';
     bar.innerHTML = `
-      <div class="buy-bar-name">${iName(item)}${isDeal ? ' 🔥' : ''}</div>
-      ${isDeal ? `<div class="buy-bar-deal">${formatLikes(origCost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> → <b>${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b></div>` : ''}
+      <div class="buy-bar-name">${iName(item)}</div>
       <div class="buy-bar-row">
         <button class="buy-bar-btn buy-confirm${canBuy ? '' : ' cant-buy'}" id="buy-bar-yes">
           ${canBuy ? (lang === 'ru' ? `Купить ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">` : `Buy ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`) : (lang === 'ru' ? `Нужно ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">` : `Need ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`)}
@@ -387,8 +384,7 @@ function showToast(msg, type) {
 
 
 function getDailyDealId() {
-  const ids = Object.keys(ITEM_COSTS);
-  return ids[dateHash(todayStr()) % ids.length];
+  return null;
 }
 
 

@@ -359,16 +359,16 @@ function getPostTextForActivity(activityId) {
 
   const enTexts = {
     recording: 'Recording a new hit in the studio! 🎙️ Charisma and bold vibe guaranteed. How do you like our look today? ✨ #kpop #bold',
-    fitness: 'Morning stretching and fitness before the comeback! 🧘 Comfort and style is key. Getting energized! 👟 #sporty #casual',
+    fitness: 'Morning stretching and fitness before the comeback! 🧘 Comfort and style are key. Getting energized! 👟 #sporty #casual',
     photoshoot: 'Shooting concept photos for our new album! 📸 How do you like this elegant look? It\'s going to be hot! 💫 #kpop #elegant',
     fansign: 'Finally met our lovely fans at the fansign event! 🤝 Thank you for the support and gifts! 💖 #school #formal',
-    variety_show: 'Guest starred on a variety show! 📺 It was super fun, watch out for the broadcast! Rate our cute style 🎀 #kpop #cute',
+    variety_show: 'We guest starred on a variety show! 📺 It was super fun, watch out for the broadcast! Rate our cute style 🎀 #kpop #cute',
     dance_practice: 'Practicing our choreography to perfection! 💃 Style and movement are our motto today! 🎵 #sporty #kpop',
     vlog: 'Shooting a new vlog for you! 🧋 Showing our daily life behind the scenes. Are you excited? 😉 #casual #cute',
     fans_qa: 'Had a cozy live stream and answered your questions! 📱 You are the best, love you all! 💕 #school #casual',
-    dance_challenge: 'Recorded a new dance challenge! 🎵 Jump into the trends, duplicate the moves! 🌟 #cute #bold',
+    dance_challenge: 'Recorded a new dance challenge! 🎵 Jump into the trends, copy the moves! 🌟 #cute #bold',
     live_stage: 'Our debut performance on Inkigayo! 🎤 The stage was on fire, the crowd was loud, unforgettable! 🔥 #kpop #bold',
-    grand_concert: 'Performed at the Rookie Awards stage! 🏆 We are incredibly happy and elegant. Thank you, our fandom! 👑 #formal #elegant'
+    grand_concert: 'Performed on the Rookie Awards stage! 🏆 We are incredibly happy and elegant. Thank you to our fandom! 👑 #formal #elegant'
   };
 
   const pool = lang === 'ru' ? ruTexts : enTexts;
@@ -438,7 +438,7 @@ function generateSocialComments(result, assignment) {
         const poolEn = trendMatches >= 2
           ? ['This outfit is absolutely perfect for the trends! 😍', 'The style is captured perfectly! 🔥', 'Super trendy look, right on target! 🔥']
           : trendMatches >= 1
-          ? ['Cute, but I wanted more matching vibes.', 'The outfit is neat, but lacks a bright trend accent.']
+          ? ['Cute, but I wanted more matching vibes.', 'The outfit is neat, but lacks a bright, trendy accent.']
           : ['This outfit doesn\'t suit the event at all... 😢', 'Strange choice of items, concept missed.', 'Did she know where she was going?'];
 
         const pool = lang === 'ru' ? poolRu : poolEn;
@@ -459,9 +459,9 @@ function generateSocialComments(result, assignment) {
         const poolEn = score >= 90
           ? ['🔥 Best look ever! Absolute viral hit!', 'Masterpiece! Fans are going crazy! 😍✨', 'Absolute perfection! My bias is gorgeous! 💖']
           : score >= 75
-          ? ['✨ Very beautiful and stylish outfit! Liked!', 'Fans love it, the outfit is super cool!', 'Nice post, sharing with all my friends! 🥰']
+          ? ['✨ Very beautiful and stylish outfit! I love it!', 'Fans love it, the outfit is super cool!', 'Nice post, sharing with all my friends! 🥰']
           : score >= 50
-          ? ['Quite a decent outfit, fans approve 👍', 'Good look, I like it!', 'Cute! Liked. 🥰']
+          ? ['Quite a decent outfit, fans approve 👍', 'Good look, I like it!', 'Cute! Like it! 🥰']
           : ['It\'s okay, but could be better 😕', 'Ordinary look, nothing special.', 'Fine, but could be much better.'];
 
         const pool = lang === 'ru' ? poolRu : poolEn;
@@ -488,7 +488,7 @@ function generateSocialComments(result, assignment) {
           text = pool[Math.floor(Math.random() * pool.length)];
         } else {
           const poolRu = ['Приятный пост, лайк от меня!', 'Прикольно, жду новые посты!', 'Очень эстетично выглядит. ✨'];
-          const poolEn = ['Nice post, liked!', 'Cool, waiting for new posts!', 'Looks very aesthetic. ✨'];
+          const poolEn = ['Nice post, love it!', 'Cool, waiting for new posts!', 'Looks very aesthetic. ✨'];
           const pool = lang === 'ru' ? poolRu : poolEn;
           text = pool[Math.floor(Math.random() * pool.length)];
         }

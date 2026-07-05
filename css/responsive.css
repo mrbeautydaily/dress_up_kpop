@@ -564,28 +564,31 @@
   .score-left-col .instagram-post {
     height: 86vh !important;
     max-height: 86vh !important;
-    width: calc(86vh * 768 / 1376) !important;
+    width: calc((86vh - 170px) * 768 / 1376) !important;
     max-width: 100% !important;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
   }
-  .score-left-col .instagram-media-container {
+  body.is-mobile .score-left-col .instagram-post {
+    width: calc(86vh * 768 / 1376) !important;
+  }
+  body.is-mobile .score-left-col .instagram-media-container {
     height: 100% !important;
     width: 100% !important;
   }
-  .score-left-col .social-post-image-container {
+  body.is-mobile .score-left-col .social-post-image-container {
     width: 100% !important;
     height: 100% !important;
     max-height: none !important;
   }
-  .score-left-col .instagram-actions-left-row {
+  body.is-mobile .score-left-col .instagram-actions-left-row {
     display: none !important;
   }
-  .score-left-col .score-comment-overlay {
+  body.is-mobile .score-left-col .score-comment-overlay {
     display: none !important;
   }
-  .score-left-col .instagram-comments-container-left {
+  body.is-mobile .score-left-col .instagram-comments-container-left {
     display: none !important;
   }
 

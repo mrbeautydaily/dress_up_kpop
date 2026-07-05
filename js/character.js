@@ -9,7 +9,10 @@ function startBlinking(container) {
   function doBlink() {
     if (!document.body.contains(blinkImg)) return;
 
-    blinkImg.classList.add('blink-active');
+    const isBlinkingEnabled = localStorage.getItem('dev_blink_enabled') === 'true';
+    if (isBlinkingEnabled) {
+      blinkImg.classList.add('blink-active');
+    }
     setTimeout(() => {
       blinkImg.classList.remove('blink-active');
 

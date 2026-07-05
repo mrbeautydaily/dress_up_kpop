@@ -50,6 +50,14 @@ const T = {
     // Outfit names (free mode)
     adj: ['Sparkly','Dreamy','Fierce','Sweet','Chic','Bold','Pastel','Glam','Iconic','Fresh'],
     noun:['Idol','Star','Diva','Queen','Vision','Dream','Look','Vibe','Moment','Era'],
+    // Tooltips
+    titleRandom:   'Random outfit',
+    titlePrevBg:   'Previous background',
+    titleNextBg:   'Next background',
+    titleShare:    'Take screenshot',
+    titleSound:    'Toggle sound',
+    titleClearEmoji: 'Remove reaction',
+    titleDevPanel:   'Developer panel',
   },
   ru: {
     // Loading
@@ -73,6 +81,14 @@ const T = {
     // Outfit names (free mode)
     adj:  ['Сверкающий','Мечтательный','Дерзкий','Сладкий','Шикарный','Смелый','Пастельный','Гламурный','Культовый','Свежий'],
     noun: ['Идол','Звезда','Дива','Королева','Образ','Мечта','Лук','Вайб','Момент','Эпоха'],
+    // Tooltips
+    titleRandom:   'Случайный наряд',
+    titlePrevBg:   'Предыдущий фон',
+    titleNextBg:   'Следующий фон',
+    titleShare:    'Сделать скриншот',
+    titleSound:    'Вкл/Выкл звук',
+    titleClearEmoji: 'Убрать реакцию',
+    titleDevPanel:   'Панель разработчика',
   },
 };
 
@@ -88,6 +104,9 @@ function tf(key, vars) {
 // ────────────────────────────────────────────────────────────
 
 function applyTranslations() {
+  // Update document title
+  document.title = t('loadingTitle');
+
   // Loading screen
   const lt = $('loading-title');
   const lp = $('loading-text');
@@ -98,6 +117,25 @@ function applyTranslations() {
   $('header-title').textContent = t('gameTitle');
   const rl = $('btn-runway-label');
   if (rl) rl.textContent = t('btnRunway').replace('🌟 ', '');
+
+  // Tooltips for control buttons
+  const btnRandom = $('btn-random-stage');
+  const btnPrev = $('btn-prev-bg');
+  const btnNext = $('btn-next-bg');
+  const btnShare = $('btn-share-stage');
+  const btnSound = $('btn-sound');
+
+  if (btnRandom) btnRandom.title = t('titleRandom');
+  if (btnPrev) btnPrev.title = t('titlePrevBg');
+  if (btnNext) btnNext.title = t('titleNextBg');
+  if (btnShare) btnShare.title = t('titleShare');
+  if (btnSound) btnSound.title = t('titleSound');
+
+  // Other tooltips
+  const emojiClear = document.querySelector('.emoji-option-clear');
+  const devTrigger = $('dev-panel-trigger');
+  if (emojiClear) emojiClear.title = t('titleClearEmoji');
+  if (devTrigger) devTrigger.title = t('titleDevPanel');
 
   // Rebuild translated lists
   buildCategoryPanel();

@@ -310,10 +310,24 @@ const ITEM_COSTS = {
 };
 
 // Вещи за рекламу (можно также купить за звёзды)
-const AD_ITEMS = new Set([]);
+const AD_ITEMS = new Set([
+  'split_dye_hair_1',
+  'double_space_buns_pastel_lavender',
+  'cropped_black_leather_jacket',
+  'pink_sequin_dress',
+  'futuristic_boots',
+  'cyber_goggles',
+  'split_dye_hair_2',
+  'gothic_wolf_cut',
+  'gothic_mini_dress',
+  'silver_bodycon_dress',
+  'y2k_cargo_pants',
+  'gothic_high_boots',
+  'pink_heart_bag'
+]);
 
 // Эксклюзивная вещь только за отзыв
-const REVIEW_ITEM = null; // Black Mesh Cocktail
+const REVIEW_ITEM = 'gothic_stage_dress';
 
 // ────────────────────────────────────────────────────────────
 // MILESTONE GOALS & REWARDS

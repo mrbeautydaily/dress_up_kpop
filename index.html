@@ -5,9 +5,6 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>Путь к славе: K-Pop</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/variables.css?v=6.0"/>
 <link rel="stylesheet" href="css/intro-loading.css?v=6.0"/>
 <link rel="stylesheet" href="css/layout.css?v=6.0"/>
@@ -115,7 +112,7 @@
           <span id="intro-follower-num">0</span> <span id="intro-follower-label">подписчиков</span>
         </div>
         <div style="font-size: 0.82rem; color: #262626; line-height: 1.35; font-weight: 400;">
-          <span style="font-weight: 700; margin-right: 6px; color: #262626;">eclipse</span>Дебютный сингл Eclipse уже в сети! Слушайте на всех платформах! 🎧✨
+          <span style="font-weight: 700; margin-right: 6px; color: #262626;">eclipse</span><span id="intro-post-caption">Дебютный сингл Eclipse уже в сети! Слушайте на всех платформах! 🎧✨</span>
         </div>
       </div>
     </div>
@@ -507,6 +504,33 @@
           <option value="none">Без анимации</option>
         </select>
         <button id="dev-btn-test-anim" class="btn btn-purple" style="padding: 0 12px; margin: 0; min-height: auto; font-size: 14px; border-radius: 8px;" title="Проиграть анимацию на текущих вещах">🎬 Тест</button>
+      </div>
+    </div>
+
+    <div class="dev-control-group">
+      <label>Эффекты и анимация:</label>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
+        <div class="dev-switch-group">
+          <label for="dev-dust-toggle">Пылинки (эффект фона)</label>
+          <label class="dev-switch">
+            <input type="checkbox" id="dev-dust-toggle">
+            <span class="dev-slider"></span>
+          </label>
+        </div>
+        <div class="dev-switch-group">
+          <label for="dev-breath-toggle">Дыхание персонажа</label>
+          <label class="dev-switch">
+            <input type="checkbox" id="dev-breath-toggle">
+            <span class="dev-slider"></span>
+          </label>
+        </div>
+        <div class="dev-switch-group">
+          <label for="dev-blink-toggle">Моргание персонажа</label>
+          <label class="dev-switch">
+            <input type="checkbox" id="dev-blink-toggle">
+            <span class="dev-slider"></span>
+          </label>
+        </div>
       </div>
     </div>
 

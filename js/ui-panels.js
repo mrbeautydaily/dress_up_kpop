@@ -533,12 +533,9 @@ function buildItemsGrid(category) {
     ? allItems.filter(item => !item.sub || item.sub === activeSub[category])
     : allItems;
 
-  const dealId = getDailyDealId();
-
   items.forEach(item => {
     const locked = !isUnlocked(item.id);
-    const isDeal = locked && item.id === dealId;
-    const cost   = isDeal ? getDailyDealLikesCost(item.id) : itemLikesCost(item.id);
+    const cost   = itemLikesCost(item.id);
 
     const baseCost = itemCost(item.id);
     let rarityClass = 'rarity-common';
@@ -563,15 +560,13 @@ function buildItemsGrid(category) {
 
     const isAdItem     = AD_ITEMS.has(item.id);
     const isReviewItem = item.id === REVIEW_ITEM;
-    const badge = isDeal
-      ? `<div class="item-deal-badge">🔥 ${formatLikes(cost)}<img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>`
-      : locked && isAdItem
-        ? `<div class="item-cost-badge item-ad-badge">📺 ${lang === 'ru' ? 'Реклама' : 'Ad'}</div>`
-        : locked && isReviewItem
-          ? `<div class="item-cost-badge item-review-badge">✍️ ${lang === 'ru' ? 'Отзыв' : 'Review'}</div>`
-          : locked && cost > 0
-            ? `<div class="item-cost-badge">${formatLikes(cost)}<img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>`
-            : '';
+    const badge = locked && isAdItem
+      ? `<div class="item-cost-badge item-ad-badge"><img src="Items/UI/shop_ad_tv.png" class="badge-tv" alt="TV"> ${lang === 'ru' ? 'Реклама' : 'Ad'}</div>`
+      : locked && isReviewItem
+        ? `<div class="item-cost-badge item-review-badge"><img src="Items/UI/calendar.png" class="badge-calendar" alt="Calendar"> ${lang === 'ru' ? 'Отзыв' : 'Review'}</div>`
+        : locked && cost > 0
+          ? `<div class="item-cost-badge">${formatLikes(cost)}<img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>`
+          : '';
 
     const filterStyle = item.filter ? ` style="filter:${item.filter}"` : '';
     let thumbHTML = '';

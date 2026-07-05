@@ -306,6 +306,9 @@
 #stage #character-breath-wrapper {
   animation: stageCharBreath 4s ease-in-out infinite;
 }
+#stage #character-breath-wrapper.no-breath {
+  animation: none !important;
+}
 @keyframes stageCharBreath {
   0%, 100% {
     transform: scale(1);
