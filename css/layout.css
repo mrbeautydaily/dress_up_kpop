@@ -297,6 +297,24 @@
   z-index: 1;
 }
 
+#character-breath-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform-origin: bottom center;
+}
+#stage #character-breath-wrapper {
+  animation: stageCharBreath 4s ease-in-out infinite;
+}
+@keyframes stageCharBreath {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.002, 1.007);
+  }
+}
+
 #character-layers {
   position: absolute; inset: 0; z-index: 1;
   transform: translateY(var(--char-y, 0px)) scale(var(--char-scale, 1));
@@ -307,6 +325,20 @@
 #layer-body img {
   width: 100%; height: 100%;
   object-fit: fill; display: block; pointer-events: none;
+}
+.body-blink-overlay {
+  position: absolute !important;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.05s ease-in-out;
+  z-index: 1;
+}
+.body-blink-overlay.blink-active {
+  opacity: 1 !important;
 }
 .char-layer { position: absolute; inset: 0; overflow: visible; }
 .character-aura {
@@ -382,6 +414,24 @@
   0%   { opacity: 1; transform: translate(0,0) scale(1); }
   100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.4); }
 }
+
+/* Stage Background Particles (Dust) */
+#stage-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.stage-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 20%, transparent 80%);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(0) rotate(0deg);
+}
+
 #outfit-name-display { display: none; }
 
 /* ---------- BOTTOMS SUB-TABS ---------- */

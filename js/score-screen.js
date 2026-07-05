@@ -1,6 +1,7 @@
-// ────────────────────────────────────────────────────────────
-// SHARE OUTFIT — скачать PNG с образом
-// ────────────────────────────────────────────────────────────
+
+// Timers for synchronized score sounds
+let scoreRiseTimer = null;
+let scoreFinalChimeTimer = null;
 
 function loadImageForCanvas(src) {
   return new Promise(resolve => {
@@ -503,6 +504,20 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   const isFree = !assignment || !result;
   const authorName = 'eclipse';
 
+  const cleanupScoreTimers = () => {
+    if (scoreRiseTimer) {
+      clearTimeout(scoreRiseTimer);
+      scoreRiseTimer = null;
+    }
+    if (scoreFinalChimeTimer) {
+      clearTimeout(scoreFinalChimeTimer);
+      scoreFinalChimeTimer = null;
+    }
+  };
+
+  // Clear any existing score sound timers
+  cleanupScoreTimers();
+
   // Clear any existing auto-scroll timer on screen load
   if (scoreAutoScrollTimer) {
     clearInterval(scoreAutoScrollTimer);
@@ -553,7 +568,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       } else if (assignment.id === 'fansign') {
         locText = lang === 'ru' ? 'Автограф-сессия в Каннаме' : 'Gangnam Fansign Hall';
       } else if (assignment.id === 'vlog') {
-        locText = lang === 'ru' ? 'Уютное кафе' : 'Cozy Cafe';
+        locText = lang === 'ru' ? 'Моя комната' : 'My Room';
       } else if (assignment.id === 'fans_qa') {
         locText = lang === 'ru' ? 'Прямой эфир' : 'Live Broadcast';
       } else if (assignment.id === 'photoshoot') {
@@ -821,9 +836,10 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       }
       statusTitleEl.textContent = statusText;
       
-      // Show at the end of the counter animation (approx 1700ms)
-      setTimeout(() => {
+      // Show and play final chime at the end of the counter animation (approx 1700ms)
+      scoreFinalChimeTimer = setTimeout(() => {
         statusTitleEl.classList.add('visible');
+        sfxScore(result.trendMatches);
       }, 1700);
     }
 
@@ -904,9 +920,10 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
     // Large score with count-up
     if (largeScoreEl) {
-      setTimeout(() => {
+      scoreRiseTimer = setTimeout(() => {
         largeScoreEl.classList.add('visible');
         animateCounter(largeScoreEl, result.totalPoints, 800, '', '/100');
+        sfxScoreRiseChime(result.totalPoints, 800);
       }, 500);
     }
 
@@ -1354,6 +1371,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     $('btn-next-lesson').textContent = lang === 'ru' ? 'Закрыть' : 'Close';
     $('btn-next-lesson').onclick = () => {
       stopAutoScroll();
+      cleanupScoreTimers();
       if (picker) picker.classList.add('hidden');
       $('score-modal').classList.add('hidden');
     };
@@ -1362,6 +1380,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     $('btn-next-lesson').textContent = t('btnNewDay');
     $('btn-next-lesson').onclick = () => {
       stopAutoScroll();
+      cleanupScoreTimers();
       if (picker) picker.classList.add('hidden');
       $('score-modal').classList.add('hidden');
       showFullscreenAd(() => {

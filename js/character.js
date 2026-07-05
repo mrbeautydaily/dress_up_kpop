@@ -2,6 +2,26 @@
 // CHARACTER STAGE
 // ────────────────────────────────────────────────────────────
 
+function startBlinking(container) {
+  const blinkImg = container.querySelector('.body-blink-overlay');
+  if (!blinkImg) return;
+
+  function doBlink() {
+    if (!document.body.contains(blinkImg)) return;
+
+    blinkImg.classList.add('blink-active');
+    setTimeout(() => {
+      blinkImg.classList.remove('blink-active');
+
+      const isDouble = Math.random() < 0.15;
+      const delay = isDouble ? (150 + Math.random() * 100) : (2000 + Math.random() * 4000);
+      setTimeout(doBlink, delay);
+    }, 100);
+  }
+
+  setTimeout(doBlink, 2000 + Math.random() * 3000);
+}
+
 function buildCharacterLayers() {
   const container = $('character-layers');
   container.innerHTML = '';
@@ -20,17 +40,28 @@ function buildCharacterLayers() {
     div.style.zIndex = zIndex;
     if (key === 'body') {
       div.style.cssText = 'position:absolute;inset:0;z-index:0;';
+      
       const img = document.createElement('img');
       img.src = 'Items/body/body_new.png';
       img.alt = 'body';
       img.draggable = false;
       img.style.cssText = 'width:100%;height:100%;object-fit:fill;display:block;pointer-events:none;';
       div.appendChild(img);
+
+      const blinkImg = document.createElement('img');
+      blinkImg.src = 'Items/body/body_new_blink.png';
+      blinkImg.alt = 'body blink';
+      blinkImg.className = 'body-blink-overlay';
+      blinkImg.draggable = false;
+      blinkImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;display:block;pointer-events:none;';
+      div.appendChild(blinkImg);
     } else {
       div.className = 'char-layer';
     }
     container.appendChild(div);
   });
+
+  startBlinking(container);
 }
 
 let currentEquipAnimation = localStorage.getItem('dev_equip_animation') || 'softPopIn';

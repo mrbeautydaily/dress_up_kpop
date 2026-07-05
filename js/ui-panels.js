@@ -2,6 +2,9 @@
 // UI — CATEGORY PANEL & ITEMS GRID
 // ────────────────────────────────────────────────────────────
 
+let lastCategory = '';
+let lastSubCategory = '';
+
 function buildCategoryPanel() {
   const list = $('category-list');
   list.innerHTML = '';
@@ -498,10 +501,24 @@ function initCardDragAndDrop(card, category, itemId) {
 function buildItemsGrid(category) {
   stopInertia();
   const grid = $('items-grid');
+  const currentSub = activeSub[category] || '';
+  const isSameTab = (category === lastCategory && currentSub === lastSubCategory);
+
+  let savedScrollTop = 0;
+  let savedScrollLeft = 0;
+
   if (grid) {
-    grid.scrollTop = 0;
-    grid.scrollLeft = 0;
+    if (isSameTab) {
+      savedScrollTop = grid.scrollTop;
+      savedScrollLeft = grid.scrollLeft;
+    } else {
+      grid.scrollTop = 0;
+      grid.scrollLeft = 0;
+    }
   }
+
+  lastCategory = category;
+  lastSubCategory = currentSub;
   const subs = CATEGORY_SUBS[category];
   if (subs) {
     buildSubTabs(category);
@@ -512,17 +529,9 @@ function buildItemsGrid(category) {
   grid.innerHTML = '';
 
   const allItems = clothes[category] || [];
-  const rawItems = subs
+  const items = subs
     ? allItems.filter(item => !item.sub || item.sub === activeSub[category])
     : allItems;
-
-  const items = [...rawItems].sort((a, b) => {
-    const aUnlocked = isUnlocked(a.id);
-    const bUnlocked = isUnlocked(b.id);
-    if (aUnlocked && !bUnlocked) return -1;
-    if (!aUnlocked && bUnlocked) return 1;
-    return 0;
-  });
 
   const dealId = getDailyDealId();
 
@@ -608,5 +617,10 @@ function buildItemsGrid(category) {
 
     grid.appendChild(card);
   });
+
+  if (grid && isSameTab) {
+    grid.scrollTop = savedScrollTop;
+    grid.scrollLeft = savedScrollLeft;
+  }
 }
 

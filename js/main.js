@@ -5,6 +5,7 @@
 function getAllImageSrcs() {
   const srcs = new Set();
   srcs.add('Items/body/body_new.png');
+  srcs.add('Items/body/body_new_blink.png');
   BACKGROUNDS.forEach(bg => srcs.add(bg));
   Object.values(clothes).forEach(category => {
     category.forEach(item => { if (item.src) srcs.add(item.src); });
@@ -112,6 +113,21 @@ async function init() {
 
   // Загружаем прогресс ДО initPayments, чтобы restorePurchases не перезаписал данные
   await loadProgress();
+
+  // Sort clothes arrays once at start: unlocked clothes first, locked clothes second.
+  // This keeps the order fixed during the session, so bought clothes do not jump to the top mid-game.
+  for (const category in clothes) {
+    if (Array.isArray(clothes[category])) {
+      clothes[category].sort((a, b) => {
+        const aUnlocked = isUnlocked(a.id);
+        const bUnlocked = isUnlocked(b.id);
+        if (aUnlocked && !bUnlocked) return -1;
+        if (!aUnlocked && bUnlocked) return 1;
+        return 0;
+      });
+    }
+  }
+
   loadOutfit();
   loadSchoolProgress();
 
@@ -236,6 +252,9 @@ async function init() {
       startSchoolMode();
       checkDailyLogin();
       markGameReady();
+      if (window.GameParticles) {
+        window.GameParticles.start();
+      }
     }
   }, { once: true });
 }
@@ -516,6 +535,74 @@ function initDevPanel() {
     localStorage.setItem('dev_equip_animation', val);
   }
 }
+
+// ────────────────────────────────────────────────────────────
+// BACKGROUND PARTICLES (DUST EFFECT)
+// ────────────────────────────────────────────────────────────
+const GameParticles = {
+  container: null,
+  active: false,
+
+  start() {
+    this.container = document.getElementById('stage-particles');
+    if (!this.container) return;
+    this.container.innerHTML = '';
+    this.active = true;
+
+    for (let i = 0; i < 15; i++) {
+      this.spawnFloatStar(true);
+    }
+  },
+
+  spawnFloatStar(randomInitialY = false) {
+    const p = document.createElement('div');
+    p.className = 'stage-particle';
+    const size = Math.random() * 2 + 4;
+    p.style.width = `${size}px`;
+    p.style.height = `${size}px`;
+    
+    let x = Math.random() * 100;
+    let y = randomInitialY ? Math.random() * 100 : 105;
+    
+    p.style.left = `${x}%`;
+    p.style.top = `${y}%`;
+    p.style.opacity = '0.7';
+    this.container.appendChild(p);
+
+    let vx = (Math.random() - 0.5) * 0.04;
+    let vy = (Math.random() - 0.5) * 0.04;
+    if (Math.abs(vx) < 0.008) vx = 0.01 * (Math.random() > 0.5 ? 1 : -1);
+    if (Math.abs(vy) < 0.008) vy = 0.01 * (Math.random() > 0.5 ? 1 : -1);
+
+    const anim = () => {
+      if (!this.active || !this.container || !p.parentNode) return;
+      x += vx;
+      y += vy;
+
+      if (y < -5) {
+        y = 105;
+        x = Math.random() * 100;
+      } else if (y > 105) {
+        y = -5;
+        x = Math.random() * 100;
+      }
+
+      if (x < -5) {
+        x = 105;
+        y = Math.random() * 100;
+      } else if (x > 105) {
+        x = -5;
+        y = Math.random() * 100;
+      }
+
+      p.style.left = `${x}%`;
+      p.style.top = `${y}%`;
+      requestAnimationFrame(anim);
+    };
+    requestAnimationFrame(anim);
+  }
+};
+window.GameParticles = GameParticles;
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);

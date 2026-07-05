@@ -383,6 +383,14 @@ const IntroDirector = {
     bodyImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;';
     stage.appendChild(bodyImg);
 
+    const blinkImg = document.createElement('img');
+    blinkImg.src = 'Items/body/body_new_blink.png';
+    blinkImg.alt = '';
+    blinkImg.className = 'body-blink-overlay';
+    blinkImg.draggable = false;
+    blinkImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;';
+    stage.appendChild(blinkImg);
+
     const sorted = outfit
       .map(({ cat, id }) => {
         const item = findItem(cat, id);
@@ -402,6 +410,10 @@ const IntroDirector = {
       img.style.cssText = `position:absolute;left:${left}%;top:${top}%;width:${width}%;height:auto;pointer-events:none;z-index:${layerZ};`;
       stage.appendChild(img);
     });
+
+    if (typeof startBlinking === 'function') {
+      startBlinking(stage);
+    }
   },
 
   typewrite(el, text, onComplete, speed = 30) {
@@ -696,6 +708,9 @@ const IntroDirector = {
       startSchoolMode();
       checkDailyLogin();
 
+      if (window.GameParticles) {
+        window.GameParticles.start();
+      }
     }, { once: true });
   }
 };

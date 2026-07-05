@@ -298,7 +298,6 @@ function onRunwayClick() {
   // Instant shutter click + flash -> show post and results using stage cloning
   triggerCameraFlash(() => {
     showScoreScreen(assignment, result, earned + dailyBonus, { followers, likes });
-    sfxScore(result.trendMultiplier);
   });
 }
 
