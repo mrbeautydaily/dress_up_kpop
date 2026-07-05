@@ -6,7 +6,7 @@
 /* Сетка горизонтального поста с двухцветным фоном */
 .score-box {
   max-width: 860px;
-  width: 92vw;
+  width: fit-content; min-width: 600px;
   max-height: 90vh;
   display: flex;
   flex-direction: row;

@@ -26,6 +26,12 @@ function detectDevice() {
     }
   }
 
+  // Эмуляция мобильного устройства для локального тестирования (без телефона и Device Emulator)
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:') {
+    deviceType = 'mobile';
+    console.log('[Dev] Эмуляция мобильного устройства включена');
+  }
+
   document.body.classList.remove('device-desktop', 'device-mobile', 'device-tablet', 'device-tv', 'is-mobile', 'is-desktop');
   document.body.classList.add('device-' + deviceType);
   if (deviceType === 'mobile' || deviceType === 'tablet') {
@@ -64,6 +70,11 @@ async function initYandexSDK() {
       const ua = navigator.userAgent.toLowerCase();
       const isUAMobile = /mobile|android|iphone|ipad|phone/i.test(ua);
       if (isUAMobile && (type === 'desktop' || type === 'tv')) {
+        type = 'mobile';
+      }
+
+      // Эмуляция мобильного устройства для локального тестирования
+      if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:') {
         type = 'mobile';
       }
 
