@@ -63,49 +63,575 @@ function sfxScore(trendMatches) {
   }
 }
 
-// ── BGM — Web Audio API (не вызывает системный медиаплеер) ───
-let _bgmBuffer = null;   // decoded AudioBuffer
-let _bgmSource = null;   // активный BufferSourceNode
-let _bgmGain   = null;   // gain-нода для громкости BGM
-let _bgmRawAB  = null;   // сырой ArrayBuffer (загружен заранее)
+// ── BGM — HTML5 Audio Mini Player (plays all tracks) ───────────
 
-// Загружаем MP3 как байты заранее, без AudioContext
-fetch('audio/sound.mp3').then(r => r.arrayBuffer()).then(ab => { _bgmRawAB = ab; }).catch(() => {});
+const MUSIC_PLAYLIST = [
+  { name: 'K-Pop Star Theme', file: 'sound.mp3' },
+  { name: 'Cotton Cloud Boutique', file: 'Cotton Cloud Boutique.mp3' },
+  { name: 'Cotton Cloud Boutique (Alt)', file: 'Cotton Cloud Boutique (1).mp3' },
+  { name: 'Cute Boutique', file: 'Cute Boutique.mp3' },
+  { name: 'Cute Boutique (Alt)', file: 'Cute Boutique (1).mp3' },
+  { name: 'Dress Up Boutique', file: 'Dress Up Boutique.mp3' },
+  { name: 'Dress Up Day', file: 'Dress Up Day.mp3' },
+  { name: 'Dress Up Day (Alt)', file: 'Dress Up Day (1).mp3' },
+  { name: 'Glassy Drift', file: 'Glassy Drift.mp3' },
+  { name: 'Glossy Glow', file: 'Glossy Glow.mp3' },
+  { name: 'Soft Boutique', file: 'Soft Boutique.mp3' },
+  { name: 'Soft Boutique (Alt)', file: 'Soft Boutique (1).mp3' },
+  { name: 'Soft Pastel Boutique', file: 'Soft Pastel Boutique.mp3' },
+  { name: 'Soft Pastel Boutique (Alt 1)', file: 'Soft Pastel Boutique (1).mp3' },
+  { name: 'Soft Pastel Boutique (Alt 2)', file: 'Soft Pastel Boutique (2).mp3' }
+];
 
-async function _decodeBGM() {
-  if (_bgmBuffer) return true;
-  if (!_bgmRawAB) return false;
+let _currentTrackIndex = 0;
+let _musicAudio = new Audio();
+_musicAudio.volume = 0.2; // Default starting volume (gentle)
+let _isPlaying = false;
+let _isShuffle = false;
+let _isRepeat = false; // loops single track if true
+
+// Active playlist and deleted tracks states
+let _activePlaylist = [];
+let _deletedSongs = new Set();
+let _likedSongs = new Set();
+
+function loadLikedSongs() {
   try {
-    _bgmBuffer = await actx().decodeAudioData(_bgmRawAB.slice(0));
-    return true;
-  } catch(e) { return false; }
+    const data = localStorage.getItem('kpop_liked_songs');
+    if (data) {
+      const arr = JSON.parse(data);
+      _likedSongs = new Set(arr);
+    }
+  } catch (e) {
+    console.warn("Failed to load liked songs:", e);
+  }
 }
 
-function _startBGMSource() {
-  if (!_bgmBuffer) return;
-  const ctx = actx();
-  if (!_bgmGain) {
-    _bgmGain = ctx.createGain();
-    _bgmGain.gain.value = 0.18;
-    _bgmGain.connect(_masterGain);
+function saveLikedSongs() {
+  try {
+    localStorage.setItem('kpop_liked_songs', JSON.stringify(Array.from(_likedSongs)));
+  } catch (e) {
+    console.warn("Failed to save liked songs:", e);
   }
-  _bgmSource = ctx.createBufferSource();
-  _bgmSource.buffer = _bgmBuffer;
-  _bgmSource.loop = true;
-  _bgmSource.connect(_bgmGain);
-  _bgmSource.start(0);
+}
+
+function loadDeletedSongs() {
+  try {
+    const data = localStorage.getItem('kpop_deleted_songs');
+    if (data) {
+      const arr = JSON.parse(data);
+      _deletedSongs = new Set(arr);
+    }
+  } catch (e) {
+    console.warn("Failed to load deleted songs:", e);
+  }
+}
+
+function saveDeletedSongs() {
+  try {
+    localStorage.setItem('kpop_deleted_songs', JSON.stringify(Array.from(_deletedSongs)));
+  } catch (e) {
+    console.warn("Failed to save deleted songs:", e);
+  }
+}
+
+function rebuildActivePlaylist() {
+  _activePlaylist = MUSIC_PLAYLIST.filter(track => !_deletedSongs.has(track.file));
+}
+
+// UI Elements references
+function mpGetElements() {
+  return {
+    container: $('mini-player'),
+    panel: $('mp-panel'),
+    toggleBtn: $('mp-disc-toggle'),
+    closeBtn: $('mp-close-btn'),
+    title: $('mp-track-title'),
+    likeBtn: $('mp-btn-like'),
+    playBtn: $('mp-btn-play'),
+    playIcon: $('mp-play-icon'),
+    pauseIcon: $('mp-pause-icon'),
+    prevBtn: $('mp-btn-prev'),
+    nextBtn: $('mp-btn-next'),
+    shuffleBtn: $('mp-btn-shuffle'),
+    repeatBtn: $('mp-btn-repeat'),
+    volumeBtn: $('mp-btn-volume'),
+    volumeSlider: $('mp-volume-slider'),
+    volumeOnIcon: $('mp-vol-on-icon'),
+    volumeMuteIcon: $('mp-vol-mute-icon'),
+    playlistBtn: $('mp-btn-playlist'),
+    playlistPanel: $('mp-playlist-panel'),
+    playlistList: $('mp-playlist-list'),
+    playlistResetBtn: $('mp-playlist-reset'),
+    progressContainer: $('mp-progress-container'),
+    progressBar: $('mp-progress-bar'),
+    currentTimeLabel: $('mp-time-current'),
+    totalTimeLabel: $('mp-time-total')
+  };
+}
+
+// Convert seconds to MM:SS
+function mpFormatTime(sec) {
+  if (isNaN(sec)) return '0:00';
+  const minutes = Math.floor(sec / 60);
+  const seconds = Math.floor(sec % 60);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Initialize player UI and listeners
+function initMiniPlayer() {
+  const el = mpGetElements();
+  if (!el.container) return;
+
+  // Load state and build active list
+  loadLikedSongs();
+  loadDeletedSongs();
+  rebuildActivePlaylist();
+
+  // Toggle Panel Open/Close
+  el.toggleBtn.addEventListener('click', () => {
+    sfxClick();
+    el.panel.classList.toggle('hidden');
+    // Scroll active item into view when opening panel
+    if (!el.panel.classList.contains('hidden')) {
+      const activeItem = el.playlistList.querySelector('.mp-playlist-item.active');
+      if (activeItem) {
+        activeItem.scrollIntoView({ block: 'nearest' });
+      }
+    }
+  });
+
+  el.closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sfxClick();
+    el.panel.classList.add('hidden');
+  });
+
+  // Like button
+  if (el.likeBtn) {
+    el.likeBtn.addEventListener('click', () => {
+      sfxClick();
+      toggleLike();
+    });
+  }
+
+  // Play/Pause button
+  el.playBtn.addEventListener('click', () => {
+    sfxClick();
+    if (_isPlaying) {
+      pauseMusic();
+    } else {
+      // If we are playing from a fresh start, resume audio context if suspended
+      if (_actx && _actx.state === 'suspended') _actx.resume();
+      playMusic();
+    }
+  });
+
+  // Prev/Next buttons
+  el.prevBtn.addEventListener('click', () => { sfxClick(); prevTrack(); });
+  el.nextBtn.addEventListener('click', () => { sfxClick(); nextTrack(); });
+
+  // Shuffle toggle
+  el.shuffleBtn.addEventListener('click', () => {
+    sfxClick();
+    _isShuffle = !_isShuffle;
+    el.shuffleBtn.classList.toggle('active', _isShuffle);
+  });
+
+  // Repeat toggle
+  el.repeatBtn.addEventListener('click', () => {
+    sfxClick();
+    _isRepeat = !_isRepeat;
+    el.repeatBtn.classList.toggle('active', _isRepeat);
+  });
+
+  // Volume slider
+  el.volumeSlider.addEventListener('input', (e) => {
+    const vol = parseFloat(e.target.value);
+    _musicAudio.volume = vol;
+    _musicAudio.muted = false;
+    updateVolumeUI(vol, false);
+  });
+
+  // Mute toggle button
+  el.volumeBtn.addEventListener('click', () => {
+    sfxClick();
+    _musicAudio.muted = !_musicAudio.muted;
+    updateVolumeUI(_musicAudio.volume, _musicAudio.muted);
+  });
+
+  // Toggle Playlist panel
+  el.playlistBtn.addEventListener('click', () => {
+    sfxClick();
+    el.playlistPanel.classList.toggle('hidden');
+    el.playlistBtn.classList.toggle('active', !el.playlistPanel.classList.contains('hidden'));
+  });
+
+  // Playlist Reset button
+  if (el.playlistResetBtn) {
+    el.playlistResetBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sfxClick();
+      resetPlaylist();
+    });
+  }
+
+  // Seeking on progress bar
+  el.progressContainer.addEventListener('click', (e) => {
+    const rect = el.progressContainer.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const percentage = clickX / width;
+    if (_musicAudio.duration) {
+      _musicAudio.currentTime = percentage * _musicAudio.duration;
+    }
+  });
+
+  // Populate Playlist
+  populatePlaylistUI();
+
+  // Load first track (silent setup)
+  loadTrack(_currentTrackIndex, false);
+
+  // Audio Event Listeners
+  _musicAudio.addEventListener('timeupdate', () => {
+    if (!_musicAudio.duration) return;
+    const percent = (_musicAudio.currentTime / _musicAudio.duration) * 100;
+    el.progressBar.style.width = percent + '%';
+    el.currentTimeLabel.textContent = mpFormatTime(_musicAudio.currentTime);
+  });
+
+  _musicAudio.addEventListener('loadedmetadata', () => {
+    el.totalTimeLabel.textContent = mpFormatTime(_musicAudio.duration);
+    updateMarqueeState();
+  });
+
+  _musicAudio.addEventListener('ended', () => {
+    if (_isRepeat) {
+      _musicAudio.currentTime = 0;
+      _musicAudio.play().catch(() => {});
+    } else {
+      nextTrack();
+    }
+  });
+
+  // Handle errors or missing files gracefully
+  _musicAudio.addEventListener('error', () => {
+    if (_activePlaylist.length > 0) {
+      console.warn(`Failed to load audio: ${_activePlaylist[_currentTrackIndex]?.file}, skipping to next.`);
+      setTimeout(() => { nextTrack(); }, 1000);
+    }
+  });
+}
+
+function updateVolumeUI(volume, isMuted) {
+  const el = mpGetElements();
+  if (!el.volumeSlider) return;
+
+  el.volumeSlider.value = isMuted ? 0 : volume;
+
+  if (isMuted || volume === 0) {
+    el.volumeOnIcon.classList.add('hidden');
+    el.volumeMuteIcon.classList.remove('hidden');
+  } else {
+    el.volumeOnIcon.classList.remove('hidden');
+    el.volumeMuteIcon.classList.add('hidden');
+  }
+}
+
+function toggleLike() {
+  if (_activePlaylist.length === 0) return;
+  const track = _activePlaylist[_currentTrackIndex];
+  const el = mpGetElements();
+  if (_likedSongs.has(track.file)) {
+    _likedSongs.delete(track.file);
+  } else {
+    _likedSongs.add(track.file);
+    if (el.likeBtn) {
+      // Explode cute heart sparkles on like!
+      spawnSparkles(6, el.likeBtn);
+    }
+  }
+  saveLikedSongs();
+  updateLikeUI();
+  populatePlaylistUI();
+}
+
+function updateLikeUI() {
+  const el = mpGetElements();
+  if (!el.likeBtn) return;
+  if (_activePlaylist.length === 0) {
+    el.likeBtn.classList.remove('liked');
+    return;
+  }
+  const track = _activePlaylist[_currentTrackIndex];
+  const isLiked = _likedSongs.has(track.file);
+  el.likeBtn.classList.toggle('liked', isLiked);
+}
+
+function deleteTrackFromPlaylist(filename) {
+  const currentTrack = _activePlaylist[_currentTrackIndex];
+  const isCurrent = currentTrack && currentTrack.file === filename;
+
+  _deletedSongs.add(filename);
+  saveDeletedSongs();
+  rebuildActivePlaylist();
+
+  if (isCurrent) {
+    if (_activePlaylist.length > 0) {
+      if (_currentTrackIndex >= _activePlaylist.length) {
+        _currentTrackIndex = 0;
+      }
+      loadTrack(_currentTrackIndex, _isPlaying);
+    } else {
+      loadTrack(0, false);
+    }
+  } else {
+    if (currentTrack) {
+      const newIndex = _activePlaylist.findIndex(t => t.file === currentTrack.file);
+      if (newIndex !== -1) {
+        _currentTrackIndex = newIndex;
+      }
+    }
+    populatePlaylistUI();
+  }
+}
+
+function resetPlaylist() {
+  _deletedSongs.clear();
+  saveDeletedSongs();
+  rebuildActivePlaylist();
+  populatePlaylistUI();
+  _currentTrackIndex = 0;
+  loadTrack(0, _isPlaying);
+}
+
+function populatePlaylistUI() {
+  const el = mpGetElements();
+  if (!el.playlistList) return;
+
+  el.playlistList.innerHTML = '';
+  
+  if (_activePlaylist.length === 0) {
+    el.playlistList.innerHTML = `
+      <div style="font-size: 10px; color: var(--text-muted); text-align: center; padding: 12px; font-weight: 700;">
+        Плейлист пуст
+      </div>
+    `;
+    return;
+  }
+
+  _activePlaylist.forEach((track, index) => {
+    const item = document.createElement('div');
+    item.className = 'mp-playlist-item';
+    if (index === _currentTrackIndex) item.className += ' active';
+    item.dataset.index = index;
+
+    const isLiked = _likedSongs.has(track.file);
+
+    item.innerHTML = `
+      <span class="mp-playlist-item-num">${(index + 1).toString().padStart(2, '0')}</span>
+      <span class="mp-playlist-item-title">${track.name}</span>
+      <span class="mp-playlist-item-like ${isLiked ? 'liked' : ''}">
+        <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </span>
+      <span class="mp-playlist-item-delete" title="Исключить трек">
+        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </span>
+    `;
+
+    item.addEventListener('click', (e) => {
+      if (e.target.closest('.mp-playlist-item-delete')) return;
+      sfxClick();
+      playTrack(index);
+    });
+
+    const delBtn = item.querySelector('.mp-playlist-item-delete');
+    if (delBtn) {
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sfxClick();
+        deleteTrackFromPlaylist(track.file);
+      });
+    }
+
+    el.playlistList.appendChild(item);
+  });
+}
+
+function updatePlaylistActiveUI() {
+  const el = mpGetElements();
+  if (!el.playlistList) return;
+
+  const items = el.playlistList.querySelectorAll('.mp-playlist-item');
+  items.forEach((item, index) => {
+    if (index === _currentTrackIndex) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+}
+
+function updateMarqueeState() {
+  const el = mpGetElements();
+  if (!el.title) return;
+
+  // Temporarily remove marquee class to measure actual size
+  el.title.classList.remove('marquee');
+  el.title.style.left = '0';
+
+  const containerWidth = el.title.parentElement.offsetWidth;
+  const textWidth = el.title.offsetWidth;
+
+  if (textWidth > containerWidth) {
+    el.title.classList.add('marquee');
+  }
+}
+
+function loadTrack(index, autoplay = true) {
+  const el = mpGetElements();
+  
+  if (_activePlaylist.length === 0) {
+    if (el.title) el.title.textContent = 'Нет треков';
+    _musicAudio.src = '';
+    _musicAudio.load();
+    pauseMusic(false);
+    updatePlaylistActiveUI();
+    updateLikeUI();
+    return;
+  }
+
+  if (index < 0 || index >= _activePlaylist.length) {
+    index = 0;
+  }
+  _currentTrackIndex = index;
+
+  const track = _activePlaylist[index];
+  if (el.title) el.title.textContent = track.name;
+
+  _musicAudio.src = 'audio/' + track.file;
+  _musicAudio.load();
+
+  updatePlaylistActiveUI();
+  updateLikeUI();
+
+  if (autoplay && soundOn) {
+    playMusic();
+  } else {
+    pauseMusic(false); // set state without calling HTML5 pause if already paused
+  }
+
+  // System Media Session Integration
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: track.name,
+      artist: 'K-Pop Star Maker',
+      album: 'Eclipse Soundtrack',
+      artwork: [
+        { src: 'Items/UI/profile_image.jpg', sizes: '64x64', type: 'image/jpeg' }
+      ]
+    });
+
+    navigator.mediaSession.setActionHandler('play', playMusic);
+    navigator.mediaSession.setActionHandler('pause', pauseMusic);
+    navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
+    navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
+  }
+}
+
+function playTrack(index) {
+  loadTrack(index, true);
+}
+
+function playMusic() {
+  if (!soundOn || _activePlaylist.length === 0) return;
+  _isPlaying = true;
+  
+  const el = mpGetElements();
+  if (el.container) el.container.classList.add('playing');
+  if (el.playIcon) {
+    el.playIcon.classList.add('hidden');
+    el.pauseIcon.classList.remove('hidden');
+  }
+
+  _musicAudio.play().catch(err => {
+    console.warn("Audio play blocked by browser. Awaiting user interaction.", err);
+    _isPlaying = false;
+    if (el.container) el.container.classList.remove('playing');
+    if (el.playIcon) {
+      el.playIcon.classList.remove('hidden');
+      el.pauseIcon.classList.add('hidden');
+    }
+  });
+
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.playbackState = 'playing';
+  }
+}
+
+function pauseMusic(callHtmlPause = true) {
+  _isPlaying = false;
+
+  const el = mpGetElements();
+  if (el.container) el.container.classList.remove('playing');
+  if (el.playIcon) {
+    el.playIcon.classList.remove('hidden');
+    el.pauseIcon.classList.add('hidden');
+  }
+
+  if (callHtmlPause) {
+    _musicAudio.pause();
+  }
+
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.playbackState = 'paused';
+  }
+}
+
+function nextTrack() {
+  if (_activePlaylist.length === 0) return;
+  if (_isShuffle) {
+    const randomIndex = Math.floor(Math.random() * _activePlaylist.length);
+    playTrack(randomIndex);
+  } else {
+    const nextIndex = (_currentTrackIndex + 1) % _activePlaylist.length;
+    playTrack(nextIndex);
+  }
+}
+
+function prevTrack() {
+  if (_activePlaylist.length === 0) return;
+  // If track has been playing for more than 3 seconds, restart it. Otherwise go to previous.
+  if (_musicAudio.currentTime > 3) {
+    _musicAudio.currentTime = 0;
+  } else {
+    const prevIndex = (_currentTrackIndex - 1 + _activePlaylist.length) % _activePlaylist.length;
+    playTrack(prevIndex);
+  }
 }
 
 function startBGM() {
   if (!soundOn) return;
-  if (_bgmBuffer) { _startBGMSource(); return; }
-  _decodeBGM().then(ok => { if (ok && soundOn) _startBGMSource(); });
+  playMusic();
 }
+
 function stopBGM() {
-  if (_bgmSource) { try { _bgmSource.stop(); } catch(e) {} _bgmSource = null; }
+  pauseMusic();
 }
-function pauseBGM() { /* AudioContext.suspend() в _audioPause уже останавливает вывод */ }
-function resumeBGM() { /* AudioContext.resume() в _audioResume уже возобновляет вывод */ }
+
+function pauseBGM() {
+  pauseMusic();
+}
+
+function resumeBGM() {
+  if (soundOn) playMusic();
+}
 
 // ── Sound toggle ─────────────────────────────────────────────
 
@@ -116,8 +642,14 @@ function toggleSound() {
   if (btn) {
     btn.classList.toggle('muted', !soundOn);
   }
-  if (soundOn) { if (_actx) _actx.resume(); actx(); startBGM(); sfxClick(); }
-  else { pauseBGM(); stopBGM(); }
+  if (soundOn) {
+    if (_actx) _actx.resume();
+    actx();
+    playMusic();
+    sfxClick();
+  } else {
+    pauseMusic();
+  }
 }
 
 function initAudio() {
@@ -126,10 +658,14 @@ function initAudio() {
   if (btn) {
     btn.classList.toggle('muted', !soundOn);
   }
-  // Браузеры запрещают AudioContext до первого жеста пользователя
+  
+  // Initialize mini player controls and list
+  initMiniPlayer();
+
+  // Unlock audio contexts and start music on first user click
   document.addEventListener('click', function onFirstClick() {
     actx();
-    if (soundOn) startBGM();
+    if (soundOn) playMusic();
     document.removeEventListener('click', onFirstClick);
   }, { once: true });
 }

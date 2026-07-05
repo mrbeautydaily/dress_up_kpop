@@ -1380,12 +1380,6 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
   $('btn-share-score-label').textContent = lang === 'ru' ? 'Сохранить фото' : 'Save Photo';
   
-  // Custom click for sharing/downloading the post image in high res
-  $('btn-share-score').onclick = () => {
-    // If download is needed, we can trigger the standard save flow
-    shareOutfit();
-  };
-
   // ── Удвой награду (только если trendMultiplier >= 1.3 и не свободный режим) ───────────────
   const dblBtn  = $('btn-double-reward');
   const retryBtn = $('btn-retry-lesson');

@@ -21,9 +21,17 @@
 
 /* --- Locked Items --- */
 .item-card.locked { opacity: .85; }
-.item-card.locked img, .item-card.locked .item-thumb-wrapper { filter: brightness(.65) saturate(.4); }
+.item-card.locked img,
+.item-card.locked .item-thumb,
+.item-card.locked .item-thumb-wrapper svg {
+  filter: brightness(.65) saturate(.4);
+}
+.item-card.locked .item-thumb-wrapper {
+  background: #a6a6a6;
+  border-color: #94849a;
+}
 .item-cost-badge, .item-deal-badge {
-  position: absolute; bottom: 22px; left: 50%;
+  position: absolute; bottom: 4px; left: 50%;
   transform: translateX(-50%);
   font-size: .62rem; font-weight: 800;
   padding: .15rem .45rem; border-radius: 99px;

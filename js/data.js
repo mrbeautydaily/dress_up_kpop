@@ -346,8 +346,8 @@ function getCategories() {
     { key:'hair',        label:t('catHair'),    icon:`<img src="Items/UI/hair.png" class="ui-icon" alt="hair">` },
     { key:'tops',        label:t('catTops'),    icon:`<img src="Items/UI/tops.png" class="ui-icon" alt="tops">` },
     { key:'bottoms',     label:t('catBottoms'), icon:`<img src="Items/UI/bottoms.png" class="ui-icon" alt="bottoms">` },
-    { key:'shoes',       label:t('catShoes'),   icon:`<img src="Items/UI/shoes.png" class="ui-icon" alt="shoes">` },
     { key:'socks',       label:t('catSocks'),   icon:`<img src="Items/UI/socks.png" class="ui-icon" alt="socks">` },
+    { key:'shoes',       label:t('catShoes'),   icon:`<img src="Items/UI/shoes.png" class="ui-icon" alt="shoes">` },
     { key:'accessories', label:t('catAcc'),     icon:`<img src="Items/UI/accessories.png" class="ui-icon" alt="accessories">` },
   ];
 }

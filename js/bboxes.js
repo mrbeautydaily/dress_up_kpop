@@ -715,10 +715,10 @@ const ITEM_BBOXES = {
     "h": 169
   },
   "Items/UI/dresses.png": {
-    "x": 0,
-    "y": 0,
-    "w": 1022,
-    "h": 1024
+    "x": 5,
+    "y": 8,
+    "w": 54,
+    "h": 49
   },
   "Items/UI/dresses_old_fabric_roll.png": {
     "x": 0,
@@ -739,10 +739,10 @@ const ITEM_BBOXES = {
     "h": 170
   },
   "Items/UI/gift_box.png": {
-    "x": 158,
-    "y": 141,
-    "w": 708,
-    "h": 736
+    "x": 9,
+    "y": 8,
+    "w": 46,
+    "h": 47
   },
   "Items/UI/hair.png": {
     "x": 0,
@@ -781,34 +781,34 @@ const ITEM_BBOXES = {
     "h": 172
   },
   "Items/UI/shop_ad_tv.png": {
-    "x": 157,
-    "y": 100,
-    "w": 701,
-    "h": 834
+    "x": 9,
+    "y": 6,
+    "w": 44,
+    "h": 53
   },
   "Items/UI/shop_heart_1.png": {
-    "x": 195,
-    "y": 236,
-    "w": 624,
-    "h": 607
+    "x": 48,
+    "y": 59,
+    "w": 157,
+    "h": 152
   },
   "Items/UI/shop_heart_2.png": {
-    "x": 125,
-    "y": 208,
-    "w": 774,
-    "h": 694
+    "x": 31,
+    "y": 52,
+    "w": 194,
+    "h": 174
   },
   "Items/UI/shop_heart_3.png": {
-    "x": 151,
-    "y": 121,
-    "w": 716,
-    "h": 784
+    "x": 37,
+    "y": 30,
+    "w": 180,
+    "h": 197
   },
   "Items/UI/shop_heart_4.png": {
-    "x": 43,
-    "y": 118,
-    "w": 944,
-    "h": 782
+    "x": 10,
+    "y": 35,
+    "w": 237,
+    "h": 190
   },
   "Items/UI/skirts.png": {
     "x": 14,

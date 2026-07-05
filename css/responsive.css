@@ -211,7 +211,7 @@
   .item-ad-badge, .item-review-badge {
     font-size: .52rem !important;
     padding: .12rem .35rem !important;
-    bottom: 18px !important;
+    bottom: 4px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
   }
@@ -523,7 +523,7 @@
   .item-ad-badge, .item-review-badge {
     font-size: .5rem;
     padding: .1rem .3rem;
-    bottom: 18px;
+    bottom: 4px;
   }
 
   /* ── Buy bar ── */

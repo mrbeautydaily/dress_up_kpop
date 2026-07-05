@@ -512,9 +512,17 @@ function buildItemsGrid(category) {
   grid.innerHTML = '';
 
   const allItems = clothes[category] || [];
-  const items = subs
+  const rawItems = subs
     ? allItems.filter(item => !item.sub || item.sub === activeSub[category])
     : allItems;
+
+  const items = [...rawItems].sort((a, b) => {
+    const aUnlocked = isUnlocked(a.id);
+    const bUnlocked = isUnlocked(b.id);
+    if (aUnlocked && !bUnlocked) return -1;
+    if (!aUnlocked && bUnlocked) return 1;
+    return 0;
+  });
 
   const dealId = getDailyDealId();
 
@@ -544,21 +552,6 @@ function buildItemsGrid(category) {
       + (locked ? ' locked' : '');
     card.dataset.id = item.id;
 
-    const filterStyle = item.filter ? ` style="filter:${item.filter}"` : '';
-    let thumbHTML = '';
-    if (item.src) {
-      thumbHTML = `<div class="item-thumb-wrapper" style="position: relative;">
-          <canvas class="item-thumb" width="120" height="120" style="display: block; width: 100%; height: 100%; pointer-events: none;"${filterStyle}></canvas>
-        </div>`;
-    } else {
-      thumbHTML = `<div class="item-thumb-wrapper" style="display: flex; justify-content: center; align-items: center;">
-          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--card-text)" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </div>`;
-    }
-
     const isAdItem     = AD_ITEMS.has(item.id);
     const isReviewItem = item.id === REVIEW_ITEM;
     const badge = isDeal
@@ -571,7 +564,24 @@ function buildItemsGrid(category) {
             ? `<div class="item-cost-badge">${formatLikes(cost)}<img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>`
             : '';
 
-    card.innerHTML = `${thumbHTML}${badge}<span class="item-name">${iName(item)}</span>`;
+    const filterStyle = item.filter ? ` style="filter:${item.filter}"` : '';
+    let thumbHTML = '';
+    if (item.src) {
+      thumbHTML = `<div class="item-thumb-wrapper" style="position: relative;">
+          <canvas class="item-thumb" width="120" height="120" style="display: block; width: 100%; height: 100%; pointer-events: none;"${filterStyle}></canvas>
+          ${badge}
+        </div>`;
+    } else {
+      thumbHTML = `<div class="item-thumb-wrapper" style="display: flex; justify-content: center; align-items: center; position: relative;">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--card-text)" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          ${badge}
+        </div>`;
+    }
+
+    card.innerHTML = `${thumbHTML}<span class="item-name">${iName(item)}</span>`;
     if (item.src) {
       const canvas = card.querySelector('.item-thumb');
       if (canvas) {
