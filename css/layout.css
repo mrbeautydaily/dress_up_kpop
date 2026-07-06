@@ -442,6 +442,7 @@
   display: flex; gap: .35rem;
   padding: 0 0 .4rem;
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 .sub-tab-btn {
   flex: 1;
