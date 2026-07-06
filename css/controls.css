@@ -542,10 +542,10 @@
   display: flex !important;
 }
 #category-panel #btn-share-stage {
-  margin-top: auto !important;
+  margin-top: 0 !important;
 }
 #category-panel #btn-sound {
-  margin-top: 0 !important;
+  margin-top: auto !important;
   position: relative !important;
   top: auto !important;
   bottom: auto !important;

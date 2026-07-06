@@ -853,13 +853,15 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       let statusText = '';
       const pts = result.totalPoints;
       if (lang === 'ru') {
-        if (pts >= 100) statusText = '👑 Сенсация!';
+        if (result.isNaked) statusText = 'Забыли одеться';
+        else if (pts >= 100) statusText = '👑 Сенсация!';
         else if (pts >= 80) statusText = '🔥 Невероятно!';
         else if (pts >= 60) statusText = '✨ Трендово!';
         else if (pts >= 40) statusText = '👍 Хорошая работа';
         else statusText = '💜 Начало пути';
       } else {
-        if (pts >= 100) statusText = '👑 Sensational!';
+        if (result.isNaked) statusText = 'Forgot clothes';
+        else if (pts >= 100) statusText = '👑 Sensational!';
         else if (pts >= 80) statusText = '🔥 Incredible!';
         else if (pts >= 60) statusText = '✨ Trendy!';
         else if (pts >= 40) statusText = '👍 Good job!';
@@ -908,6 +910,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         trendLabel.style.setProperty('flex', '1', 'important');
         trendLabel.style.setProperty('min-width', '0', 'important');
         trendLabel.style.setProperty('width', 'auto', 'important');
+        trendLabel.style.setProperty('overflow', 'hidden', 'important');
 
         const isFree = (result && result.isFreePost) || (assignment && assignment.isFree);
         if (lang === 'ru') {
@@ -940,6 +943,17 @@ function showScoreScreen(assignment, result, earned, socialStats) {
           }
           trendLabel.innerHTML = html;
         }
+
+        // Auto-shrink font size if content overflows (keep single line, no wrapping)
+        requestAnimationFrame(() => {
+          let fs = 0.85;
+          const minFs = 0.55;
+          trendLabel.style.fontSize = fs + 'em';
+          while (trendLabel.scrollWidth > trendLabel.clientWidth && fs > minFs) {
+            fs -= 0.03;
+            trendLabel.style.fontSize = fs + 'em';
+          }
+        });
       }
       if (trendValue) {
         trendValue.textContent = '0';

@@ -4,10 +4,12 @@
   flex-direction: column;
   gap: 0.6rem;
   overflow-y: auto;
+  overflow-x: hidden;
   background: var(--white);
   padding: 1.5rem;
   box-sizing: border-box;
   scrollbar-width: none;
+  min-width: 0;
 }
 .score-right-col::-webkit-scrollbar { display: none; }
 
@@ -356,6 +358,8 @@
   line-height: 1;
   display: block;
   width: fit-content;
+  min-width: 5ch;
+  font-variant-numeric: tabular-nums;
   
   /* Анимация появления */
   opacity: 0;
@@ -413,12 +417,17 @@
 .breakdown-label {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .breakdown-value {
   font-weight: 800;
   color: var(--purple);
   font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+  text-align: right;
 }
 
 #score-items-value {
@@ -428,6 +437,7 @@
 /* Trend multiplier highlight */
 .trend-row {
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 .trend-row.has-trend {
   color: #b45309;
@@ -523,6 +533,9 @@
   color: var(--text);
   font-size: 0.9rem;
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+  display: inline-block;
 }
 #score-reward-followers .reward-unit {
   color: var(--text-muted);
@@ -541,6 +554,9 @@
   color: var(--text);
   font-size: 0.9rem;
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+  display: inline-block;
 }
 #score-reward-row .reward-unit {
   color: var(--text-muted);
@@ -555,6 +571,8 @@
   font-weight: 600;
   margin: 0.15em;
   border: 1px solid transparent;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 .hashtag-badge.tag-matched {
   background: rgba(16, 185, 129, 0.1);

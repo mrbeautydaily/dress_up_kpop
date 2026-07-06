@@ -194,7 +194,7 @@
 <div id="sparkles"></div>
 </div>
 <div id="outfit-name-display"></div>
-<div class="stage-controls-left">
+<div class="stage-controls-left" style="display: none !important;">
 <button id="btn-random-stage" class="btn-random-stage" title="Случайный наряд">
   <img src="Items/UI/random.png" class="ui-icon-btn" alt="random">
 </button>
@@ -219,11 +219,11 @@
         <!-- Dynamically populated via JavaScript -->
       </nav>
       <!-- Camera/Share button moved here, to sit at the bottom in desktop -->
-      <button id="btn-share-stage" class="btn-share-stage" title="Сделать скриншот">
-        <img src="Items/UI/camera.png" class="ui-icon-btn" alt="camera">
-      </button>
       <button id="btn-sound" class="btn-share-stage" title="Вкл/Выкл звук">
         <img src="Items/UI/sound.png" class="ui-icon-btn" alt="sound">
+      </button>
+      <button id="btn-share-stage" class="btn-share-stage" title="Сделать скриншот">
+        <img src="Items/UI/camera.png" class="ui-icon-btn" alt="camera">
       </button>
     </div>
 
@@ -537,7 +537,7 @@
     <button id="dev-panel-reset" class="btn btn-yellow dev-reset-btn">Сбросить настройки</button>
   </div>
 </div>
-<button id="dev-panel-trigger" class="dev-panel-trigger" title="Панель разработчика">🛠️</button>
+<button id="dev-panel-trigger" class="dev-panel-trigger" title="Панель разработчика" style="display: none !important;">🛠️</button>
 <div id="emoji-picker" class="emoji-picker-tooltip hidden">
   <span class="emoji-option" data-emoji="🔥">🔥</span>
   <span class="emoji-option" data-emoji="🙌">🙌</span>

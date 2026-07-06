@@ -255,12 +255,13 @@ async function init() {
 
   // Hide loading, show intro or game
   const loadingEl = $('loading-screen');
-  loadingEl.remove(); // Резко убираем экран загрузки
   markGameReady(); // Сообщаем Яндексу о готовности (может стриггерить преролл)
   
   // Даем Яндексу 150мс на то, чтобы прислать событие game_api_pause, если преролл всё-таки запустился
   setTimeout(() => {
     const startGame = () => {
+      if (loadingEl) loadingEl.remove(); // Убираем экран загрузки только перед стартом игры/интро
+      
       if (!prog.introDone) {
         showIntro();
       } else {
