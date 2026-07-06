@@ -300,7 +300,7 @@ const ITEM_BBOXES = {
     "w": 266,
     "h": 236
   },
-  "Items/Legs/Jeans/stylish_cargo_pants.png": {
+  "Items/Legs/Skirt/gothic_lace_up_skirt.png": {
     "x": 180,
     "y": 438,
     "w": 385,

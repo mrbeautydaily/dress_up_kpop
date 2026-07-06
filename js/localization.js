@@ -14,13 +14,17 @@ let lang = detectLangFromBrowser(); // set early; refined after SDK init
 let scoreAutoScrollTimer = null;
 
 function detectLangFromBrowser() {
-  // 1. URL-параметр ?lang=ru — Яндекс Игры передают его в URL
+  // 1. URL-параметр ?lang= — Яндекс Игры передают его в URL
   const urlLang = new URLSearchParams(window.location.search).get('lang');
-  if (urlLang) return urlLang === 'ru' ? 'ru' : 'en';
+  const cisLangs = ['ru', 'be', 'kk', 'uk', 'uz', 'az', 'hy', 'ka', 'mo', 'tg', 'tk', 'ky'];
+  
+  if (urlLang) {
+    return cisLangs.includes(urlLang) ? 'ru' : 'en';
+  }
 
   // 2. Язык браузера
   const nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
-  return nav.startsWith('ru') ? 'ru' : 'en';
+  return cisLangs.some(l => nav.startsWith(l)) ? 'ru' : 'en';
 }
 
 function t(key) {

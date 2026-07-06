@@ -403,27 +403,43 @@ const IntroDirector = {
     this.clearTyping();
     el.innerHTML = '';
 
-    let i = 0;
     const cursor = document.createElement('span');
     cursor.className = 'intro-cursor';
     el.appendChild(cursor);
 
+    const tokens = [];
+    const parts = text.split('{heart}');
+    for (let j = 0; j < parts.length; j++) {
+      let chars;
+      if (window.Intl && window.Intl.Segmenter) {
+        chars = Array.from(new Intl.Segmenter().segment(parts[j])).map(x => x.segment);
+      } else {
+        chars = Array.from(parts[j]);
+      }
+      tokens.push(...chars);
+      if (j < parts.length - 1) {
+        tokens.push('{heart}');
+      }
+    }
+
+    let i = 0;
+
     const typeNext = () => {
-      if (i < text.length) {
-        if (text.substring(i, i + 7) === '{heart}') {
+      if (i < tokens.length) {
+        const token = tokens[i++];
+
+        if (token === '{heart}') {
           const img = document.createElement('img');
           img.src = 'Items/UI/heart.png';
           img.className = 'intro-inline-heart';
           img.alt = 'heart';
           el.insertBefore(img, cursor);
-          i += 7;
           this.typingTimer = setTimeout(typeNext, speed);
           return;
         }
 
-        const ch = text[i++];
-        const tn = document.createTextNode(ch === '\n' ? '' : ch);
-        if (ch === '\n') {
+        const tn = document.createTextNode(token === '\n' ? '' : token);
+        if (token === '\n') {
           el.insertBefore(document.createElement('br'), cursor);
         } else {
           el.insertBefore(tn, cursor);
@@ -431,7 +447,7 @@ const IntroDirector = {
 
         if (i % 2 === 0) this.playSynthTick();
 
-        this.typingTimer = setTimeout(typeNext, ch === '\n' ? 120 : speed);
+        this.typingTimer = setTimeout(typeNext, token === '\n' ? 120 : speed);
       } else {
         cursor.remove();
         this.typingTimer = null;
@@ -678,12 +694,15 @@ const IntroDirector = {
     });
 
     saveOutfit();
-    localStorage.setItem('kpop_intro_done', '1');
+    prog.introDone = true;
+    saveProgress();
 
     const overlay = $('intro-overlay');
     overlay.style.transition = 'opacity .6s ease';
     overlay.style.opacity = '0';
-    overlay.addEventListener('transitionend', () => {
+    
+    // Надежный таймер вместо transitionend (чтобы игра не зависла, если игрок свернул окно)
+    setTimeout(() => {
       overlay.remove();
 
       $('game').classList.remove('hidden');
@@ -694,7 +713,7 @@ const IntroDirector = {
       if (window.GameParticles) {
         window.GameParticles.start();
       }
-    }, { once: true });
+    }, 600);
   }
 };
 

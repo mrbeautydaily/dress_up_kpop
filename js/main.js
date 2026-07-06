@@ -25,12 +25,24 @@ function preloadImages(srcs, onProgress) {
       onProgress(done / srcs.length);
       if (done >= srcs.length) resolve();
     };
+    
+    // Определяем картинки, которые требуют декодирования до рендера (фоны и тяжелые платья интро)
+    const shouldDecode = (src) => src.includes('Background/') || src.includes('dress_new_1.png') || src.includes('pink_sequin_dress.png');
+
     srcs.forEach(src => {
       // Уже в кеше — не грузим повторно
       if (_imgCache[src]) { finish(); return; }
       const img = new Image();
       _imgCache[src] = img;   // сохраняем ссылку — защита от GC
-      img.onload  = finish;
+      
+      img.onload = () => {
+        // Если это фон или тяжелая картинка, форсируем декодирование в GPU
+        if (shouldDecode(src) && img.decode) {
+          img.decode().then(finish).catch(finish);
+        } else {
+          finish();
+        }
+      };
       img.onerror = finish;   // ошибка тоже считается — не блокируем загрузку
       img.src = src;
     });
@@ -105,10 +117,10 @@ async function init() {
   // Apply browser-detected language to loading screen immediately
   applyLoadingTranslations();
 
-  await runLoadingScreen();
-
-  // Init SDK — may refine lang to Yandex-authoritative value
+  // Инициализируем SDK первым делом, до загрузки картинок
   await initYandexSDK();
+
+  await runLoadingScreen();
 
   // Complete the progress bar
   const bar = $('loading-bar');
@@ -243,23 +255,33 @@ async function init() {
 
   // Hide loading, show intro or game
   const loadingEl = $('loading-screen');
-  loadingEl.style.transition = 'opacity .4s ease';
-  loadingEl.style.opacity = '0';
-  loadingEl.addEventListener('transitionend', () => {
-    loadingEl.remove();
-    if (!localStorage.getItem('kpop_intro_done')) {
-      showIntro();
-      markGameReady();
-    } else {
-      $('game').classList.remove('hidden');
-      startSchoolMode();
-      checkDailyLogin();
-      markGameReady();
-      if (window.GameParticles) {
-        window.GameParticles.start();
+  loadingEl.remove(); // Резко убираем экран загрузки
+  markGameReady(); // Сообщаем Яндексу о готовности (может стриггерить преролл)
+  
+  // Даем Яндексу 150мс на то, чтобы прислать событие game_api_pause, если преролл всё-таки запустился
+  setTimeout(() => {
+    const startGame = () => {
+      if (!prog.introDone) {
+        showIntro();
+      } else {
+        $('game').classList.remove('hidden');
+        startSchoolMode();
+        checkDailyLogin();
+        if (window.GameParticles) {
+          window.GameParticles.start();
+        }
       }
+    };
+
+    if (window.isGamePausedByYandex) {
+      // Яндекс показывает рекламу, ждем события game_api_resume
+      console.log('[Game] Waiting for Yandex preroll to finish before starting intro/game...');
+      window.yandexResumeCallbacks.push(startGame);
+    } else {
+      // Рекламы нет, стартуем сразу
+      startGame();
     }
-  }, { once: true });
+  }, 150);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -312,7 +334,7 @@ function initDevPanel() {
 
   // Load values from localStorage
   const savedCharScale = localStorage.getItem('dev_char_scale') || '1.15';
-  const savedCharY = localStorage.getItem('dev_char_y') || '30';
+  const savedCharY = localStorage.getItem('dev_char_y') || (deviceType === 'mobile' ? '20' : '30');
   const savedBgScale = localStorage.getItem('dev_bg_scale') || '0.95';
   const savedBgY = localStorage.getItem('dev_bg_y') || '0';
   const savedBgBlur = localStorage.getItem('dev_bg_blur') || '1';

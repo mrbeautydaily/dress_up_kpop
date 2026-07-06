@@ -498,6 +498,8 @@ function initCardDragAndDrop(card, category, itemId) {
   }, { passive: true });
 }
 
+let currentGridRenderSession = 0;
+
 function buildItemsGrid(category) {
   stopInertia();
   const grid = $('items-grid');
@@ -511,9 +513,6 @@ function buildItemsGrid(category) {
     if (isSameTab) {
       savedScrollTop = grid.scrollTop;
       savedScrollLeft = grid.scrollLeft;
-    } else {
-      grid.scrollTop = 0;
-      grid.scrollLeft = 0;
     }
   }
 
@@ -526,7 +525,9 @@ function buildItemsGrid(category) {
     hideSubTabs();
   }
 
-  grid.innerHTML = '';
+  const fragment = document.createDocumentFragment();
+  const drawTasks = [];
+  const session = ++currentGridRenderSession;
 
   const allItems = clothes[category] || [];
   const items = subs
@@ -586,12 +587,14 @@ function buildItemsGrid(category) {
     }
 
     card.innerHTML = `${thumbHTML}<span class="item-name">${iName(item)}</span>`;
+    
     if (item.src) {
       const canvas = card.querySelector('.item-thumb');
       if (canvas) {
-        drawItemThumbnail(canvas, item.src);
+        drawTasks.push(() => drawItemThumbnail(canvas, item.src));
       }
     }
+    
     if (isEquipped) {
       const check = document.createElement('div');
       check.className = 'equipped-indicator';
@@ -610,12 +613,34 @@ function buildItemsGrid(category) {
 
     initCardDragAndDrop(card, category, item.id);
 
-    grid.appendChild(card);
+    fragment.appendChild(card);
   });
 
-  if (grid && isSameTab) {
-    grid.scrollTop = savedScrollTop;
-    grid.scrollLeft = savedScrollLeft;
+  if (grid) {
+    grid.innerHTML = '';
+    grid.appendChild(fragment);
+
+    if (isSameTab) {
+      grid.scrollTop = savedScrollTop;
+      grid.scrollLeft = savedScrollLeft;
+    }
+  }
+
+  let taskIndex = 0;
+  function processDrawTasks() {
+    if (session !== currentGridRenderSession) return;
+    const CHUNK_SIZE = 8;
+    const end = Math.min(taskIndex + CHUNK_SIZE, drawTasks.length);
+    for (; taskIndex < end; taskIndex++) {
+      drawTasks[taskIndex]();
+    }
+    if (taskIndex < drawTasks.length) {
+      requestAnimationFrame(processDrawTasks);
+    }
+  }
+  
+  if (drawTasks.length > 0) {
+    requestAnimationFrame(processDrawTasks);
   }
 }
 

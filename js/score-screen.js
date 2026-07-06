@@ -276,11 +276,42 @@ async function shareOutfit() {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(0, 0, SHARE_W, CANVAS_H);
 
-    // — Скачать
-    const link = document.createElement('a');
-    link.download = 'kpop-outfit.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    // — Скачать или поделиться
+    const filename = 'kpop-outfit.png';
+    let shared = false;
+
+    // Пытаемся использовать Web Share API (особенно актуально для iOS/Yandex)
+    // чтобы избежать ухода со страницы при попытке скачивания
+    if (navigator.canShare && navigator.share) {
+      try {
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        if (blob) {
+          const file = new File([blob], filename, { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file]
+            });
+            shared = true;
+          }
+        }
+      } catch (e) {
+        console.log('Share canceled or failed', e);
+        // Если юзер просто закрыл меню "Поделиться", не нужно принудительно скачивать
+        if (e.name === 'AbortError' || e.name === 'NotAllowedError') {
+          shared = true;
+        }
+      }
+    }
+
+    if (!shared) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.target = '_blank';
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link); // Иногда нужно добавить в DOM
+      link.click();
+      document.body.removeChild(link);
+    }
 
   } catch (e) {
     showToast(lang === 'ru' ? 'Не удалось создать изображение' : 'Could not create image', 'error');
@@ -1451,10 +1482,11 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   $('score-modal').classList.remove('hidden');
 
   // Adjust trend label font size to fit tags without wrapping
-  if (trendLabel) {
-    adjustTrendLabelFontSize(trendLabel);
-    setTimeout(() => adjustTrendLabelFontSize(trendLabel), 300);
-    setTimeout(() => adjustTrendLabelFontSize(trendLabel), 900);
+  const trendLabelEl = $('score-trend-label');
+  if (trendLabelEl) {
+    adjustTrendLabelFontSize(trendLabelEl);
+    setTimeout(() => adjustTrendLabelFontSize(trendLabelEl), 300);
+    setTimeout(() => adjustTrendLabelFontSize(trendLabelEl), 900);
   }
 }
 

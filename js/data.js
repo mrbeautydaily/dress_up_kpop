@@ -100,19 +100,19 @@ const clothes = {
     { id:'kpop_style_skirt_3', name:'K-Pop Skirt III', name_ru:'K-Pop юбка III', src:'Items/Legs/Skirt/kpop_style_skirt_3.png', pos:{left:0,top:0,width:100}, tags:['kpop','elegant'], sub:'skirts' },
     { id:'pleated_mini_skirt_classic', name:'Classic Pleated Skirt', name_ru:'Классическая плиссированная юбка', src:'Items/Legs/Skirt/pleated_mini_skirt_classic.png', pos:{left:0,top:0,width:100}, tags:['school','casual'], sub:'skirts' },
     
-    // 4 новых брюк/шорт
+    // 3 новых брюк/шорт
     { id:'classic_pants', name:'Classic Trousers', name_ru:'Классические брюки', src:'Items/Legs/Jeans/classic_pants.png', pos:{left:0,top:0,width:100}, tags:['formal','school','casual'], sub:'pants' },
     { id:'running_shorts', name:'Running Shorts', name_ru:'Спортивные шорты', src:'Items/Legs/Jeans/running_shorts.png', pos:{left:0,top:0,width:100}, tags:['sporty','casual'], sub:'pants' },
     { id:'tailored_shorts', name:'Tailored Shorts', name_ru:'Строгие шорты', src:'Items/Legs/Jeans/tailored_shorts.png', pos:{left:0,top:0,width:100}, tags:['formal','school'], sub:'pants' },
-    { id:'stylish_cargo_pants', name:'Stylish Cargo Pants', name_ru:'Стильные брюки карго', src:'Items/Legs/Jeans/stylish_cargo_pants.png', pos:{left:0,top:0,width:100}, tags:['casual','bold','sporty'], sub:'pants' },
 
-    // 6 новых юбок
+    // 7 новых юбок
     { id:'mini_skirt_basic_1', name:'Basic Mini Skirt I', name_ru:'Базовая мини-юбка I', src:'Items/Legs/Skirt/mini_skirt_basic_1.png', pos:{left:0,top:0,width:100}, tags:['casual','cute'], sub:'skirts' },
     { id:'mini_skirt_basic_2', name:'Basic Mini Skirt II', name_ru:'Базовая мини-юбка II', src:'Items/Legs/Skirt/mini_skirt_basic_2.png', pos:{left:0,top:0,width:100}, tags:['casual','cute'], sub:'skirts' },
     { id:'navy_chiffon_skirt', name:'Navy Chiffon Skirt', name_ru:'Синяя шифоновая юбка', src:'Items/Legs/Skirt/navy_chiffon_skirt.png', pos:{left:0,top:0,width:100}, tags:['elegant','cute','pastel'], sub:'skirts' },
     { id:'pleated_mini_skirt_new', name:'Pleated Mini Skirt', name_ru:'Плиссированная мини-юбка', src:'Items/Legs/Skirt/pleated_mini_skirt_new.png', pos:{left:0,top:0,width:100}, tags:['school','casual','cute'], sub:'skirts' },
     { id:'silver_metallic_skirt', name:'Silver Metallic Skirt', name_ru:'Серебристая блестящая юбка', src:'Items/Legs/Skirt/silver_metallic_skirt.png', pos:{left:0,top:0,width:100}, tags:['kpop','bold'], sub:'skirts' },
-    { id:'y2k_denim_mini_skirt', name:'Y2K Denim Mini Skirt', name_ru:'Джинсовая мини-юбка Y2K', src:'Items/Legs/Skirt/y2k_denim_mini_skirt.png', pos:{left:0,top:0,width:100}, tags:['casual','cute'], sub:'skirts' }
+    { id:'y2k_denim_mini_skirt', name:'Y2K Denim Mini Skirt', name_ru:'Джинсовая мини-юбка Y2K', src:'Items/Legs/Skirt/y2k_denim_mini_skirt.png', pos:{left:0,top:0,width:100}, tags:['casual','cute'], sub:'skirts' },
+    { id:'gothic_lace_up_skirt', name:'Gothic Lace-up Skirt', name_ru:'Готическая юбка на шнуровке', src:'Items/Legs/Skirt/gothic_lace_up_skirt.png', pos:{left:0,top:0,width:100}, tags:['gothic','dark','cute'], sub:'skirts' }
   ],
 
   // ── SHOES ─────────────────────────────────────────────────
@@ -290,7 +290,7 @@ const ITEM_COSTS = {
   'navy_chiffon_star_dress': 35,
   'ribbed_knit_pastel_dress': 30,
   'sleeveless_sequin_dress': 40,
-  'stylish_cargo_pants': 30,
+  'gothic_lace_up_skirt': 30,
   'navy_chiffon_skirt': 25,
   'silver_metallic_skirt': 30,
   'futuristic_boots': 35,

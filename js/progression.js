@@ -14,6 +14,10 @@ let prog = {
   runwayCount: 0,
   perfectCount: 0,
   dailyTasksCompleted: 0,
+  introDone: false,
+  schoolFollowers: 0,
+  schoolMilestones: [],
+  hints: {},
 };
 
 async function loadProgress() {
@@ -39,8 +43,21 @@ async function loadProgress() {
       prog.likesEarned = 12000;
     }
   }
+  
+  // Применяем загруженные облачные значения в режим карьеры
+  if (typeof school !== 'undefined') {
+    if (prog.schoolFollowers !== undefined) school.totalFollowers = prog.schoolFollowers;
+    if (prog.schoolMilestones !== undefined) school.rewardedMilestones = prog.schoolMilestones;
+  }
 }
+
 function saveProgress() {
+  // Перед сохранением обновляем данные из режима карьеры
+  if (typeof school !== 'undefined') {
+    prog.schoolFollowers = school.totalFollowers || 0;
+    prog.schoolMilestones = school.rewardedMilestones || [];
+  }
+
   try { localStorage.setItem(PROG_KEY, JSON.stringify(prog)); } catch(e) {}
   if (_player) {
     _player.setData({ prog }, true).catch(e => console.warn('[Player] setData error:', e));
@@ -209,16 +226,15 @@ let _ctxHintEl    = null;
 let _ctxHintTimer = null;
 let _runwayHintCooldown = false;
 
-// Подсказки показываются только один раз за всё время (хранится в localStorage)
-const HINT_KEY = 'kpop_hints_v1';
+// Подсказки показываются только один раз за всё время (теперь хранятся в облаке)
 function _loadHintFlags() {
-  try { return JSON.parse(localStorage.getItem(HINT_KEY) || '{}'); } catch { return {}; }
+  return prog.hints || {};
 }
 function _hintShown(name) { return !!_loadHintFlags()[name]; }
 function _markHintShown(name) {
-  const flags = _loadHintFlags();
-  flags[name] = true;
-  localStorage.setItem(HINT_KEY, JSON.stringify(flags));
+  if (!prog.hints) prog.hints = {};
+  prog.hints[name] = true;
+  saveProgress();
 }
 
 function showCtxHint(targetId, text, duration) {

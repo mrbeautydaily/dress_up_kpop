@@ -7,6 +7,9 @@ let _player    = null;
 let _adShowing = false;
 let _gameReadySent = false;
 
+window.isGamePausedByYandex = false;
+window.yandexResumeCallbacks = [];
+
 let deviceType = 'desktop';
 let isMobileDevice = false;
 
@@ -79,6 +82,7 @@ async function initYandexSDK() {
       }
 
       console.log('[Device] YSDK detected type:', type);
+      deviceType = type;
       document.body.classList.remove('device-desktop', 'device-mobile', 'device-tablet', 'device-tv', 'is-mobile', 'is-desktop');
       document.body.classList.add('device-' + type);
       if (type === 'mobile' || type === 'tablet') {
@@ -96,13 +100,14 @@ async function initYandexSDK() {
 
     console.log('[i18n] SDK ready — lang:', sdkLang, '| tld:', sdkTld);
 
-    // sdkLang отражает ?lang= из URL — он главный
-    if (sdkLang) {
-      lang = sdkLang === 'ru' ? 'ru' : 'en';
+    // Умное определение для СНГ (Языки и Домены)
+    const cisLangs = ['ru', 'be', 'kk', 'uk', 'uz', 'az', 'hy', 'ka', 'mo', 'tg', 'tk', 'ky'];
+    const cisTlds  = ['ru', 'by', 'kz', 'ua', 'uz', 'az', 'am', 'ge', 'md', 'tj', 'tm', 'kg'];
+
+    if (cisLangs.includes(sdkLang) || cisTlds.includes(sdkTld)) {
+      lang = 'ru';
     } else {
-      // lang не задан явно → используем домен как подсказку
-      const ruTlds = ['ru', 'kz', 'by', 'ua', 'uz', 'az', 'am', 'ge', 'md', 'tj', 'tm'];
-      if (ruTlds.includes(sdkTld)) lang = 'ru';
+      lang = 'en';
     }
     // если SDK ничего не дал — остаётся результат detectLangFromBrowser()
 
@@ -113,7 +118,25 @@ async function initYandexSDK() {
 
     // Пауза звука при сворачивании / смене вкладки (требование модерации Яндекс)
     const _audioPause = () => { if (_actx) _actx.suspend(); pauseBGM(); };
-    const _audioResume = () => { if (_adShowing) return; if (soundOn) { if (_actx) _actx.resume(); resumeBGM(); } };
+    const _audioResume = () => { if (_adShowing || window.isGamePausedByYandex) return; if (soundOn) { if (_actx) _actx.resume(); resumeBGM(); } };
+
+    // Обработка событий паузы от Яндекса (реклама, покупки)
+    ysdk.on('game_api_pause', () => {
+      console.log('[YaGames] game_api_pause fired');
+      window.isGamePausedByYandex = true;
+      _audioPause();
+    });
+
+    ysdk.on('game_api_resume', () => {
+      console.log('[YaGames] game_api_resume fired');
+      window.isGamePausedByYandex = false;
+      _audioResume();
+      // Запускаем отложенные действия, которые ждали конца рекламы
+      if (window.yandexResumeCallbacks.length > 0) {
+        window.yandexResumeCallbacks.forEach(cb => cb());
+        window.yandexResumeCallbacks = [];
+      }
+    });
 
     // Основной способ — срабатывает на смену вкладки, сворачивание, меню вкладок
     document.addEventListener('visibilitychange', () => {

@@ -223,6 +223,7 @@ function loadOutfit() {
   }
 }
 function saveSchoolProgress() {
+  saveProgress(); // Сохраняем в облако
   try {
     localStorage.setItem(SCHOOL_SAVE_KEY, JSON.stringify({
       day: school.day,
