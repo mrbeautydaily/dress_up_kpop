@@ -5,9 +5,10 @@
 /* Сетка горизонтального поста */
 /* Сетка горизонтального поста с двухцветным фоном */
 .score-box {
-  max-width: 860px;
-  width: fit-content; min-width: 600px;
-  max-height: 90vh;
+  width: 860px;
+  height: 600px;
+  max-width: none;
+  max-height: none;
   display: flex;
   flex-direction: row;
   gap: 0;
@@ -16,6 +17,7 @@
   border-radius: 18px;
   background: var(--white);
   position: relative;
+  transform-origin: center center;
 }
 
 #modal-sparkles {

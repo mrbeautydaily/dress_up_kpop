@@ -1428,7 +1428,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     };
   }
 
-  $('btn-share-score-label').textContent = lang === 'ru' ? 'Сохранить фото' : 'Save Photo';
+  $('btn-share-score-label').textContent = lang === 'ru' ? 'Сохранить' : 'Save';
   
   // ── Удвой награду (только если trendMultiplier >= 1.3 и не свободный режим) ───────────────
   const dblBtn  = $('btn-double-reward');
@@ -1439,8 +1439,8 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   if (!isFree && result.trendMatches >= 1) {
     let doubled = false;
     dblBtn.innerHTML = lang === 'ru'
-      ? `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Удвоить награду (+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">)`
-      : `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Double reward (+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">)`;
+      ? `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Удвоить +${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`
+      : `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Double +${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`;
     dblBtn.classList.remove('hidden');
     dblBtn.onclick = () => {
       if (doubled || _adShowing) return;
@@ -1481,13 +1481,8 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
   $('score-modal').classList.remove('hidden');
 
-  // Adjust trend label font size to fit tags without wrapping
-  const trendLabelEl = $('score-trend-label');
-  if (trendLabelEl) {
-    adjustTrendLabelFontSize(trendLabelEl);
-    setTimeout(() => adjustTrendLabelFontSize(trendLabelEl), 300);
-    setTimeout(() => adjustTrendLabelFontSize(trendLabelEl), 900);
-  }
+  resizeScoreModal();
+  setTimeout(resizeScoreModal, 100);
 }
 
 /**
