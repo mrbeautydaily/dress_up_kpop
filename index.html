@@ -346,7 +346,6 @@
     <!-- Block: Publication Results — Simplified Breakdown -->
     <div class="social-results-block" id="social-results-block">
       <div class="score-status-title" id="score-status-title"></div>
-      <div class="score-large-score" id="score-large-score">0/100</div>
       <div class="score-breakdown">
         <!-- Row: Items equipped -->
         <div class="score-breakdown-row" id="score-row-items">
@@ -364,36 +363,40 @@
           <span class="breakdown-label" id="score-trend-label">Тренд</span>
           <span class="breakdown-value trend-multiplier" id="score-trend-value">+0</span>
         </div>
-      </div>
-
-      <!-- Rewards: followers + likes -->
-      <div class="score-rewards-block">
-        <div class="score-reward-item" id="score-reward-followers">
-          <span class="reward-icon">
-            <img src="Items/UI/followers.png" alt="Followers" class="reward-img">
+        <!-- Divider -->
+        <div class="score-breakdown-divider"></div>
+        <!-- Row: Total / Stars earned -->
+        <div class="score-breakdown-row total-row" id="score-reward-row">
+          <span class="breakdown-label" id="score-total-label" style="font-weight: 800; color: var(--purple);">Итого:</span>
+          <span class="breakdown-value total-value" style="display: flex; align-items: center; gap: 4px;">
+            <span class="reward-plus">+</span><span id="score-reward-value">0</span>
+            <img src="Items/UI/star.png" alt="Stars" style="width: 1.15rem; height: 1.15rem; object-fit: contain;">
           </span>
-          <span class="reward-text"><span class="reward-plus">+</span><span id="score-followers-gained">0</span><span class="reward-unit" id="score-total-unit"> подписчиков</span></span>
-        </div>
-        <div class="score-reward-item" id="score-reward-row">
-          <span class="reward-icon">
-            <img src="Items/UI/star.png" alt="Stars" class="reward-img">
-          </span>
-          <span class="reward-text"><span class="reward-plus">+</span><span id="score-reward-value">0</span><span class="reward-unit" id="score-likes-unit"> звёзд</span></span>
         </div>
       </div>
 
       <!-- Milestone Progress -->
       <div id="score-rank-section" class="score-rank-section">
-        <div class="score-rank-header">
-          <span id="score-rank-badge" class="score-rank-badge">
+        <div class="score-rank-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="score-rank-badge">
             <img src="Items/UI/followers.png" alt="Followers" class="rank-badge-img">
-            <span id="score-rank-badge-val">0</span>
+            <span id="score-rank-title" style="font-weight:700; color:var(--text-main); margin-right: 8px;" data-i18n="followersTitle">Подписчики</span>
           </span>
-          <span id="score-rank-next" class="score-rank-next">Goal: 1K</span>
+          <span id="score-rank-gained-wrap" class="score-rank-gained-wrap">
+            <span class="reward-plus">+</span><span id="score-followers-gained">0</span><span id="score-total-unit" style="margin-left: 4px;"> подписчиков</span>
+          </span>
         </div>
         <div class="score-rank-progress-container">
           <div id="score-rank-progress-wrap" class="score-rank-progress-wrap">
             <div id="score-rank-bar" class="score-rank-bar" style="width: 0%;"></div>
+            <!-- Base Dark Text -->
+            <div id="score-rank-progress-text-dark" class="score-rank-progress-text text-dark">
+              <span id="score-rank-badge-val-dark">0</span> / <span id="score-rank-next-dark">1K</span>
+            </div>
+            <!-- Highlight White Text (Clipped) -->
+            <div id="score-rank-progress-text-white" class="score-rank-progress-text text-white" style="clip-path: inset(0 100% 0 0); transition: clip-path 0.6s cubic-bezier(.22,.61,.36,1);">
+              <span id="score-rank-badge-val">0</span> / <span id="score-rank-next">1K</span>
+            </div>
           </div>
           <img id="score-gift-box" class="score-gift-box" src="Items/UI/gift_box.png" alt="gift">
         </div>

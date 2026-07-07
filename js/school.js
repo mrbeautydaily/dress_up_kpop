@@ -275,7 +275,7 @@ function onRunwayClick() {
   const likes = followers * (Math.floor(Math.random() * (lMax - lMin + 1)) + lMin);
 
   // ── Likes reward (currency) ──
-  const earned = result.isNaked ? 0 : Math.round(followers * 0.8);
+  const earned = result.isNaked ? 0 : result.totalPoints;
 
   prog.totalLessons++;
   prog.runwayCount = (prog.runwayCount || 0) + 1;
@@ -297,7 +297,7 @@ function onRunwayClick() {
 
   // Instant shutter click + flash -> show post and results using stage cloning
   triggerCameraFlash(() => {
-    showScoreScreen(assignment, result, earned + dailyBonus, { followers, likes });
+    showScoreScreen(assignment, result, earned, { followers, likes });
   });
 }
 

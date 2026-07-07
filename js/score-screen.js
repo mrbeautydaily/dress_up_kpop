@@ -807,6 +807,8 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
   // Set unit text next to total followers gained
   $('score-total-unit').textContent = lang === 'ru' ? ' подписчиков' : ' followers';
+  const rankTitleEl = $('score-rank-title');
+  if (rankTitleEl) rankTitleEl.textContent = lang === 'ru' ? 'Подписчики' : 'Followers';
 
   const socialComments = generateSocialComments(result, assignment);
   
@@ -831,9 +833,9 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         const likesVal = earned || 0;
         setTimeout(() => animateCounter(rewardValEl, likesVal, 900, '', '', 'short'), 800);
       }
-      const likesUnitEl = $('score-likes-unit');
-      if (likesUnitEl) {
-        likesUnitEl.textContent = lang === 'ru' ? ' звёзд' : ' stars';
+      const totalLabelEl = $('score-total-label');
+      if (totalLabelEl) {
+        totalLabelEl.textContent = lang === 'ru' ? 'Итого:' : 'Total:';
       }
     }
   }
@@ -1005,6 +1007,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     const rankBadgeEl = $('score-rank-badge');
     const rankBarEl = $('score-rank-bar');
     const rankNextEl = $('score-rank-next');
+    const rankNextDarkEl = $('score-rank-next-dark');
     const rankSectionEl = $('score-rank-section');
     const giftBoxEl = $('score-gift-box');
 
@@ -1033,24 +1036,36 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
     // Show current total as badge (if milestone crossed, we update it at the climax of the animation)
     const rankBadgeValEl = $('score-rank-badge-val');
-    if (rankBadgeValEl) {
-      rankBadgeValEl.textContent = formatFollowers(milestoneCrossed ? prevTotal : school.totalFollowers);
-    } else if (rankBadgeEl) {
-      rankBadgeEl.textContent = `📊 ${formatFollowers(milestoneCrossed ? prevTotal : school.totalFollowers)}`;
-    }
+    const rankBadgeValDarkEl = $('score-rank-badge-val-dark');
+    const currentFollowersText = formatFollowers(milestoneCrossed ? prevTotal : school.totalFollowers);
+    if (rankBadgeValEl) rankBadgeValEl.textContent = currentFollowersText;
+    if (rankBadgeValDarkEl) rankBadgeValDarkEl.textContent = currentFollowersText;
+    else if (!rankBadgeValEl && rankBadgeEl) rankBadgeEl.textContent = `📊 ${currentFollowersText}`;
 
     if (school.totalFollowers >= GOAL_FOLLOWERS) {
       if (rankBarEl) {
         const pDenom = prevMilestone.to - prevMilestone.from;
         const prevPct = pDenom > 0 ? ((prevTotal - prevMilestone.from) / pDenom) * 100 : 100;
-        rankBarEl.style.width = Math.min(Math.max(0, prevPct), 100) + '%';
+        const initialPercent = Math.min(Math.max(0, prevPct), 100);
+        rankBarEl.style.width = initialPercent + '%';
         rankBarEl.style.transition = 'width 0.6s cubic-bezier(.22,.61,.36,1)';
-        setTimeout(() => { rankBarEl.style.width = '100%'; }, 300);
+        const progTextWhiteEl = $('score-rank-progress-text-white');
+        if (progTextWhiteEl) {
+          progTextWhiteEl.style.clipPath = `inset(0 ${100 - initialPercent}% 0 0)`;
+        }
+        setTimeout(() => { 
+          rankBarEl.style.width = '100%'; 
+          if (progTextWhiteEl) progTextWhiteEl.style.clipPath = 'inset(0 0% 0 0)';
+        }, 300);
       }
       if (rankNextEl) {
-        rankNextEl.innerHTML = lang === 'ru'
-          ? '<span style="color: #d97706; font-weight: 800;">🎉 1 МИЛЛИОН! Легенды K-Pop! 🎉</span>'
-          : '<span style="color: #d97706; font-weight: 800;">🎉 1 MILLION! K-Pop Legends! 🎉</span>';
+        const progTextWhite = $('score-rank-progress-text-white');
+        const progTextDark = $('score-rank-progress-text-dark');
+        const finaleHtml = lang === 'ru'
+          ? '<span style="font-weight: 800;">🎉 1М! Легенды K-Pop! 🎉</span>'
+          : '<span style="font-weight: 800;">🎉 1M! K-Pop Legends! 🎉</span>';
+        if (progTextWhite) progTextWhite.innerHTML = finaleHtml;
+        if (progTextDark) progTextDark.innerHTML = finaleHtml;
       }
 
       // If reached 1M for the first time
@@ -1100,13 +1115,23 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       if (rankBarEl) {
         if (milestoneCrossed) {
           // 1. Start at prevPercent of the old bracket
+          const initialPercent = Math.min(Math.max(0, prevPercent), 100);
           rankBarEl.style.transition = '';
-          rankBarEl.style.width = Math.min(Math.max(0, prevPercent), 100) + '%';
+          rankBarEl.style.width = initialPercent + '%';
+          const progTextWhiteEl = $('score-rank-progress-text-white');
+          if (progTextWhiteEl) {
+            progTextWhiteEl.style.transition = '';
+            progTextWhiteEl.style.clipPath = `inset(0 ${100 - initialPercent}% 0 0)`;
+          }
           
           // 2. Animate to 100% of the old bracket
           setTimeout(() => {
             rankBarEl.style.transition = 'width 0.6s cubic-bezier(.22,.61,.36,1)';
             rankBarEl.style.width = '100%';
+            if (progTextWhiteEl) {
+              progTextWhiteEl.style.transition = 'clip-path 0.6s cubic-bezier(.22,.61,.36,1)';
+              progTextWhiteEl.style.clipPath = 'inset(0 0% 0 0)';
+            }
           }, 300);
 
           if (giftBoxEl) {
@@ -1115,12 +1140,9 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             }, 900);
           }
 
-          if (rankNextEl) {
-            const remaining = prevMilestone.to - prevTotal;
-            rankNextEl.textContent = lang === 'ru'
-              ? `Цель: ${formatFollowers(prevMilestone.to)} · осталось ${formatFollowers(remaining)}`
-              : `Goal: ${formatFollowers(prevMilestone.to)} · ${formatFollowers(remaining)} left`;
-          }
+          if (rankNextEl) rankNextEl.textContent = formatFollowers(prevMilestone.to);
+          const rankNextDarkEl = $('score-rank-next-dark');
+          if (rankNextDarkEl) rankNextDarkEl.textContent = formatFollowers(prevMilestone.to);
           
           // 3. When it reaches 100% (after ~1500ms total), trigger celebration and reward
           setTimeout(() => {
@@ -1153,7 +1175,10 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
             
             // Update total followers display badge early to reflect progress
-            if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
+            const currentFollowersText = formatFollowers(school.totalFollowers);
+            if (rankBadgeValEl) rankBadgeValEl.textContent = currentFollowersText;
+            const rankBadgeValDarkEl = $('score-rank-badge-val-dark');
+            if (rankBadgeValDarkEl) rankBadgeValDarkEl.textContent = currentFollowersText;
             
             // 4. Wait another 1500ms for player to celebrate, then reset progress bar to 0% and animate to new nextPercent
             setTimeout(() => {
@@ -1162,37 +1187,52 @@ function showScoreScreen(assignment, result, earned, socialStats) {
                 giftBoxEl.classList.remove('hidden-box');
               }
 
+              const newPercent = Math.min(Math.max(0, nextPercent), 100);
               rankBarEl.style.transition = 'none';
               rankBarEl.style.width = '0%';
+              const progTextWhiteEl = $('score-rank-progress-text-white');
+              if (progTextWhiteEl) {
+                progTextWhiteEl.style.transition = 'none';
+                progTextWhiteEl.style.clipPath = 'inset(0 100% 0 0)';
+              }
               void rankBarEl.offsetWidth; // trigger reflow
               rankBarEl.style.transition = ''; // restore CSS transition
-              rankBarEl.style.width = Math.min(Math.max(0, nextPercent), 100) + '%';
-              
-              // Update goal text to show remaining to new milestone
-              if (rankNextEl) {
-                const remaining = curMilestone.to - school.totalFollowers;
-                rankNextEl.textContent = lang === 'ru'
-                  ? `Цель: ${formatFollowers(curMilestone.to)} · осталось ${formatFollowers(remaining)}`
-                  : `Goal: ${formatFollowers(curMilestone.to)} · ${formatFollowers(remaining)} left`;
+              rankBarEl.style.width = newPercent + '%';
+              if (progTextWhiteEl) {
+                progTextWhiteEl.style.transition = 'clip-path 1.2s cubic-bezier(.22,.61,.36,1)';
+                progTextWhiteEl.style.clipPath = `inset(0 ${100 - newPercent}% 0 0)`;
               }
+              
+              if (rankNextEl) rankNextEl.textContent = formatFollowers(curMilestone.to);
+              const rankNextDarkEl = $('score-rank-next-dark');
+              if (rankNextDarkEl) rankNextDarkEl.textContent = formatFollowers(curMilestone.to);
             }, 1500);
             
           }, 1500);
           
         } else {
           // No milestone crossed: standard animation
+          const initialPercent = Math.min(Math.max(0, prevPercent), 100);
+          const finalPercent = Math.min(Math.max(0, nextPercent), 100);
           rankBarEl.style.transition = '';
-          rankBarEl.style.width = Math.min(Math.max(0, prevPercent), 100) + '%';
+          rankBarEl.style.width = initialPercent + '%';
+          const progTextWhiteEl = $('score-rank-progress-text-white');
+          if (progTextWhiteEl) {
+            progTextWhiteEl.style.transition = '';
+            progTextWhiteEl.style.clipPath = `inset(0 ${100 - initialPercent}% 0 0)`;
+          }
+          
           setTimeout(() => {
-            rankBarEl.style.width = Math.min(Math.max(0, nextPercent), 100) + '%';
+            rankBarEl.style.width = finalPercent + '%';
+            if (progTextWhiteEl) {
+              progTextWhiteEl.style.transition = 'clip-path 1.2s cubic-bezier(.22,.61,.36,1)';
+              progTextWhiteEl.style.clipPath = `inset(0 ${100 - finalPercent}% 0 0)`;
+            }
           }, 300);
           
-          if (rankNextEl) {
-            const remaining = curMilestone.to - school.totalFollowers;
-            rankNextEl.textContent = lang === 'ru'
-              ? `Цель: ${formatFollowers(curMilestone.to)} · осталось ${formatFollowers(remaining)}`
-              : `Goal: ${formatFollowers(curMilestone.to)} · ${formatFollowers(remaining)} left`;
-          }
+          if (rankNextEl) rankNextEl.textContent = formatFollowers(curMilestone.to);
+          const rankNextDarkEl = $('score-rank-next-dark');
+          if (rankNextDarkEl) rankNextDarkEl.textContent = formatFollowers(curMilestone.to);
         }
       }
     }
