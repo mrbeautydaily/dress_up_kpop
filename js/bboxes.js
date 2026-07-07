@@ -36,6 +36,12 @@ const ITEM_BBOXES = {
     "w": 474,
     "h": 1218
   },
+  "Items/body/body_new_blink.png": {
+    "x": 335,
+    "y": 131,
+    "w": 82,
+    "h": 64
+  },
   "Items/Dress/beige_cable_knit_dress.png": {
     "x": 154,
     "y": 217,
@@ -300,12 +306,6 @@ const ITEM_BBOXES = {
     "w": 266,
     "h": 236
   },
-  "Items/Legs/Skirt/gothic_lace_up_skirt.png": {
-    "x": 180,
-    "y": 438,
-    "w": 385,
-    "h": 295
-  },
   "Items/Legs/Jeans/tailored_shorts.png": {
     "x": 240,
     "y": 458,
@@ -317,6 +317,12 @@ const ITEM_BBOXES = {
     "y": 478,
     "w": 374,
     "h": 785
+  },
+  "Items/Legs/Skirt/gothic_lace_up_skirt.png": {
+    "x": 180,
+    "y": 438,
+    "w": 385,
+    "h": 295
   },
   "Items/Legs/Skirt/kpop_plaid_skirt.png": {
     "x": 216,
@@ -681,7 +687,7 @@ const ITEM_BBOXES = {
   "Items/UI/accessories.png": {
     "x": 0,
     "y": 0,
-    "w": 196,
+    "w": 195,
     "h": 94
   },
   "Items/UI/achievements.png": {
@@ -756,6 +762,12 @@ const ITEM_BBOXES = {
     "w": 154,
     "h": 125
   },
+  "Items/UI/hashtag.png": {
+    "x": 154,
+    "y": 158,
+    "w": 716,
+    "h": 717
+  },
   "Items/UI/heart.png": {
     "x": 0,
     "y": 0,
@@ -787,33 +799,33 @@ const ITEM_BBOXES = {
     "h": 53
   },
   "Items/UI/shop_heart_1.png": {
-    "x": 48,
-    "y": 59,
-    "w": 157,
-    "h": 152
+    "x": 0,
+    "y": 0,
+    "w": 256,
+    "h": 256
   },
   "Items/UI/shop_heart_2.png": {
-    "x": 31,
-    "y": 52,
-    "w": 194,
-    "h": 174
+    "x": 0,
+    "y": 0,
+    "w": 256,
+    "h": 256
   },
   "Items/UI/shop_heart_3.png": {
-    "x": 37,
-    "y": 30,
-    "w": 180,
-    "h": 197
+    "x": 0,
+    "y": 0,
+    "w": 256,
+    "h": 256
   },
   "Items/UI/shop_heart_4.png": {
-    "x": 10,
-    "y": 35,
-    "w": 237,
-    "h": 190
+    "x": 0,
+    "y": 0,
+    "w": 256,
+    "h": 256
   },
   "Items/UI/skirts.png": {
-    "x": 14,
+    "x": 13,
     "y": 34,
-    "w": 173,
+    "w": 174,
     "h": 135
   },
   "Items/UI/socks.png": {
@@ -827,6 +839,12 @@ const ITEM_BBOXES = {
     "y": 0,
     "w": 185,
     "h": 186
+  },
+  "Items/UI/star.png": {
+    "x": 8,
+    "y": 2,
+    "w": 120,
+    "h": 116
   },
   "Items/UI/tops.png": {
     "x": 2,

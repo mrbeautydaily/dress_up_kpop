@@ -542,10 +542,10 @@
   display: flex !important;
 }
 #category-panel #btn-share-stage {
-  margin-top: 0 !important;
+  margin-top: auto !important;
 }
 #category-panel #btn-sound {
-  margin-top: auto !important;
+  margin-top: 0 !important;
   position: relative !important;
   top: auto !important;
   bottom: auto !important;
@@ -653,4 +653,78 @@
 }
 .dev-switch input:checked + .dev-slider:before {
   transform: translateX(20px);
+}
+
+/* ── Mobile floating buttons (sound + screenshot) inside stage ── */
+.mobile-stage-btns {
+  display: none; /* hidden by default; JS shows it on mobile */
+}
+
+/* When active (mobile device detected by Yandex SDK) */
+.mobile-stage-btns.active {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 50;
+  pointer-events: auto;
+}
+
+.mobile-stage-btns .btn-share-stage {
+  position: static !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1.5px solid rgba(255, 182, 219, 0.45) !important;
+  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.18),
+              0 0 0 1px rgba(255, 255, 255, 0.25) inset !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+}
+
+.mobile-stage-btns .btn-share-stage:active {
+  transform: scale(0.88) !important;
+}
+
+.mobile-stage-btns .btn-share-stage img {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+/* Muted state inside mobile container */
+.mobile-stage-btns #btn-sound.muted {
+  background: rgba(255, 255, 255, 0.45) !important;
+  border-color: rgba(124, 58, 237, 0.2) !important;
+  box-shadow: none !important;
+}
+
+.mobile-stage-btns #btn-sound.muted img {
+  filter: grayscale(100%) opacity(0.3) !important;
+  transform: scale(0.9);
+}
+
+.mobile-stage-btns #btn-sound.muted::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--pink), #f43f5e);
+  border-radius: 99px;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  box-shadow: 0 0 6px rgba(255, 42, 133, 0.6);
+  z-index: 15;
+  animation: muteSlashIn 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }

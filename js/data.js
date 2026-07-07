@@ -1,10 +1,10 @@
 const $ = id => document.getElementById(id);
 
 const STAR_PACKAGES = [
-  { id: 'stars_30',  likes:  3000, bonus: 0,     icon: 'Items/UI/shop_heart_1.png' },
-  { id: 'stars_150', likes: 15000, bonus: 0,     icon: 'Items/UI/shop_heart_2.png' },
-  { id: 'stars_300', likes: 30000, bonus: 3000,  icon: 'Items/UI/shop_heart_3.png', popular: true },
-  { id: 'stars_600', likes: 60000, bonus: 10000, icon: 'Items/UI/shop_heart_4.png' },
+  { id: 'stars_30',  likes:  3000, bonus: 0,     icon: 'Items/UI/shop_heart_1.png', priceRu: '30 Ян', priceEn: '30 Yan' },
+  { id: 'stars_150', likes: 15000, bonus: 0,     icon: 'Items/UI/shop_heart_2.png', priceRu: '150 Ян', priceEn: '150 Yan' },
+  { id: 'stars_300', likes: 30000, bonus: 3000,  icon: 'Items/UI/shop_heart_3.png', popular: true, priceRu: '300 Ян', priceEn: '300 Yan' },
+  { id: 'stars_600', likes: 60000, bonus: 10000, icon: 'Items/UI/shop_heart_4.png', priceRu: '600 Ян', priceEn: '600 Yan' },
 ];
 
 // ────────────────────────────────────────────────────────────

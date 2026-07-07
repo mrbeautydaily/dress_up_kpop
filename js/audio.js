@@ -155,7 +155,7 @@ function spawnSparkles(count = 6, targetEl = null) {
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       const el = document.createElement('img');
-      el.src = 'Items/UI/heart.png';
+      el.src = 'Items/UI/star.png';
       el.className = 'sparkle';
       el.style.width = '1.25rem';
       el.style.height = '1.25rem';

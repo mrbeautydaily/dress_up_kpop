@@ -566,7 +566,7 @@ function buildItemsGrid(category) {
       : locked && isReviewItem
         ? `<div class="item-cost-badge item-review-badge"><img src="Items/UI/calendar.png" class="badge-calendar" alt="Calendar"> ${lang === 'ru' ? 'Отзыв' : 'Review'}</div>`
         : locked && cost > 0
-          ? `<div class="item-cost-badge">${formatLikes(cost)}<img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>`
+          ? `<div class="item-cost-badge">${formatLikes(cost)}<img src="Items/UI/star.png" class="inline-heart" alt="star"></div>`
           : '';
 
     const filterStyle = item.filter ? ` style="filter:${item.filter}"` : '';

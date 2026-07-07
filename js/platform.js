@@ -51,6 +51,31 @@ function detectDevice() {
 // Run immediately since script is at the bottom of the body
 detectDevice();
 
+/**
+ * On mobile/tablet: move btn-sound and btn-share-stage from the
+ * category panel into #mobile-stage-btns (bottom-right of the game stage).
+ * On desktop: do nothing — buttons stay in #category-panel.
+ * Called once after Yandex SDK finalises device detection.
+ */
+function relocateButtonsForMobile() {
+  if (!isMobileDevice) return;
+
+  const container = document.getElementById('mobile-stage-btns');
+  const btnShare  = document.getElementById('btn-share-stage');
+  const btnSound  = document.getElementById('btn-sound');
+
+  if (!container) return;
+
+  // Move buttons into the stage container
+  if (btnShare) container.appendChild(btnShare);
+  if (btnSound) container.appendChild(btnSound);
+
+  // Activate the container (makes it visible via CSS)
+  container.classList.add('active');
+
+  console.log('[Mobile] Sound & screenshot buttons moved to game stage');
+}
+
 function markGameReady() {
   if (_gameReadySent) return;
   _gameReadySent = true;
@@ -266,8 +291,8 @@ function grantStarPackage(pkg) {
   spawnSparkles(14);
   sfxUnlock();
   const msg = pkg.bonus > 0
-    ? (lang === 'ru' ? `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> и +${formatLikes(pkg.bonus)} бонус!` : `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> + ${formatLikes(pkg.bonus)} bonus!`)
-    : `+${formatLikes(pkg.likes)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`;
+    ? (lang === 'ru' ? `+${formatLikes(pkg.likes)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> и +${formatLikes(pkg.bonus)} бонус!` : `+${formatLikes(pkg.likes)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> + ${formatLikes(pkg.bonus)} bonus!`)
+    : `+${formatLikes(pkg.likes)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`;
   showToast(msg, 'reward');
 }
 
@@ -278,16 +303,16 @@ function showShopModal() {
 
   const titleEl = $('shop-title');
   const subtitleEl = $('shop-subtitle');
-  if (titleEl) titleEl.textContent = lang === 'ru' ? 'Магазин лайков' : 'Like Shop';
-  if (subtitleEl) subtitleEl.textContent = lang === 'ru' ? 'Набирай популярность и открывай новые вещи!' : 'Grow your popularity and unlock new items!';
+  if (titleEl) titleEl.textContent = lang === 'ru' ? 'Магазин' : 'Shop';
+  if (subtitleEl) subtitleEl.textContent = lang === 'ru' ? 'Покупай звёзды и разблокируй весь гардероб!' : 'Buy stars and unlock the entire wardrobe!';
 
-  // ── Кнопка "1000 лайков за рекламу" (во всю ширину, сверху) ──
+  // ── Кнопка "1000 звёзд за рекламу" (во всю ширину, сверху) ──
   const adCard = document.createElement('div');
   adCard.className = 'shop-ad-card';
   adCard.innerHTML = `
     <img src="Items/UI/shop_ad_tv.png" class="shop-ad-icon-img" alt="ad icon">
     <span class="shop-ad-text">
-      <b>+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart"></b> — ${lang === 'ru' ? 'за просмотр рекламы' : 'watch an ad'}
+      <b>+1 000 <img src="Items/UI/star.png" class="inline-heart" alt="star"></b> — ${lang === 'ru' ? 'смотри рекламу и забирай' : 'watch an ad and claim'}
     </span>
     <span class="shop-ad-btn">${lang === 'ru' ? 'Смотреть' : 'Watch'}</span>`;
   adCard.addEventListener('click', () => {
@@ -305,7 +330,7 @@ function showShopModal() {
             _adShowing = false;
             adCard.classList.remove('loading');
             if (_actx && soundOn) _actx.resume(); resumeBGM();
-            if (_rewarded) { addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart">', 'reward'); }
+            if (_rewarded) { addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/star.png" class="inline-heart" alt="star">', 'reward'); }
           },
           onError: () => {
             _adShowing = false;
@@ -316,13 +341,13 @@ function showShopModal() {
         },
       });
     } else {
-      addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> (dev)', 'reward');
+      addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/star.png" class="inline-heart" alt="star"> (dev)', 'reward');
       adCard.classList.remove('loading');
     }
   });
   container.appendChild(adCard);
 
-  // ── Пакеты лайков (сетка 2×2) ──
+  // ── Пакеты звёзд (сетка 2×2) ──
   const grid = document.createElement('div');
   grid.className = 'shop-grid';
 
@@ -335,15 +360,20 @@ function showShopModal() {
       : `<div class="shop-card-bonus"></div>`;
 
     const badgeHtml = pkg.popular
-      ? `<div class="shop-card-badge">${lang === 'ru' ? '🔥 Хит' : '🔥 Popular'}</div>`
+      ? `<div class="shop-card-badge">${lang === 'ru' ? 'Хит' : 'Popular'}</div>`
       : '';
+
+    const catalogPrice = (_catalog.find(c => c.id === pkg.id) || {}).price;
+    const displayPrice = catalogPrice || (lang === 'ru' ? pkg.priceRu : pkg.priceEn);
 
     card.innerHTML = `
       ${badgeHtml}
-      <img src="${pkg.icon}" class="shop-card-icon-img" alt="pack icon">
-      <div class="shop-card-stars">${formatLikes(pkg.likes + pkg.bonus)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"></div>
+      <div class="shop-card-icon-container">
+        <img src="${pkg.icon}" class="shop-card-icon-img" alt="pack icon">
+      </div>
+      <div class="shop-card-stars">${formatLikes(pkg.likes + pkg.bonus)} <img src="Items/UI/star.png" class="inline-heart" alt="star"></div>
       ${bonusLine}
-      <div class="shop-card-price">${(_catalog.find(c=>c.id===pkg.id)||{}).price||"—"}</div>`;
+      <div class="shop-card-price">${displayPrice}</div>`;
 
     card.addEventListener('click', () => buyStarPackage(pkg, card));
     grid.appendChild(card);

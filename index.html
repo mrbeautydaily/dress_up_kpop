@@ -182,7 +182,7 @@
     </div>
     <div class="stage-counter-divider"></div>
     <div class="stage-counter-unit">
-      <img src="Items/UI/heart.png" class="ui-icon" alt="heart">
+      <img src="Items/UI/star.png" class="ui-icon" alt="star">
       <span id="stars-count">0</span>
     </div>
   </button>
@@ -209,6 +209,8 @@
   </svg>
 </button>
 </div>
+<!-- Mobile-only floating buttons (sound + screenshot), positioned bottom-right of stage -->
+<div id="mobile-stage-btns" class="mobile-stage-btns"></div>
 </section>
 <!-- Right Sidebar Container -->
 <aside class="sidebar items-sidebar">
@@ -219,11 +221,11 @@
         <!-- Dynamically populated via JavaScript -->
       </nav>
       <!-- Camera/Share button moved here, to sit at the bottom in desktop -->
-      <button id="btn-sound" class="btn-share-stage" title="Вкл/Выкл звук">
-        <img src="Items/UI/sound.png" class="ui-icon-btn" alt="sound">
-      </button>
       <button id="btn-share-stage" class="btn-share-stage" title="Сделать скриншот">
         <img src="Items/UI/camera.png" class="ui-icon-btn" alt="camera">
+      </button>
+      <button id="btn-sound" class="btn-share-stage" title="Вкл/Выкл звук">
+        <img src="Items/UI/sound.png" class="ui-icon-btn" alt="sound">
       </button>
     </div>
 
@@ -357,7 +359,7 @@
         <!-- Row: Trend multiplier (hidden if x1.0) -->
         <div class="score-breakdown-row trend-row" id="score-row-trend">
           <span class="breakdown-icon">
-            <img src="Items/UI/fire.png" alt="Fire" class="breakdown-img">
+            <img src="Items/UI/hashtag.png" alt="Hashtag" class="breakdown-img">
           </span>
           <span class="breakdown-label" id="score-trend-label">Тренд</span>
           <span class="breakdown-value trend-multiplier" id="score-trend-value">+0</span>
@@ -374,9 +376,9 @@
         </div>
         <div class="score-reward-item" id="score-reward-row">
           <span class="reward-icon">
-            <img src="Items/UI/heart.png" alt="Likes" class="reward-img">
+            <img src="Items/UI/star.png" alt="Stars" class="reward-img">
           </span>
-          <span class="reward-text"><span class="reward-plus">+</span><span id="score-reward-value">0</span><span class="reward-unit" id="score-likes-unit"> лайков</span></span>
+          <span class="reward-text"><span class="reward-plus">+</span><span id="score-reward-value">0</span><span class="reward-unit" id="score-likes-unit"> звёзд</span></span>
         </div>
       </div>
 
@@ -401,7 +403,7 @@
           </div>
           <div class="milestone-subtext-right">
             <span id="score-milestone-reward-text" class="milestone-subtext-reward"></span>
-            <img src="Items/UI/heart.png" class="milestone-subtext-heart" alt="heart">
+            <img src="Items/UI/star.png" class="milestone-subtext-heart" alt="star">
           </div>
         </div>
       </div>
@@ -433,10 +435,10 @@
 <div id="shop-modal" class="modal-overlay hidden">
 <div class="modal-box shop-box">
 <div class="shop-header">
-    <span class="shop-header-title-container"><img src="Items/UI/heart.png" class="shop-header-icon" alt="heart"><span id="shop-title">Магазин звёзд</span></span>
+    <span class="shop-header-title-container"><img src="Items/UI/star.png" class="shop-header-icon" alt="star"><span id="shop-title">Магазин</span></span>
 <button id="shop-close" class="modal-close-btn">✕</button>
 </div>
-<p class="shop-subtitle" id="shop-subtitle">Покупай звёзды и открывай новые вещи!</p>
+<p class="shop-subtitle" id="shop-subtitle">Покупай звёзды и разблокируй весь гардероб!</p>
 <div id="shop-packages"></div>
 </div>
 </div>

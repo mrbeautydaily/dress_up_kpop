@@ -176,14 +176,14 @@ function showBuyBar(category, itemId, cost) {
     const canBuy = prog.likes >= cost;
     const shopHint = !canBuy
       ? `<button class="buy-bar-gem-hint" id="buy-bar-shop">
-           <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> ${lang === 'ru' ? 'Купить лайки' : 'Buy Likes'}
-         </button>`
+            <img src="Items/UI/star.png" class="inline-heart" alt="star"> ${lang === 'ru' ? 'Купить звёзды' : 'Buy Stars'}
+          </button>`
       : '';
     bar.innerHTML = `
       <div class="buy-bar-name">${iName(item)}</div>
       <div class="buy-bar-row">
         <button class="buy-bar-btn buy-confirm${canBuy ? '' : ' cant-buy'}" id="buy-bar-yes">
-          ${canBuy ? (lang === 'ru' ? `Купить ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">` : `Buy ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`) : (lang === 'ru' ? `Нужно ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">` : `Need ${formatLikes(cost)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`)}
+          ${canBuy ? (lang === 'ru' ? `Купить ${formatLikes(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">` : `Buy ${formatLikes(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`) : (lang === 'ru' ? `Нужно ${formatLikes(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">` : `Need ${formatLikes(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`)}
         </button>
         <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
       </div>

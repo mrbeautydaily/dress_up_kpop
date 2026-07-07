@@ -120,6 +120,9 @@ async function init() {
   // Инициализируем SDK первым делом, до загрузки картинок
   await initYandexSDK();
 
+  // On mobile: move sound + screenshot buttons into the game stage area (bottom-right)
+  relocateButtonsForMobile();
+
   await runLoadingScreen();
 
   // Complete the progress bar

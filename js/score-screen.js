@@ -477,7 +477,7 @@ function generateSocialComments(result, assignment) {
       }
     } else if (c.type === 'rating') {
       if (result && result.isNaked) {
-        text = lang === 'ru' ? 'Ужасно, где одежда? 😢' : 'Terrible, where is the clothing? 😢';
+        text = lang === 'ru' ? 'Ой, где же одежда? 😢' : 'Oops, where is the clothing? 😢';
       } else {
         const score = c.val;
         const poolRu = score >= 90
@@ -833,7 +833,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       }
       const likesUnitEl = $('score-likes-unit');
       if (likesUnitEl) {
-        likesUnitEl.textContent = lang === 'ru' ? ' лайков' : ' likes';
+        likesUnitEl.textContent = lang === 'ru' ? ' звёзд' : ' stars';
       }
     }
   }
@@ -1086,7 +1086,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             }
             alertEl.classList.remove('hidden');
           }
-          showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`, 'reward');
+          showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
           
           if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
         }, 1500);
@@ -1150,7 +1150,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
               }
               alertEl.classList.remove('hidden');
             }
-            showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">!`, 'reward');
+            showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
             
             // Update total followers display badge early to reflect progress
             if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
@@ -1453,8 +1453,8 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   if (!isFree && result.trendMatches >= 1) {
     let doubled = false;
     dblBtn.innerHTML = lang === 'ru'
-      ? `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Удвоить +${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`
-      : `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Double +${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart">`;
+      ? `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Удвоить +${formatLikes(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`
+      : `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Double +${formatLikes(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`;
     dblBtn.classList.remove('hidden');
     dblBtn.onclick = () => {
       if (doubled || _adShowing) return;
@@ -1463,7 +1463,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         dblBtn.classList.add('hidden');
         addLikes(earned);
         spawnSparkles(12);
-        showToast(`+${formatLikes(earned)} <img src="Items/UI/heart.png" class="inline-heart" alt="heart"> × 2!`, 'reward');
+        showToast(`+${formatLikes(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> × 2!`, 'reward');
       };
       if (ysdk) {
         _adShowing = true;

@@ -25,7 +25,7 @@ const IntroDirector = {
       dream: 'Один вирусный пост может изменить всё...',
       realityText: '...Но пока я об этом только мечтаю. 💭\nПривет! Я Хана из K-Pop группы Eclipse! 👋\nМы только что дебютировали, и о нас пока никто не знает 😅',
       gameplayText1: 'Мне нужен стилист — и это ты! 💖\nКаждый день мы публикуем посты о съемках клипов, фан-встречах, концертах...',
-      gameplayText2: 'Подбирай образы под эти события — чем точнее попадёшь в стиль, тем больше подписчиков и лайков!\n(За лайки {heart} можно покупать новые вещи!)',
+      gameplayText2: 'Подбирай образы под эти события — чем точнее попадёшь в стиль, тем больше подписчиков и звёзд!\n(За звёзды {heart} можно покупать новые вещи!)',
       debutText: 'Наша мечта — 1 000 000 подписчиков! 👑\nОт полных нулей до K-Pop легенд!\nНу что, поможешь мне? 🔥',
       btnNext: 'Далее ➤',
       btnDebut: 'Начать карьеру!',
@@ -37,7 +37,7 @@ const IntroDirector = {
       dream: 'One viral post can change everything...',
       realityText: "...But for now, I can only dream of it. 💭\nHi! I'm Hana from the K-Pop group Eclipse! 👋\nWe just debuted, and nobody knows us yet 😅",
       gameplayText1: "I need a stylist — and that's you! 💖\nEvery day we publish posts about music video shoots, fan meetings, concerts...",
-      gameplayText2: "Match outfits to these events — the closer you get to the style, the more followers and likes we get!\n(With likes {heart}, you can buy new clothes!)",
+      gameplayText2: "Match outfits to these events — the closer you get to the style, the more followers and stars we get!\n(With stars {heart}, you can buy new clothes!)",
       debutText: 'Our dream — 1,000,000 followers! 👑\nFrom total zeros to K-Pop legends!\nSo, will you help me? 🔥',
       btnNext: 'Next ➤',
       btnDebut: 'Start Career!',
@@ -430,9 +430,9 @@ const IntroDirector = {
 
         if (token === '{heart}') {
           const img = document.createElement('img');
-          img.src = 'Items/UI/heart.png';
+          img.src = 'Items/UI/star.png';
           img.className = 'intro-inline-heart';
-          img.alt = 'heart';
+          img.alt = 'star';
           el.insertBefore(img, cursor);
           this.typingTimer = setTimeout(typeNext, speed);
           return;
@@ -468,7 +468,7 @@ const IntroDirector = {
   formatText(txt) {
     return txt
       .replace(/\n/g, '<br>')
-      .replace(/{heart}/g, '<img src="Items/UI/heart.png" class="intro-inline-heart" alt="heart">');
+      .replace(/{heart}/g, '<img src="Items/UI/star.png" class="intro-inline-heart" alt="star">');
   },
 
   buildDots(total, current) {
