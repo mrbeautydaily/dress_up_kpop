@@ -328,9 +328,9 @@ async function shareOutfit() {
 
 
 // Smoothly count up raw numbers (e.g. total points, followers)
-function animateCounter(el, target, duration = 1000, prefix = '', suffix = '', format = false) {
+function animateCounter(el, target, duration = 1000, prefix = '', suffix = '', format = false, startValue = 0) {
   if (!el) return;
-  const start = 0;
+  const start = startValue;
   const startTime = (window.performance && window.performance.now) ? performance.now() : Date.now();
   
   function update() {
@@ -643,12 +643,12 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       if (postLiked) {
         postLikeBtn.classList.add('liked');
         if (likesCountEl) {
-          likesCountEl.textContent = formatLikes(currentLikesVal);
+          likesCountEl.textContent = formatStars(currentLikesVal);
         }
       } else {
         postLikeBtn.classList.remove('liked');
         if (likesCountEl) {
-          likesCountEl.textContent = formatLikes(currentLikesVal - 1);
+          likesCountEl.textContent = formatStars(currentLikesVal - 1);
         }
       }
     };
@@ -694,7 +694,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         postShared = true;
         currentSharesVal++;
         if (sharesCountEl) {
-          sharesCountEl.textContent = formatLikes(currentSharesVal);
+          sharesCountEl.textContent = formatStars(currentSharesVal);
         }
       }
     };
@@ -805,10 +805,8 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     if (resultsBlock) resultsBlock.style.display = 'block';
   }
 
-  // Set unit text next to total followers gained
-  $('score-total-unit').textContent = lang === 'ru' ? ' подписчиков' : ' followers';
   const rankTitleEl = $('score-rank-title');
-  if (rankTitleEl) rankTitleEl.textContent = lang === 'ru' ? 'Подписчики' : 'Followers';
+  if (rankTitleEl) rankTitleEl.textContent = lang === 'ru' ? 'Подписчики:' : 'Followers:';
 
   const socialComments = generateSocialComments(result, assignment);
   
@@ -979,12 +977,11 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       breakdownCard.classList.toggle('viral-post', result.trendMatches >= 2);
     }
 
-    // Followers gained with count-up
+    // Followers gained (static, acts as the source of points for the progress bar below)
     const gainedEl = $('score-followers-gained');
     if (gainedEl) {
-      gainedEl.textContent = '0';
       const followersVal = socialStats ? socialStats.followers : 0;
-      setTimeout(() => animateCounter(gainedEl, followersVal, 900, '', '', 'short'), 800);
+      gainedEl.textContent = formatShortNumber(followersVal);
     }
 
     // Update Milestone Progress (1K → 10K → 100K → 500K → 1M)
@@ -1034,13 +1031,30 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
     const milestoneCrossed = curMilestone.to !== prevMilestone.to;
 
-    // Show current total as badge (if milestone crossed, we update it at the climax of the animation)
+    // Show current total as badge (start at prevTotal and animate)
     const rankBadgeValEl = $('score-rank-badge-val');
     const rankBadgeValDarkEl = $('score-rank-badge-val-dark');
-    const currentFollowersText = formatFollowers(milestoneCrossed ? prevTotal : school.totalFollowers);
-    if (rankBadgeValEl) rankBadgeValEl.textContent = currentFollowersText;
-    if (rankBadgeValDarkEl) rankBadgeValDarkEl.textContent = currentFollowersText;
-    else if (!rankBadgeValEl && rankBadgeEl) rankBadgeEl.textContent = `📊 ${currentFollowersText}`;
+    
+    function animateBothBadges(startVal, endVal, durationMs) {
+      if (startVal === endVal) return;
+      const startTime = (window.performance && window.performance.now) ? performance.now() : Date.now();
+      function update() {
+        const now = (window.performance && window.performance.now) ? performance.now() : Date.now();
+        const progress = Math.min((now - startTime) / durationMs, 1);
+        const easeProgress = progress * (2 - progress);
+        const current = Math.floor(startVal + easeProgress * (endVal - startVal));
+        const text = formatFollowers(current);
+        if (rankBadgeValEl) rankBadgeValEl.textContent = text;
+        if (rankBadgeValDarkEl) rankBadgeValDarkEl.textContent = text;
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
+    const initialFollowersText = formatFollowers(prevTotal);
+    if (rankBadgeValEl) rankBadgeValEl.textContent = initialFollowersText;
+    if (rankBadgeValDarkEl) rankBadgeValDarkEl.textContent = initialFollowersText;
+    else if (!rankBadgeValEl && rankBadgeEl) rankBadgeEl.textContent = `📊 ${initialFollowersText}`;
 
     if (school.totalFollowers >= GOAL_FOLLOWERS) {
       if (rankBarEl) {
@@ -1055,7 +1069,11 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         }
         setTimeout(() => { 
           rankBarEl.style.width = '100%'; 
-          if (progTextWhiteEl) progTextWhiteEl.style.clipPath = 'inset(0 0% 0 0)';
+          if (progTextWhiteEl) {
+            progTextWhiteEl.style.transition = 'clip-path 0.6s cubic-bezier(.22,.61,.36,1)';
+            progTextWhiteEl.style.clipPath = 'inset(0 0% 0 0)';
+          }
+          animateBothBadges(prevTotal, school.totalFollowers, 600);
         }, 300);
       }
       if (rankNextEl) {
@@ -1071,7 +1089,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       // If reached 1M for the first time
       if (newlyReached.includes(1000000)) {
         const reward = MILESTONE_REWARDS[1000000] || 50000;
-        addLikes(reward);
+        addStars(reward);
         saveSchoolProgress();
 
         if (giftBoxEl) {
@@ -1101,7 +1119,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             }
             alertEl.classList.remove('hidden');
           }
-          showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
+          showToast(`+${formatStars(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
           
           if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(school.totalFollowers);
         }, 1500);
@@ -1132,6 +1150,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
               progTextWhiteEl.style.transition = 'clip-path 0.6s cubic-bezier(.22,.61,.36,1)';
               progTextWhiteEl.style.clipPath = 'inset(0 0% 0 0)';
             }
+            animateBothBadges(prevTotal, prevMilestone.to, 600);
           }, 300);
 
           if (giftBoxEl) {
@@ -1158,7 +1177,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             const milestone = newlyReached[newlyReached.length - 1] || prevMilestone.to;
             const reward = MILESTONE_REWARDS[milestone] || 3000;
             
-            addLikes(reward);
+            addStars(reward);
             saveSchoolProgress();
             
             if (alertEl) {
@@ -1172,13 +1191,13 @@ function showScoreScreen(assignment, result, earned, socialStats) {
               }
               alertEl.classList.remove('hidden');
             }
-            showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
+            showToast(`+${formatStars(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
             
             // Update total followers display badge early to reflect progress
             const currentFollowersText = formatFollowers(school.totalFollowers);
-            if (rankBadgeValEl) rankBadgeValEl.textContent = currentFollowersText;
-            const rankBadgeValDarkEl = $('score-rank-badge-val-dark');
-            if (rankBadgeValDarkEl) rankBadgeValDarkEl.textContent = currentFollowersText;
+            // Since we animate these values, we just ensure they are correct when phase 2 starts
+            if (rankBadgeValEl) rankBadgeValEl.textContent = formatFollowers(prevMilestone.to);
+            if (rankBadgeValDarkEl) rankBadgeValDarkEl.textContent = formatFollowers(prevMilestone.to);
             
             // 4. Wait another 1500ms for player to celebrate, then reset progress bar to 0% and animate to new nextPercent
             setTimeout(() => {
@@ -1202,6 +1221,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
                 progTextWhiteEl.style.transition = 'clip-path 1.2s cubic-bezier(.22,.61,.36,1)';
                 progTextWhiteEl.style.clipPath = `inset(0 ${100 - newPercent}% 0 0)`;
               }
+              animateBothBadges(prevMilestone.to, school.totalFollowers, 1200);
               
               if (rankNextEl) rankNextEl.textContent = formatFollowers(curMilestone.to);
               const rankNextDarkEl = $('score-rank-next-dark');
@@ -1228,6 +1248,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
               progTextWhiteEl.style.transition = 'clip-path 1.2s cubic-bezier(.22,.61,.36,1)';
               progTextWhiteEl.style.clipPath = `inset(0 ${100 - finalPercent}% 0 0)`;
             }
+            animateBothBadges(prevTotal, school.totalFollowers, 1200);
           }, 300);
           
           if (rankNextEl) rankNextEl.textContent = formatFollowers(curMilestone.to);
@@ -1493,17 +1514,17 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   if (!isFree && result.trendMatches >= 1) {
     let doubled = false;
     dblBtn.innerHTML = lang === 'ru'
-      ? `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Удвоить +${formatLikes(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`
-      : `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Double +${formatLikes(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`;
+      ? `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Удвоить +${formatStars(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`
+      : `<img src="Items/UI/shop_ad_tv.png" class="inline-tv" alt="tv">Double +${formatStars(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`;
     dblBtn.classList.remove('hidden');
     dblBtn.onclick = () => {
       if (doubled || _adShowing) return;
       const onRewarded = () => {
         doubled = true;
         dblBtn.classList.add('hidden');
-        addLikes(earned);
+        addStars(earned);
         spawnSparkles(12);
-        showToast(`+${formatLikes(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> × 2!`, 'reward');
+        showToast(`+${formatStars(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> × 2!`, 'reward');
       };
       if (ysdk) {
         _adShowing = true;

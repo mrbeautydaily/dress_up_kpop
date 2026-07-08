@@ -136,7 +136,7 @@
 <div id="game" class="hidden">
 <!-- Header (hidden in CSS, buttons moved to panel-controls and stage-wrap) -->
 <header id="game-header" style="display: none !important;">
-<h1 class="game-title" id="header-title">✨ K-Pop Star Maker ✨</h1>
+<h1 class="game-title" id="header-title">K-Pop Star Maker</h1>
 </header>
 <!-- Main layout -->
 <main id="main-layout">
@@ -379,23 +379,23 @@
       <div id="score-rank-section" class="score-rank-section">
         <div class="score-rank-header" style="display: flex; justify-content: space-between; align-items: center;">
           <span class="score-rank-badge">
-            <img src="Items/UI/followers.png" alt="Followers" class="rank-badge-img">
-            <span id="score-rank-title" style="font-weight:700; color:var(--text-main); margin-right: 8px;" data-i18n="followersTitle">Подписчики</span>
+            <span id="score-rank-title" style="font-weight:700; color:var(--purple); margin-right: 8px;" data-i18n="followersTitle">Подписчики:</span>
           </span>
-          <span id="score-rank-gained-wrap" class="score-rank-gained-wrap">
-            <span class="reward-plus">+</span><span id="score-followers-gained">0</span><span id="score-total-unit" style="margin-left: 4px;"> подписчиков</span>
+          <span id="score-rank-gained-wrap" class="score-rank-gained-wrap" style="display: flex; align-items: center; color: var(--purple); font-weight: 800; font-size: 1.05rem;">
+            <span class="reward-plus">+</span><span id="score-followers-gained">0</span>
+            <img src="Items/UI/followers.png" alt="Followers" class="rank-badge-img" style="margin-left: 6px;">
           </span>
         </div>
-        <div class="score-rank-progress-container">
+        <div class="score-rank-progress-container" style="gap: 0;">
           <div id="score-rank-progress-wrap" class="score-rank-progress-wrap">
             <div id="score-rank-bar" class="score-rank-bar" style="width: 0%;"></div>
             <!-- Base Dark Text -->
             <div id="score-rank-progress-text-dark" class="score-rank-progress-text text-dark">
-              <span id="score-rank-badge-val-dark">0</span> / <span id="score-rank-next-dark">1K</span>
+              <span id="score-rank-badge-val-dark">0</span>&nbsp;&nbsp;/&nbsp;&nbsp;<span id="score-rank-next-dark">1K</span>
             </div>
             <!-- Highlight White Text (Clipped) -->
             <div id="score-rank-progress-text-white" class="score-rank-progress-text text-white" style="clip-path: inset(0 100% 0 0); transition: clip-path 0.6s cubic-bezier(.22,.61,.36,1);">
-              <span id="score-rank-badge-val">0</span> / <span id="score-rank-next">1K</span>
+              <span id="score-rank-badge-val">0</span>&nbsp;&nbsp;/&nbsp;&nbsp;<span id="score-rank-next">1K</span>
             </div>
           </div>
           <img id="score-gift-box" class="score-gift-box" src="Items/UI/gift_box.png" alt="gift">

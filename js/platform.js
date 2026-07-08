@@ -246,7 +246,7 @@ async function restorePurchases() {
     const purchases = await _payments.getPurchases();
     for (const p of purchases) {
       const pkg = STAR_PACKAGES.find(pk => pk.id === p.productID);
-      if (pkg) addLikes(pkg.likes + pkg.bonus);
+      if (pkg) addStars(pkg.stars + pkg.bonus);
       // Консумируем все покупки, даже неизвестные (п. 1.13.1)
       await _payments.consumePurchase(p.purchaseToken);
     }
@@ -285,14 +285,14 @@ async function buyStarPackage(pkg, cardEl) {
 }
 
 function grantStarPackage(pkg) {
-  const total = pkg.likes + pkg.bonus;
-  addLikes(total);
+  const total = pkg.stars + pkg.bonus;
+  addStars(total);
   buildItemsGrid(activeCategory);
   spawnSparkles(14);
   sfxUnlock();
   const msg = pkg.bonus > 0
-    ? (lang === 'ru' ? `+${formatLikes(pkg.likes)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> и +${formatLikes(pkg.bonus)} бонус!` : `+${formatLikes(pkg.likes)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> + ${formatLikes(pkg.bonus)} bonus!`)
-    : `+${formatLikes(pkg.likes)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`;
+    ? (lang === 'ru' ? `+${formatStars(pkg.stars)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> и +${formatStars(pkg.bonus)} бонус!` : `+${formatStars(pkg.stars)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> + ${formatStars(pkg.bonus)} bonus!`)
+    : `+${formatStars(pkg.stars)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`;
   showToast(msg, 'reward');
 }
 
@@ -312,7 +312,7 @@ function showShopModal() {
   adCard.innerHTML = `
     <img src="Items/UI/shop_ad_tv.png" class="shop-ad-icon-img" alt="ad icon">
     <span class="shop-ad-text">
-      <b>+1 000 <img src="Items/UI/star.png" class="inline-heart" alt="star"></b> — ${lang === 'ru' ? 'смотри рекламу и забирай' : 'watch an ad and claim'}
+      <b>+50 <img src="Items/UI/star.png" class="inline-heart" alt="star"></b> — ${lang === 'ru' ? 'смотри рекламу и забирай' : 'watch an ad and claim'}
     </span>
     <span class="shop-ad-btn">${lang === 'ru' ? 'Смотреть' : 'Watch'}</span>`;
   adCard.addEventListener('click', () => {
@@ -330,7 +330,7 @@ function showShopModal() {
             _adShowing = false;
             adCard.classList.remove('loading');
             if (_actx && soundOn) _actx.resume(); resumeBGM();
-            if (_rewarded) { addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/star.png" class="inline-heart" alt="star">', 'reward'); }
+            if (_rewarded) { addStars(50); spawnSparkles(8); showToast('+50 <img src="Items/UI/star.png" class="inline-heart" alt="star">', 'reward'); }
           },
           onError: () => {
             _adShowing = false;
@@ -341,7 +341,7 @@ function showShopModal() {
         },
       });
     } else {
-      addLikes(1000); spawnSparkles(8); showToast('+1 000 <img src="Items/UI/star.png" class="inline-heart" alt="star"> (dev)', 'reward');
+      addStars(50); spawnSparkles(8); showToast('+50 <img src="Items/UI/star.png" class="inline-heart" alt="star"> (dev)', 'reward');
       adCard.classList.remove('loading');
     }
   });
@@ -356,7 +356,7 @@ function showShopModal() {
     card.className = 'shop-card' + (pkg.popular ? ' popular' : '');
 
     const bonusLine = pkg.bonus > 0
-      ? `<div class="shop-card-bonus">+${formatLikes(pkg.bonus)} ${lang === 'ru' ? 'бонус!' : 'bonus!'}</div>`
+      ? `<div class="shop-card-bonus">+${formatStars(pkg.bonus)} ${lang === 'ru' ? 'бонус!' : 'bonus!'}</div>`
       : `<div class="shop-card-bonus"></div>`;
 
     const badgeHtml = pkg.popular
@@ -371,7 +371,7 @@ function showShopModal() {
       <div class="shop-card-icon-container">
         <img src="${pkg.icon}" class="shop-card-icon-img" alt="pack icon">
       </div>
-      <div class="shop-card-stars">${formatLikes(pkg.likes + pkg.bonus)} <img src="Items/UI/star.png" class="inline-heart" alt="star"></div>
+      <div class="shop-card-stars">${formatStars(pkg.stars + pkg.bonus)} <img src="Items/UI/star.png" class="inline-heart" alt="star"></div>
       ${bonusLine}
       <div class="shop-card-price">${displayPrice}</div>`;
 

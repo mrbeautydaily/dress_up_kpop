@@ -1,0 +1,123 @@
+--- index.html ---
+Line 115: 🎧✨ -> <span style="font-weight: 700; margin-right: 6px; color: #262626;">eclipse</span><span id="intro-post-caption">Дебютный сингл Eclipse уже в сети! Слушайте на всех платформах! 🎧✨</span>
+Line 139: ✨✨ -> <h1 class="game-title" id="header-title">✨ K-Pop Star Maker ✨</h1>
+Line 442: ✕ -> <button id="shop-close" class="modal-close-btn">✕</button>
+Line 451: 📸 -> <div class="sg-icon">📸</div>
+Line 458: 🛠 -> <h3>Панель разработчика 🛠️</h3>
+Line 459: ✕ -> <button id="dev-panel-close" class="dev-close-btn">✕</button>
+Line 511: 🎬 -> <button id="dev-btn-test-anim" class="btn btn-purple" style="padding: 0 12px; margin: 0; min-height: auto; font-size: 14px; border-radius: 8px;" title="Проиграть анимацию на текущих вещах">🎬 Тест</button>
+Line 545: 🛠 -> <button id="dev-panel-trigger" class="dev-panel-trigger" title="Панель разработчика" style="display: none !important;">🛠️</button>
+Line 547: 🔥🔥 -> <span class="emoji-option" data-emoji="🔥">🔥</span>
+Line 548: 🙌🙌 -> <span class="emoji-option" data-emoji="🙌">🙌</span>
+Line 549: 🤔🤔 -> <span class="emoji-option" data-emoji="🤔">🤔</span>
+Line 550: 😮😮 -> <span class="emoji-option" data-emoji="😮">😮</span>
+Line 551: ❌ -> <span class="emoji-option-clear" title="Убрать реакцию">❌</span>
+--- character.js ---
+Line 142: ✓ -> check.textContent = '✓';
+--- data.js ---
+Line 400: ✅❌ -> const icon = matched ? '✅' : '❌';
+--- intro.js ---
+Line 26: 💭👋😅 -> realityText: '...Но пока я об этом только мечтаю. 💭\nПривет! Я Хана из K-Pop группы Eclipse! 👋\nМы только что дебютировали, и о нас пока никто не знает 😅',
+Line 27: 💖 -> gameplayText1: 'Мне нужен стилист — и это ты! 💖\nКаждый день мы публикуем посты о съемках клипов, фан-встречах, концертах...',
+Line 29: 👑🔥 -> debutText: 'Наша мечта — 1 000 000 подписчиков! 👑\nОт полных нулей до K-Pop легенд!\nНу что, поможешь мне? 🔥',
+Line 30: ➤ -> btnNext: 'Далее ➤',
+Line 34: 🎧✨ -> postCaption: 'Дебютный сингл Eclipse уже в сети! Слушайте на всех платформах! 🎧✨'
+Line 38: 💭👋😅 -> realityText: "...But for now, I can only dream of it. 💭\nHi! I'm Hana from the K-Pop group Eclipse! 👋\nWe just debuted, and nobody knows us yet 😅",
+Line 39: 💖 -> gameplayText1: "I need a stylist — and that's you! 💖\nEvery day we publish posts about music video shoots, fan meetings, concerts...",
+Line 41: 👑🔥 -> debutText: 'Our dream — 1,000,000 followers! 👑\nFrom total zeros to K-Pop legends!\nSo, will you help me? 🔥',
+Line 42: ➤ -> btnNext: 'Next ➤',
+Line 46: 🎧✨ -> postCaption: "Eclipse's debut single is out now! Listen on all platforms! 🎧✨"
+Line 117: ❤💖👍 -> heart.textContent = Math.random() > 0.35 ? '❤️' : (Math.random() > 0.5 ? '💖' : '👍');
+--- localization.js ---
+Line 40: ✨✨ -> gameTitle:     '✨ K-Pop Star Maker ✨',
+Line 50: 📍 -> scoreResults:    '📍 {title}',
+Line 51: ➡ -> btnNewDay:       '➡ Next Post',
+Line 53: ✅ -> milestoneSubtextLeft: '{milestone} Followers! ✅',
+Line 71: ✨✨ -> gameTitle:     '✨ K-Pop: Путь к славе ✨',
+Line 81: 📍 -> scoreResults:    '📍 {title}',
+Line 82: ➡ -> btnNewDay:       '➡ Следующий пост',
+Line 84: ✅ -> milestoneSubtextLeft: '{milestone} подписчиков! ✅',
+Line 123: 🌟 -> if (rl) rl.textContent = t('btnRunway').replace('🌟 ', '');
+--- platform.js ---
+Line 266: ⚠⚠ -> showToast(lang === 'ru' ? '⚠️ Продукт не настроен в консоли' : '⚠️ Product not set up in console', 'error');
+--- progression.js ---
+Line 155: ✕ -> <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
+Line 169: ✕ -> <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
+Line 188: ✕ -> <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
+--- score-screen.js ---
+Line 270: ✨ -> const titleText = t('gameTitle').replace(/[✨]/g, '').trim().toUpperCase();
+Line 378: 🎙✨ -> recording: 'Записываем новый трек на студии! 🎙️ Дерзкий вайб и крутой звук обеспечены. Как вам наш лук сегодня? ✨ #kpop #bold',
+Line 379: 🧘👟 -> fitness: 'Утренняя тренировка и растяжка перед камбэком! 🧘 Главное — удобство и стиль. Заряжаемся энергией! 👟 #sporty #casual',
+Line 380: 📸💫 -> photoshoot: 'Снимаем концепт-фото для нового альбома! 📸 Как вам этот элегантный образ? Будет жарко! 💫 #kpop #elegant',
+Line 381: 🤝💖 -> fansign: 'Наконец-то встретились с нашими любимыми фанатами на автограф-сессии! 🤝 Спасибо за поддержку и подарки! 💖 #school #formal',
+Line 382: 📺🎀 -> variety_show: 'Приняли участие в развлекательном шоу! 📺 Было очень весело, ждите эфир! Оцените наш милый стиль 🎀 #kpop #cute',
+Line 383: 💃🎵 -> dance_practice: 'Отрабатываем хореографию в зале до идеала! 💃 Стиль и свобода движений — наш девиз сегодня! 🎵 #sporty #kpop',
+Line 384: 🧋😉 -> vlog: 'Снимаем новый влог для вас! 🧋 Покажем наши повседневные будни за кадром. Ждете? 😉 #casual #cute',
+Line 385: 📱💕 -> fans_qa: 'Провели уютный прямой эфир и ответили на ваши вопросы! 📱 Вы лучшие, обожаем вас! 💕 #school #casual',
+Line 386: 🎵🌟 -> dance_challenge: 'Записали новый танцевальный челлендж! 🎵 Залетайте в тренды, повторяйте движения! 🌟 #cute #bold',
+Line 387: 🎤🔥 -> live_stage: 'Наше дебютное выступление на Inkigayo! 🎤 Сцена горела, зал кричал, это было незабываемо! 🔥 #kpop #bold',
+Line 388: 🏆👑 -> grand_concert: 'Выступили на премии Rookie Awards! 🏆 Мы невероятно счастливы и элегантны. Спасибо, наш фандом! 👑 #formal #elegant'
+Line 392: 🎙✨ -> recording: 'Recording a new hit in the studio! 🎙️ Charisma and bold vibe guaranteed. How do you like our look today? ✨ #kpop #bold',
+Line 393: 🧘👟 -> fitness: 'Morning stretching and fitness before the comeback! 🧘 Comfort and style are key. Getting energized! 👟 #sporty #casual',
+Line 394: 📸💫 -> photoshoot: 'Shooting concept photos for our new album! 📸 How do you like this elegant look? It\'s going to be hot! 💫 #kpop #elegant',
+Line 395: 🤝💖 -> fansign: 'Finally met our lovely fans at the fansign event! 🤝 Thank you for the support and gifts! 💖 #school #formal',
+Line 396: 📺🎀 -> variety_show: 'We guest starred on a variety show! 📺 It was super fun, watch out for the broadcast! Rate our cute style 🎀 #kpop #cute',
+Line 397: 💃🎵 -> dance_practice: 'Practicing our choreography to perfection! 💃 Style and movement are our motto today! 🎵 #sporty #kpop',
+Line 398: 🧋😉 -> vlog: 'Shooting a new vlog for you! 🧋 Showing our daily life behind the scenes. Are you excited? 😉 #casual #cute',
+Line 399: 📱💕 -> fans_qa: 'Had a cozy live stream and answered your questions! 📱 You are the best, love you all! 💕 #school #casual',
+Line 400: 🎵🌟 -> dance_challenge: 'Recorded a new dance challenge! 🎵 Jump into the trends, copy the moves! 🌟 #cute #bold',
+Line 401: 🎤🔥 -> live_stage: 'Our debut performance on Inkigayo! 🎤 The stage was on fire, the crowd was loud, unforgettable! 🔥 #kpop #bold',
+Line 402: 🏆👑 -> grand_concert: 'Performed on the Rookie Awards stage! 🏆 We are incredibly happy and elegant. Thank you to our fandom! 👑 #formal #elegant'
+Line 406: ✨✨ -> return pool[activityId] || (lang === 'ru' ? 'Новый пост! ✨ Оцените наш образ для сегодняшней активности!' : 'New post! ✨ Check out our look for today\'s activity!');
+Line 417: 🐼🦊🐰🐱🐻🐨🐯🦄💖✨🎵 -> const emojis = ['🐼', '🦊', '🐰', '🐱', '🐻', '🐨', '🐯', '🦄', '💖', '✨', '🎵'];
+Line 456: 💕 -> ? 'Свободный день — свободный стиль! Выглядит отлично! 💕'
+Line 457: 💕 -> : 'Free style day! Looks great! 💕';
+Line 460: 😅 -> ? 'Эм... Образ явно не закончен. Где низ/верх? 😅'
+Line 461: 😅 -> : 'Um... The look is clearly unfinished. Where is the rest? 😅';
+Line 465: 😍🔥🔥 -> ? ['Этот образ идеально подходит под тренды! 😍', 'Стиль передан на 100% круто! 🔥', 'Трендовый лук, прямо в точку! 🔥']
+Line 468: 😢 -> : ['Совсем не попали в стиль события... 😢', 'Странный выбор вещей, концепт провален.', 'Она точно знала, куда одевается?'];
+Line 470: 😍🔥🔥 -> ? ['This outfit is absolutely perfect for the trends! 😍', 'The style is captured perfectly! 🔥', 'Super trendy look, right on target! 🔥']
+Line 473: 😢 -> : ['This outfit doesn\'t suit the event at all... 😢', 'Strange choice of items, concept missed.', 'Did she know where she was going?'];
+Line 480: 😢😢 -> text = lang === 'ru' ? 'Ой, где же одежда? 😢' : 'Oops, where is the clothing? 😢';
+Line 484: 🔥😍✨💖 -> ? ['🔥 Лучший образ за всю историю! Вирусный хит!', 'Шедевр! Фанаты сходят с ума! 😍✨', 'Просто разрыв! Мой биас прекрасен! 💖']
+Line 486: ✨🥰 -> ? ['✨ Очень красивый и стильный образ! Лайк!', 'Фанаты в восторге, образ получился супер!', 'Хороший пост, делюсь со всеми друзьями! 🥰']
+Line 488: 👍🥰 -> ? ['Вполне неплохой наряд, фанаты одобряют 👍', 'Хороший лук, мне нравится!', 'Симпатично! Лайк от меня. 🥰']
+Line 489: 😕 -> : ['Нормально, но бывало и лучше 😕', 'Обычный образ, ничего особенного.', 'Пойдет, но можно было постараться сильнее.'];
+Line 491: 🔥😍✨💖 -> ? ['🔥 Best look ever! Absolute viral hit!', 'Masterpiece! Fans are going crazy! 😍✨', 'Absolute perfection! My bias is gorgeous! 💖']
+Line 493: ✨🥰 -> ? ['✨ Very beautiful and stylish outfit! I love it!', 'Fans love it, the outfit is super cool!', 'Nice post, sharing with all my friends! 🥰']
+Line 495: 👍🥰 -> ? ['Quite a decent outfit, fans approve 👍', 'Good look, I like it!', 'Cute! Like it! 🥰']
+Line 496: 😕 -> : ['It\'s okay, but could be better 😕', 'Ordinary look, nothing special.', 'Fine, but could be much better.'];
+Line 503: ✨✨ -> text = lang === 'ru' ? 'Очень эстетично выглядит! ✨' : 'Looks very aesthetic! ✨';
+Line 505: 😮😮 -> const poolRu = ['Забыла одеться? Кто-нибудь, дайте ей пальто! 😮', 'Эм... почему наряд такой пустой? 😮', 'Где верх и низ (или платье)? Образ абсолютно не завершен.'];
+Line 506: 😮😮 -> const poolEn = ['Forgot to get dressed? Someone give her a coat! 😮', 'Um... why so empty? 😮', 'Where are the top and bottom (or dress)? The look is incomplete.'];
+Line 510: 💕🥰💕 -> const poolRu = ['Люблю, когда она сама выбирает одежду! 💕', 'Свободный стиль ей так идет! 🥰', 'Самый естественный и милый пост! 💕'];
+Line 511: 💕🥰💕 -> const poolEn = ['Love it when she chooses her own clothes! 💕', 'Free style suits her so well! 🥰', 'The most natural and cute post! 💕'];
+Line 516: 🌟🔥✨ -> const poolRu = ['Полный образ! Всё продумано до мелочей! 🌟', 'Вау, каждый слот заполнен — идеально! 🔥', 'Собрала полный лук, вот это старание! ✨'];
+Line 517: 🌟🔥✨ -> const poolEn = ['Full outfit! Every detail is perfect! 🌟', 'Wow, every slot is filled — perfection! 🔥', 'Complete look, that\'s dedication! ✨'];
+Line 521: ✨ -> const poolRu = ['Приятный пост, лайк от меня!', 'Прикольно, жду новые посты!', 'Очень эстетично выглядит. ✨'];
+Line 522: ✨ -> const poolEn = ['Nice post, love it!', 'Cool, waiting for new posts!', 'Looks very aesthetic. ✨'];
+Line 783: 📍📍 -> assignTitleEl.textContent = lang === 'ru' ? '📍 Свободная фотосессия' : '📍 Free Photoshoot';
+Line 787: 💫 -> ? 'Мой новый образ в свободном стиле! Как вам такое сочетание? 💫 #kpop #freestyle'
+Line 788: 💫 -> : 'My new outfit in free style! Do you like this combination? 💫 #kpop #freestyle';
+Line 857: 👑 -> else if (pts >= 100) statusText = '👑 Сенсация!';
+Line 858: 🔥 -> else if (pts >= 80) statusText = '🔥 Невероятно!';
+Line 859: ✨ -> else if (pts >= 60) statusText = '✨ Трендово!';
+Line 860: 👍 -> else if (pts >= 40) statusText = '👍 Хорошая работа';
+Line 861: 💜 -> else statusText = '💜 Начало пути';
+Line 864: 👑 -> else if (pts >= 100) statusText = '👑 Sensational!';
+Line 865: 🔥 -> else if (pts >= 80) statusText = '🔥 Incredible!';
+Line 866: ✨ -> else if (pts >= 60) statusText = '✨ Trendy!';
+Line 867: 👍 -> else if (pts >= 40) statusText = '👍 Good job!';
+Line 868: 💜 -> else statusText = '💜 Start of the journey';
+Line 919: ✅ -> html = `<span>Тренд: Свободный стиль ✅</span>`;
+Line 925: ✅ -> return `<span class="hashtag-badge tag-matched" style="margin-left: 0.5em; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 0.3em;">#${label} ✅</span>`;
+Line 934: ✅ -> html = `<span>Trend: Free style ✅</span>`;
+Line 939: ✅ -> return `<span class="hashtag-badge tag-matched" style="margin-left: 0.5em; margin-top: 0; margin-bottom: 0; display: inline-flex; align-items: center; gap: 0.3em;">#${t} ✅</span>`;
+Line 1057: 📊 -> else if (!rankBadgeValEl && rankBadgeEl) rankBadgeEl.textContent = `📊 ${initialFollowersText}`;
+Line 1083: 🎉🎉 -> ? '<span style="font-weight: 800;">🎉 1М! Легенды K-Pop! 🎉</span>'
+Line 1084: 🎉🎉 -> : '<span style="font-weight: 800;">🎉 1M! K-Pop Legends! 🎉</span>';
+Line 1122: ✨ -> showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
+Line 1194: ✨ -> showToast(`✨ +${formatLikes(reward)} <img src="Items/UI/star.png" class="inline-heart" alt="star">!`, 'reward');
+Line 1325: ❤ -> likeBtn.textContent = '❤️';
+--- ui-panels.js ---
+Line 601: ✓ -> check.textContent = '✓';

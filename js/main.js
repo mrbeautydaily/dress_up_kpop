@@ -247,7 +247,7 @@ async function init() {
   // Also hook into window resize just in case fonts load later and change inner width
   window.addEventListener('resize', fitPanelControls);
   $('btn-next-bg').addEventListener('click', () => { sfxClick(); changeBackground(1); });
-  updateLikesDisplay();
+  updateStarsDisplay();
   initAudio();
 
 
@@ -270,7 +270,7 @@ async function init() {
       } else {
         $('game').classList.remove('hidden');
         startSchoolMode();
-        checkDailyLogin();
+        
         if (window.GameParticles) {
           window.GameParticles.start();
         }

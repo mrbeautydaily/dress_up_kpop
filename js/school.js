@@ -284,15 +284,8 @@ function onRunwayClick() {
     prog.perfectCount = (prog.perfectCount || 0) + 1;
   }
 
-  // Bonus for daily challenge
-  const isDaily = assignment.id === prog.dailyTaskId && !prog.dailyTaskDone;
-  if (isDaily) {
-    prog.dailyTaskDone = true;
-    prog.dailyTasksCompleted = (prog.dailyTasksCompleted || 0) + 1;
-  }
   saveProgress();
-  const dailyBonus = isDaily ? 1500 : 0;
-  addLikes(earned + dailyBonus);
+  addStars(earned);
   saveSchoolProgress();
 
   // Instant shutter click + flash -> show post and results using stage cloning

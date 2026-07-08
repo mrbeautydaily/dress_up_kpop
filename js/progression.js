@@ -5,15 +5,15 @@
 const PROG_KEY = 'kpop_progress_v1';
 
 let prog = {
-  likes: 12000, likesEarned: 12000,
+  stars: 850, starsEarned: 850,
   unlocked: [],
   achievements: {},
   loginStreak: 0, lastLoginDate: '',
-  dailyTaskId: '', dailyTaskDone: false, dailyTaskDate: '',
+  
   totalLessons: 0, highScore: 0,
   runwayCount: 0,
   perfectCount: 0,
-  dailyTasksCompleted: 0,
+  
   introDone: false,
   schoolFollowers: 0,
   schoolMilestones: [],
@@ -33,14 +33,14 @@ async function loadProgress() {
       }
     } catch(e) { console.warn('[Player] getData error:', e); }
   }
-  // Миграция: если у игрока старые сохранения со звёздами, переводим их в лайки (1 звезда = 100 лайков)
-  if (prog.likes === undefined) {
-    if (prog.stars !== undefined) {
-      prog.likes = prog.stars * 100;
-      prog.likesEarned = (prog.starsEarned || prog.stars) * 100;
+  // Инициализация баланса звезд
+  if (prog.stars === undefined) {
+    if (prog.likes !== undefined) {
+      prog.stars = Math.floor(prog.likes / 20); // На случай миграции, если вдруг нужно
+      prog.starsEarned = Math.floor((prog.likesEarned || prog.likes) / 20);
     } else {
-      prog.likes = 12000;
-      prog.likesEarned = 12000;
+      prog.stars = 850;
+      prog.starsEarned = 850;
     }
   }
   
@@ -71,29 +71,29 @@ function isUnlocked(itemId) {
   return FREE_ITEMS.has(itemId) || prog.unlocked.includes(itemId);
 }
 function itemCost(itemId) { return ITEM_COSTS[itemId] ?? 0; }
-function itemLikesCost(itemId) { return (ITEM_COSTS[itemId] ?? 0) * 100; }
+function itemStarCost(itemId) { return (ITEM_COSTS[itemId] ?? 0) * 5; }
 
-function formatLikes(n) {
+function formatStars(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
   if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
   return String(n);
 }
 
 // ────────────────────────────────────────────────────────────
-// PROGRESSION — LIKES
+// PROGRESSION — STARS
 // ────────────────────────────────────────────────────────────
 
-function addLikes(n) {
-  prog.likes = (prog.likes || 0) + n;
-  prog.likesEarned = (prog.likesEarned || 0) + n;
+function addStars(n) {
+  prog.stars = (prog.stars || 0) + n;
+  prog.starsEarned = (prog.starsEarned || 0) + n;
   saveProgress();
-  updateLikesDisplay();
+  updateStarsDisplay();
 }
 
 
-function updateLikesDisplay() {
+function updateStarsDisplay() {
   const el = $('stars-count');
-  if (el) el.textContent = formatLikes(prog.likes);
+  if (el) el.textContent = formatStars(prog.stars);
   setTimeout(adjustStageCounters, 0);
 }
 
@@ -126,7 +126,7 @@ function tryEquipOrBuy(category, itemId) {
     return;
   }
 
-  const cost = getDailyDealLikesCost(itemId);
+  const cost = getDailyDealStarCost(itemId);
   _buyPending = itemId;
   showBuyBar(category, itemId, cost);
 }
@@ -173,7 +173,7 @@ function showBuyBar(category, itemId, cost) {
       e.stopPropagation(); showReviewForItem(category, itemId);
     };
   } else {
-    const canBuy = prog.likes >= cost;
+    const canBuy = prog.stars >= cost;
     const shopHint = !canBuy
       ? `<button class="buy-bar-gem-hint" id="buy-bar-shop">
             <img src="Items/UI/star.png" class="inline-heart" alt="star"> ${lang === 'ru' ? 'Купить звёзды' : 'Buy Stars'}
@@ -183,7 +183,7 @@ function showBuyBar(category, itemId, cost) {
       <div class="buy-bar-name">${iName(item)}</div>
       <div class="buy-bar-row">
         <button class="buy-bar-btn buy-confirm${canBuy ? '' : ' cant-buy'}" id="buy-bar-yes">
-          ${canBuy ? (lang === 'ru' ? `Купить ${formatLikes(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">` : `Buy ${formatLikes(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`) : (lang === 'ru' ? `Нужно ${formatLikes(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">` : `Need ${formatLikes(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`)}
+          ${canBuy ? (lang === 'ru' ? `Купить ${formatStars(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">` : `Buy ${formatStars(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`) : (lang === 'ru' ? `Нужно ${formatStars(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">` : `Need ${formatStars(cost)} <img src="Items/UI/star.png" class="inline-heart" alt="star">`)}
         </button>
         <button class="buy-bar-btn buy-cancel" id="buy-bar-no">✕</button>
       </div>
@@ -193,9 +193,9 @@ function showBuyBar(category, itemId, cost) {
       e.stopPropagation();
       if (!canBuy) return;
       _buyPending = null; hideBuyBar();
-      prog.likes -= cost;
+      prog.stars -= cost;
       prog.unlocked.push(itemId);
-      saveProgress(); updateLikesDisplay();
+      saveProgress(); updateStarsDisplay();
       equipItem(category, itemId);
       buildItemsGrid(activeCategory);
       spawnSparkles(8);
@@ -404,26 +404,10 @@ function getDailyDealId() {
 }
 
 
-function getDailyDealLikesCost(itemId) {
-  return itemId === getDailyDealId() ? Math.ceil(itemLikesCost(itemId) / 2) : itemLikesCost(itemId);
+function getDailyDealStarCost(itemId) {
+  return itemId === getDailyDealId() ? Math.ceil(itemStarCost(itemId) / 2) : itemStarCost(itemId);
 }
 
-function refreshDailyTask(today) {
-  if (prog.dailyTaskDate === today) return;
-  prog.dailyTaskId   = ASSIGNMENTS[dateHash(today) % ASSIGNMENTS.length].id;
-  prog.dailyTaskDone = false;
-  prog.dailyTaskDate = today;
-  saveProgress();
-}
-
-// ────────────────────────────────────────────────────────────
-// PROGRESSION — DAILY LOGIN
-// ────────────────────────────────────────────────────────────
-
-function checkDailyLogin() {
-  const today = todayStr();
-  refreshDailyTask(today);
-}
 
 
 

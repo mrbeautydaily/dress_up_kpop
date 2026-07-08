@@ -37,7 +37,7 @@ const T = {
     loadingTitle:  'K-Pop Idol: Star Maker',
     loadingText:   'Loading...',
     // Header
-    gameTitle:     '✨ K-Pop Star Maker ✨',
+    gameTitle:     'K-Pop Star Maker',
     btnRunway:     'Publish Post',
     // Panels
     catHair:       'Hair',
@@ -68,7 +68,7 @@ const T = {
     loadingTitle:  'Путь к славе: K-Pop',
     loadingText:   'Загрузка...',
     // Header
-    gameTitle:     '✨ K-Pop: Путь к славе ✨',
+    gameTitle:     'K-Pop: Путь к славе',
     btnRunway:     'Опубликовать',
     // Panels
     catHair:       'Волосы',

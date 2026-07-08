@@ -708,7 +708,7 @@ const IntroDirector = {
       $('game').classList.remove('hidden');
       renderAllLayers();
       startSchoolMode();
-      checkDailyLogin();
+      
 
       if (window.GameParticles) {
         window.GameParticles.start();

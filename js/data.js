@@ -1,10 +1,10 @@
 const $ = id => document.getElementById(id);
 
 const STAR_PACKAGES = [
-  { id: 'stars_30',  likes:  3000, bonus: 0,     icon: 'Items/UI/shop_heart_1.png', priceRu: '30 Ян', priceEn: '30 Yan' },
-  { id: 'stars_150', likes: 15000, bonus: 0,     icon: 'Items/UI/shop_heart_2.png', priceRu: '150 Ян', priceEn: '150 Yan' },
-  { id: 'stars_300', likes: 30000, bonus: 3000,  icon: 'Items/UI/shop_heart_3.png', popular: true, priceRu: '300 Ян', priceEn: '300 Yan' },
-  { id: 'stars_600', likes: 60000, bonus: 10000, icon: 'Items/UI/shop_heart_4.png', priceRu: '600 Ян', priceEn: '600 Yan' },
+  { id: 'stars_30',  stars:  150, bonus: 0,     icon: 'Items/UI/shop_heart_1.png', priceRu: '30 Ян', priceEn: '30 Yan' },
+  { id: 'stars_150', stars:  750, bonus: 0,     icon: 'Items/UI/shop_heart_2.png', priceRu: '150 Ян', priceEn: '150 Yan' },
+  { id: 'stars_300', stars: 1500, bonus: 150,  icon: 'Items/UI/shop_heart_3.png', popular: true, priceRu: '300 Ян', priceEn: '300 Yan' },
+  { id: 'stars_600', stars: 3000, bonus: 500, icon: 'Items/UI/shop_heart_4.png', priceRu: '600 Ян', priceEn: '600 Yan' },
 ];
 
 // ────────────────────────────────────────────────────────────
@@ -334,11 +334,11 @@ const REVIEW_ITEM = 'gothic_stage_dress';
 // ────────────────────────────────────────────────────────────
 
 const MILESTONE_REWARDS = {
-  1000: 3000,
-  10000: 5000,
-  100000: 10000,
-  500000: 25000,
-  1000000: 50000
+  1000: 100,
+  10000: 200,
+  100000: 400,
+  500000: 800,
+  1000000: 1500
 };
 
 // ────────────────────────────────────────────────────────────
@@ -563,14 +563,14 @@ const BACKGROUNDS = [
 let currentBackgroundIndex = 2; // Default to 'Background/photoshoot.jpg'
 
 function formatFollowers(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  if (n >= 1000000) return Number((n / 1000000).toFixed(1)) + 'M';
+  if (n >= 1000) return Number((n / 1000).toFixed(1)) + 'K';
   return String(n);
 }
 
 function formatShortNumber(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M';
-  if (n >= 1000) return (n / 1000).toFixed(2) + 'K';
+  if (n >= 1000000) return Number((n / 1000000).toFixed(1)) + 'M';
+  if (n >= 1000) return Number((n / 1000).toFixed(1)) + 'K';
   return String(n);
 }
 
