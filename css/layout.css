@@ -314,7 +314,7 @@
     transform: scale(1);
   }
   50% {
-    transform: scale(1.002, 1.007);
+    transform: scale(1.001, 1.004);
   }
 }
 

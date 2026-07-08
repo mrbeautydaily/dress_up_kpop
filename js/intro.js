@@ -354,6 +354,13 @@ const IntroDirector = {
   renderCharacter(outfit, stage = $('intro-char-stage')) {
     if (!stage) return;
     stage.innerHTML = '';
+    
+    const savedBreathEnabled = localStorage.getItem('dev_breath_enabled') !== 'false';
+    if (!savedBreathEnabled) {
+      stage.classList.add('no-breath');
+    } else {
+      stage.classList.remove('no-breath');
+    }
 
     const shadowDiv = document.createElement('div');
     shadowDiv.className = 'character-shadow';

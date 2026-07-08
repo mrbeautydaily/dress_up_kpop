@@ -126,7 +126,7 @@ function tryEquipOrBuy(category, itemId) {
     return;
   }
 
-  const cost = getDailyDealStarCost(itemId);
+  const cost = itemStarCost(itemId);
   _buyPending = itemId;
   showBuyBar(category, itemId, cost);
 }
@@ -393,21 +393,4 @@ function showToast(msg, type) {
   clearTimeout(el._t);
   el._t = setTimeout(() => el.className = 'game-toast hidden', 2000);
 }
-
-// ────────────────────────────────────────────────────────────
-// PROGRESSION — DAILY DEAL & TASK
-// ────────────────────────────────────────────────────────────
-
-
-function getDailyDealId() {
-  return null;
-}
-
-
-function getDailyDealStarCost(itemId) {
-  return itemId === getDailyDealId() ? Math.ceil(itemStarCost(itemId) / 2) : itemStarCost(itemId);
-}
-
-
-
 

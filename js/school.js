@@ -74,19 +74,19 @@ function scoreOutfit(assignment) {
 
 function buildDaySchedule() {
   const allTasks = [
-    PROMO_ACTIVITIES[0], // Recording Session (bold, kpop)
-    PROMO_ACTIVITIES[1], // Fitness & Stretching (sporty, casual)
-    PROMO_ACTIVITIES[2], // Album Photoshoot (kpop, elegant)
-    FREE_POST,            // Free Style Post
-    PROMO_ACTIVITIES[3], // Fansign Event (school, formal)
-    PROMO_ACTIVITIES[4], // Variety Show (kpop, cute)
-    FINAL_STAGES[0],     // Inkigayo Live Stage (kpop, bold)
-    PROMO_ACTIVITIES[5], // Choreography Practice (sporty, kpop)
-    PROMO_ACTIVITIES[6], // Vlog Recording (casual, cute)
-    FREE_POST,            // Free Style Post
-    PROMO_ACTIVITIES[7], // Live with Fans (school, casual)
-    PROMO_ACTIVITIES[8], // Viral Dance Challenge (cute, bold)
-    FINAL_STAGES[1],     // Rookie Awards Stage (formal, elegant)
+    PROMO_ACTIVITIES[0], // Day 1: Recording Session (bold, kpop)
+    PROMO_ACTIVITIES[6], // Day 2: Vlog Recording (casual, cute)
+    PROMO_ACTIVITIES[2], // Day 3: Album Photoshoot (kpop, elegant)
+    FREE_POST,            // Day 4: Free Style Post
+    PROMO_ACTIVITIES[1], // Day 5: Fitness & Stretching (sporty, casual)
+    PROMO_ACTIVITIES[3], // Day 6: Fansign Event (school, formal)
+    PROMO_ACTIVITIES[4], // Day 7: Variety Show (kpop, cute)
+    FINAL_STAGES[0],     // Day 8: Inkigayo Live Stage (kpop, bold)
+    PROMO_ACTIVITIES[5], // Day 9: Choreography Practice (sporty, kpop)
+    FREE_POST,            // Day 10: Free Style Post
+    PROMO_ACTIVITIES[7], // Day 11: Live with Fans (school, casual)
+    PROMO_ACTIVITIES[8], // Day 12: Viral Dance Challenge (cute, bold)
+    FINAL_STAGES[1],     // Day 13: Rookie Awards Stage (formal, elegant)
   ];
   const idx = Math.max(0, school.day - 1) % allTasks.length;
   school.schedule = [allTasks[idx]];

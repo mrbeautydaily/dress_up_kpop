@@ -1,6 +1,7 @@
 
 // Timers for synchronized score sounds
 let scoreRiseTimer = null;
+let scoreRewardRiseTimer = null;
 let scoreFinalChimeTimer = null;
 
 function loadImageForCanvas(src) {
@@ -540,6 +541,10 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       clearTimeout(scoreRiseTimer);
       scoreRiseTimer = null;
     }
+    if (scoreRewardRiseTimer) {
+      clearTimeout(scoreRewardRiseTimer);
+      scoreRewardRiseTimer = null;
+    }
     if (scoreFinalChimeTimer) {
       clearTimeout(scoreFinalChimeTimer);
       scoreFinalChimeTimer = null;
@@ -838,14 +843,13 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     }
   }
 
-  if (!isFree) {
-    // ── Reset large score counter ──
-    const largeScoreEl = $('score-large-score');
-    if (largeScoreEl) {
-      largeScoreEl.textContent = '0/100';
-      largeScoreEl.classList.remove('visible');
-    }
+  // Play chime during total reward / likes count-up animation (duration 800ms)
+  scoreRewardRiseTimer = setTimeout(() => {
+    const targetVal = isFree ? currentLikesVal : (earned || 0);
+    sfxScoreRiseChime(targetVal, 800);
+  }, 800);
 
+  if (!isFree) {
     // ── Update score status title ──
     const statusTitleEl = $('score-status-title');
     if (statusTitleEl) {
@@ -963,14 +967,10 @@ function showScoreScreen(assignment, result, earned, socialStats) {
 
 
 
-    // Large score with count-up
-    if (largeScoreEl) {
-      scoreRiseTimer = setTimeout(() => {
-        largeScoreEl.classList.add('visible');
-        animateCounter(largeScoreEl, result.totalPoints, 800, '', '/100');
-        sfxScoreRiseChime(result.totalPoints, 800);
-      }, 500);
-    }
+    // Play chime during outfit/trend points animation (duration 450ms)
+    scoreRiseTimer = setTimeout(() => {
+      sfxScoreRiseChime(result.totalPoints, 450);
+    }, 300);
 
     // Viral glow on breakdown card
     if (breakdownCard) {
@@ -1103,7 +1103,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
             giftBoxEl.classList.remove('shaking');
             giftBoxEl.classList.add('hidden-box');
           }
-          spawnSparkles(35, giftBoxEl);
+          spawnSparkles(35, giftBoxEl, 'star');
           sfxClick();
 
           if (rankSectionEl) rankSectionEl.classList.add('celebrating');
@@ -1169,7 +1169,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
               giftBoxEl.classList.remove('shaking');
               giftBoxEl.classList.add('hidden-box');
             }
-            spawnSparkles(30, giftBoxEl);
+            spawnSparkles(30, giftBoxEl, 'star');
             sfxClick();
 
             if (rankSectionEl) rankSectionEl.classList.add('celebrating');
@@ -1523,7 +1523,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
         doubled = true;
         dblBtn.classList.add('hidden');
         addStars(earned);
-        spawnSparkles(12);
+        spawnSparkles(12, null, 'star');
         showToast(`+${formatStars(earned)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> × 2!`, 'reward');
       };
       if (ysdk) {

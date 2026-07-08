@@ -350,8 +350,8 @@ function initDevPanel() {
     savedAnim = 'softPopIn';
   }
   const savedDustEnabled = localStorage.getItem('dev_dust_enabled') === 'true';
-  const savedBreathEnabled = localStorage.getItem('dev_breath_enabled') === 'true';
-  const savedBlinkEnabled = localStorage.getItem('dev_blink_enabled') === 'true';
+  const savedBreathEnabled = localStorage.getItem('dev_breath_enabled') !== 'false';
+  const savedBlinkEnabled = localStorage.getItem('dev_blink_enabled') !== 'false';
 
   // Apply scales and values initially
   applyCharScale(savedCharScale);

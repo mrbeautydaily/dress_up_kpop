@@ -136,7 +136,7 @@ function initAudio() {
 // SPARKLE EFFECT
 // ────────────────────────────────────────────────────────────
 
-function spawnSparkles(count = 6, targetEl = null) {
+function spawnSparkles(count = 6, targetEl = null, imageType = 'heart') {
   const modal = $('score-modal');
   const useModal = modal && !modal.classList.contains('hidden');
   const container = useModal ? $('modal-sparkles') : $('sparkles');
@@ -155,7 +155,7 @@ function spawnSparkles(count = 6, targetEl = null) {
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       const el = document.createElement('img');
-      el.src = 'Items/UI/heart.png';
+      el.src = imageType === 'star' ? 'Items/UI/star.png' : 'Items/UI/heart.png';
       el.className = 'sparkle';
       el.style.width = '1.25rem';
       el.style.height = '1.25rem';

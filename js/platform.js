@@ -129,12 +129,17 @@ async function initYandexSDK() {
     const cisLangs = ['ru', 'be', 'kk', 'uk', 'uz', 'az', 'hy', 'ka', 'mo', 'tg', 'tk', 'ky'];
     const cisTlds  = ['ru', 'by', 'kz', 'ua', 'uz', 'az', 'am', 'ge', 'md', 'tj', 'tm', 'kg'];
 
-    if (cisLangs.includes(sdkLang) || cisTlds.includes(sdkTld)) {
-      lang = 'ru';
-    } else {
-      lang = 'en';
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+
+    if (urlLang) {
+      lang = cisLangs.includes(urlLang) ? 'ru' : 'en';
+    } else if (sdkLang) {
+      lang = cisLangs.includes(sdkLang) ? 'ru' : 'en';
+    } else if (sdkTld) {
+      lang = cisTlds.includes(sdkTld) ? 'ru' : 'en';
     }
-    // если SDK ничего не дал — остаётся результат detectLangFromBrowser()
+    // если SDK ничего не дал и параметров нет — остаётся результат detectLangFromBrowser()
 
     console.log('[i18n] Language set to:', lang);
 
@@ -247,7 +252,8 @@ async function restorePurchases() {
     for (const p of purchases) {
       const pkg = STAR_PACKAGES.find(pk => pk.id === p.productID);
       if (pkg) addStars(pkg.stars + pkg.bonus);
-      // Консумируем все покупки, даже неизвестные (п. 1.13.1)
+      // Сохраняем данные ДО consumePurchase — покупка удаляется безвозвратно (п. 1.13.1)
+      await saveProgress();
       await _payments.consumePurchase(p.purchaseToken);
     }
   } catch (e) {
@@ -268,6 +274,8 @@ async function buyStarPackage(pkg, cardEl) {
       }
       const purchase = await _payments.purchase({ id: pkg.id });
       grantStarPackage(pkg);
+      // Сохраняем данные ДО consumePurchase — покупка удаляется безвозвратно
+      await saveProgress();
       await _payments.consumePurchase(purchase.purchaseToken);
     } else {
       // Dev-режим без SDK — симулируем покупку
@@ -288,7 +296,7 @@ function grantStarPackage(pkg) {
   const total = pkg.stars + pkg.bonus;
   addStars(total);
   buildItemsGrid(activeCategory);
-  spawnSparkles(14);
+  spawnSparkles(14, null, 'star');
   sfxUnlock();
   const msg = pkg.bonus > 0
     ? (lang === 'ru' ? `+${formatStars(pkg.stars)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> и +${formatStars(pkg.bonus)} бонус!` : `+${formatStars(pkg.stars)} <img src="Items/UI/star.png" class="inline-heart" alt="star"> + ${formatStars(pkg.bonus)} bonus!`)
@@ -330,7 +338,7 @@ function showShopModal() {
             _adShowing = false;
             adCard.classList.remove('loading');
             if (_actx && soundOn) _actx.resume(); resumeBGM();
-            if (_rewarded) { addStars(50); spawnSparkles(8); showToast('+50 <img src="Items/UI/star.png" class="inline-heart" alt="star">', 'reward'); }
+            if (_rewarded) { addStars(50); spawnSparkles(8, null, 'star'); showToast('+50 <img src="Items/UI/star.png" class="inline-heart" alt="star">', 'reward'); }
           },
           onError: () => {
             _adShowing = false;
@@ -341,7 +349,7 @@ function showShopModal() {
         },
       });
     } else {
-      addStars(50); spawnSparkles(8); showToast('+50 <img src="Items/UI/star.png" class="inline-heart" alt="star"> (dev)', 'reward');
+      addStars(50); spawnSparkles(8, null, 'star'); showToast('+50 <img src="Items/UI/star.png" class="inline-heart" alt="star"> (dev)', 'reward');
       adCard.classList.remove('loading');
     }
   });
