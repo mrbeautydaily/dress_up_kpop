@@ -231,6 +231,7 @@ function saveSchoolProgress() {
       totalPosts: school.totalPosts,
       dayFollowersGained: school.dayFollowersGained,
       rewardedMilestones: school.rewardedMilestones || [],
+      bannerGlowDismissed: school.bannerGlowDismissed || false,
     }));
   } catch(e) {}
   updateFollowersDisplay();
@@ -240,13 +241,20 @@ function loadSchoolProgress() {
     const r = localStorage.getItem(SCHOOL_SAVE_KEY);
     if (r) {
       const s = JSON.parse(r);
-      school.day = s.day || 1;
-      school.totalFollowers = s.totalFollowers || s.totalScore || 0;
-      school.totalPosts = s.totalPosts || 0;
-      school.dayFollowersGained = s.dayFollowersGained || 0;
+      // day & dayFollowersGained: only in localStorage, cloud doesn't store them
+      school.day = s.day || school.day || 1;
+      school.dayFollowersGained = s.dayFollowersGained || school.dayFollowersGained || 0;
+      school.bannerGlowDismissed = s.bannerGlowDismissed || false;
+      // Followers & posts: take the HIGHER value between cloud (already loaded by loadProgress) and localStorage.
+      // This way switching devices never loses progress, and offline play is also safe.
+      const localFollowers = s.totalFollowers || s.totalScore || 0;
+      school.totalFollowers = Math.max(school.totalFollowers || 0, localFollowers);
+      school.totalPosts = Math.max(school.totalPosts || 0, s.totalPosts || 0);
+      // Milestones: merge cloud + localStorage so we never lose a rewarded milestone
       if (s.rewardedMilestones) {
-        school.rewardedMilestones = s.rewardedMilestones;
-      } else {
+        const cloudMs = school.rewardedMilestones || [];
+        school.rewardedMilestones = [...new Set([...cloudMs, ...s.rewardedMilestones])];
+      } else if (!school.rewardedMilestones || school.rewardedMilestones.length === 0) {
         // Pre-populate already reached milestones to avoid retroactive reward spam/exploit on first load
         const MILESTONES = [1000, 10000, 100000, 500000, 1000000];
         school.rewardedMilestones = [];

@@ -23,12 +23,42 @@ let prog = {
 async function loadProgress() {
   // Сначала читаем локальный кэш
   try { const s = localStorage.getItem(PROG_KEY); if (s) prog = { ...prog, ...JSON.parse(s) }; } catch(e) {}
-  // Затем перезаписываем серверными данными (п. 1.13.3)
+  // Затем УМНО мержим с облачными данными (не затираем, а берём лучшее)
   if (_player) {
     try {
       const data = await _player.getData(['prog']);
       if (data && data.prog) {
-        prog = { ...prog, ...data.prog };
+        const cloud = data.prog;
+        // ★ Звёзды — САМОЕ ВАЖНОЕ: берём максимум, чтобы купленные звёзды не пропали
+        prog.stars = Math.max(prog.stars || 0, cloud.stars || 0);
+        prog.starsEarned = Math.max(prog.starsEarned || 0, cloud.starsEarned || 0);
+        // ★ Купленные вещи — объединяем оба списка, ни одна покупка не потеряется
+        if (cloud.unlocked) {
+          prog.unlocked = [...new Set([...(prog.unlocked || []), ...cloud.unlocked])];
+        }
+        // Ачивки — объединяем (что заработал — то заработал)
+        if (cloud.achievements) {
+          prog.achievements = { ...(prog.achievements || {}), ...cloud.achievements };
+        }
+        // Статистика — берём максимум
+        prog.totalLessons = Math.max(prog.totalLessons || 0, cloud.totalLessons || 0);
+        prog.highScore = Math.max(prog.highScore || 0, cloud.highScore || 0);
+        prog.runwayCount = Math.max(prog.runwayCount || 0, cloud.runwayCount || 0);
+        prog.perfectCount = Math.max(prog.perfectCount || 0, cloud.perfectCount || 0);
+        // Логин-стрик — берём из облака (серверное время)
+        if (cloud.loginStreak !== undefined) prog.loginStreak = cloud.loginStreak;
+        if (cloud.lastLoginDate !== undefined) prog.lastLoginDate = cloud.lastLoginDate;
+        // Школа в prog — берём максимум
+        prog.schoolFollowers = Math.max(prog.schoolFollowers || 0, cloud.schoolFollowers || 0);
+        if (cloud.schoolMilestones) {
+          prog.schoolMilestones = [...new Set([...(prog.schoolMilestones || []), ...cloud.schoolMilestones])];
+        }
+        // Интро — если хоть где-то пройдено, значит пройдено
+        if (cloud.introDone) prog.introDone = true;
+        // Хинты — объединяем (показанная подсказка = показанная навсегда)
+        if (cloud.hints) {
+          prog.hints = { ...(prog.hints || {}), ...cloud.hints };
+        }
         localStorage.setItem(PROG_KEY, JSON.stringify(prog));
       }
     } catch(e) { console.warn('[Player] getData error:', e); }
@@ -51,7 +81,7 @@ async function loadProgress() {
   }
 }
 
-function saveProgress() {
+async function saveProgress() {
   // Перед сохранением обновляем данные из режима карьеры
   if (typeof school !== 'undefined') {
     prog.schoolFollowers = school.totalFollowers || 0;
@@ -60,7 +90,7 @@ function saveProgress() {
 
   try { localStorage.setItem(PROG_KEY, JSON.stringify(prog)); } catch(e) {}
   if (_player) {
-    _player.setData({ prog }, true).catch(e => console.warn('[Player] setData error:', e));
+    try { await _player.setData({ prog }, true); } catch(e) { console.warn('[Player] setData error:', e); }
   }
 }
 

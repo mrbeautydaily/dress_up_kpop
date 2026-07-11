@@ -621,7 +621,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     if (isFree) {
       currentLikesVal = Math.floor(Math.random() * 1000) + 250;
     } else {
-      currentLikesVal = earned || 0;
+      currentLikesVal = Math.max(1, earned || 0);
     }
     likesCountEl.textContent = '0';
     setTimeout(() => animateCounter(likesCountEl, currentLikesVal, 900, '', '', true), 800);
@@ -653,7 +653,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       } else {
         postLikeBtn.classList.remove('liked');
         if (likesCountEl) {
-          likesCountEl.textContent = formatStars(currentLikesVal - 1);
+          likesCountEl.textContent = formatStars(Math.max(0, currentLikesVal - 1));
         }
       }
     };
@@ -873,11 +873,19 @@ function showScoreScreen(assignment, result, earned, socialStats) {
       }
       statusTitleEl.textContent = statusText;
       
-      // Show and play final chime at the end of the counter animation (approx 1700ms)
-      scoreFinalChimeTimer = setTimeout(() => {
-        statusTitleEl.classList.add('visible');
-        sfxScore(result.trendMatches);
-      }, 1700);
+      if (result.isNaked) {
+        // Show immediately (with a minimal delay for CSS transitions to trigger)
+        scoreFinalChimeTimer = setTimeout(() => {
+          statusTitleEl.classList.add('visible');
+          sfxScore(result.trendMatches);
+        }, 50);
+      } else {
+        // Show and play final chime at the end of the counter animation (approx 1700ms)
+        scoreFinalChimeTimer = setTimeout(() => {
+          statusTitleEl.classList.add('visible');
+          sfxScore(result.trendMatches);
+        }, 1700);
+      }
     }
 
     // ── Populate breakdown rows ──
@@ -1555,9 +1563,6 @@ function showScoreScreen(assignment, result, earned, socialStats) {
   }
 
   $('score-modal').classList.remove('hidden');
-
-  resizeScoreModal();
-  setTimeout(resizeScoreModal, 100);
 }
 
 /**

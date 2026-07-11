@@ -355,8 +355,10 @@ const IntroDirector = {
     if (!stage) return;
     stage.innerHTML = '';
     
+    const isPhoneStage = stage.id === 'intro-phone-char-stage';
+    
     const savedBreathEnabled = localStorage.getItem('dev_breath_enabled') !== 'false';
-    if (!savedBreathEnabled) {
+    if (!savedBreathEnabled || isPhoneStage) {
       stage.classList.add('no-breath');
     } else {
       stage.classList.remove('no-breath');
@@ -401,7 +403,7 @@ const IntroDirector = {
       stage.appendChild(img);
     });
 
-    if (typeof startBlinking === 'function') {
+    if (typeof startBlinking === 'function' && !isPhoneStage) {
       startBlinking(stage);
     }
   },

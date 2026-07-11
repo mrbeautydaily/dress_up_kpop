@@ -241,9 +241,14 @@
 
 .assignment-card-header .arrow-icon {
   margin-left: auto !important;
-  font-size: 0.75rem !important;
   transition: transform 0.3s ease !important;
   color: var(--purple) !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
 }
 
 .assignment-card-content {
@@ -303,7 +308,10 @@
     font-size: 0.74rem !important;
   }
   #banner-task-title {
-    font-size: 0.82rem !important;
+    font-size: 0.62rem !important;
+  }
+  #banner-task-icon {
+    display: none !important;
   }
   .assignment-card-header-subtitle {
     font-size: 0.55rem !important;
@@ -727,4 +735,26 @@
   box-shadow: 0 0 6px rgba(255, 42, 133, 0.6);
   z-index: 15;
   animation: muteSlashIn 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Assignment card arrow glow effect */
+.arrow-icon.arrow-glow {
+  background: rgba(161, 72, 200, 0.25) !important;
+  box-shadow: 0 0 0 0 rgba(161, 72, 200, 0.85);
+  animation: arrowPulseGlow 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes arrowPulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(161, 72, 200, 0.85);
+    background: rgba(161, 72, 200, 0.25) !important;
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(161, 72, 200, 0);
+    background: rgba(161, 72, 200, 0.45) !important;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(161, 72, 200, 0);
+    background: rgba(161, 72, 200, 0) !important;
+  }
 }

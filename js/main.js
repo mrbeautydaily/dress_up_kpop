@@ -165,7 +165,19 @@ async function init() {
   if (cardToggle) {
     cardToggle.addEventListener('click', () => {
       sfxClick();
-      $('assignment-banner').classList.toggle('collapsed');
+      const banner = $('assignment-banner');
+      if (banner) {
+        banner.classList.toggle('collapsed');
+        // If the banner was expanded (is not collapsed anymore)
+        if (!banner.classList.contains('collapsed')) {
+          const arrow = $('assignment-card-arrow');
+          if (arrow && arrow.classList.contains('arrow-glow')) {
+            arrow.classList.remove('arrow-glow');
+            school.bannerGlowDismissed = true;
+            saveSchoolProgress();
+          }
+        }
+      }
       setTimeout(() => {
         adjustAssignmentBannerWidth();
         adjustStageCounters();
@@ -177,7 +189,12 @@ async function init() {
   window.addEventListener('resize', () => {
     const banner = $('assignment-banner');
     if (banner && !banner.classList.contains('hidden') && window.innerWidth < 768) {
-      banner.classList.add('collapsed');
+      // Do not auto-collapse on resize on Day 1
+      if (school.active && school.day === 1) {
+        // keep open
+      } else {
+        banner.classList.add('collapsed');
+      }
     }
     adjustAssignmentBannerWidth();
     adjustStageCounters();
@@ -185,7 +202,9 @@ async function init() {
   // Trigger once on load
   if (window.innerWidth < 768) {
     const banner = $('assignment-banner');
-    if (banner) banner.classList.add('collapsed');
+    if (banner && !(school.active && school.day === 1)) {
+      banner.classList.add('collapsed');
+    }
   }
   setTimeout(() => {
     adjustAssignmentBannerWidth();

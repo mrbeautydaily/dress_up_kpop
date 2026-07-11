@@ -164,6 +164,23 @@ function showAssignmentBanner() {
   }
   
   $('outfit-name-display').textContent = assignmentDesc(a);
+
+  const banner = $('assignment-banner');
+  const arrow = $('assignment-card-arrow');
+  if (banner && arrow) {
+    if (school.day === 1) {
+      banner.classList.remove('collapsed');
+      arrow.classList.remove('arrow-glow');
+    } else {
+      if (!school.bannerGlowDismissed) {
+        banner.classList.add('collapsed');
+        arrow.classList.add('arrow-glow');
+      } else {
+        arrow.classList.remove('arrow-glow');
+      }
+    }
+  }
+
   setTimeout(() => {
     adjustAssignmentBannerWidth();
     adjustStageCounters();

@@ -527,6 +527,15 @@
   .btn           { padding: .18rem .35rem; font-size: .6rem; }
 }
 
+@media (max-width: 540px) {
+  #btn-double-reward:not(.hidden) ~ #btn-share-score #btn-share-score-label {
+    display: none;
+  }
+  #btn-double-reward:not(.hidden) ~ #btn-share-score svg {
+    margin-right: 0 !important;
+  }
+}
+
 
 
 

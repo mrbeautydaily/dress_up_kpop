@@ -407,8 +407,8 @@ function buildHashtagsHTML(assignment, result) {
 const PROMO_ACTIVITIES = [
   { id:'recording',
     title:'Recording Session',     title_ru:'Запись трека',
-    desc: 'Fans want pure charisma and bold vibe for the title track!',
-    desc_ru:'Фанаты хотят чистую харизму и дерзкий вайб от заглавного трека!',
+    desc: 'Show the fans your bright charisma and a bold K-pop vibe in your new look!',
+    desc_ru:'Покажите фанатам яркую харизму и дерзкий к-поп вайб в своем новом образе!',
     requiredTags:['kpop','bold'] },
   { id:'fitness',
     title:'Fitness & Stretching',  title_ru:'Фитнес и растяжка',
@@ -540,6 +540,7 @@ const school = {
   totalPosts:         0,     // total published posts
   dayFollowersGained: 0,     // followers gained during current day
   rewardedMilestones: [],    // list of already rewarded follower milestones
+  bannerGlowDismissed: false, // true when user dismissed the arrow glow
 };
 
 // ────────────────────────────────────────────────────────────
