@@ -621,7 +621,7 @@ function showScoreScreen(assignment, result, earned, socialStats) {
     if (isFree) {
       currentLikesVal = Math.floor(Math.random() * 1000) + 250;
     } else {
-      currentLikesVal = Math.max(1, earned || 0);
+      currentLikesVal = (socialStats && socialStats.likes !== undefined) ? socialStats.likes : Math.max(1, earned || 0);
     }
     likesCountEl.textContent = '0';
     setTimeout(() => animateCounter(likesCountEl, currentLikesVal, 900, '', '', true), 800);

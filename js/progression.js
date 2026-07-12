@@ -341,7 +341,7 @@ function checkRunwayHint() {
     _nudgeBtn(btn, 'hint-extra-pulse');
     const text = lang === 'ru'
       ? 'Образ собран!<br>Нажми <b>Опубликовать</b>'
-      : 'Outfit ready!<br>Tap <b>Publish Post</b>';
+      : 'Outfit ready!<br>Tap <b>Publish</b>';
     showCtxHint('stars-display', text, 5000);
   } else {
     _nudgeBtn(btn, 'hint-nudge');

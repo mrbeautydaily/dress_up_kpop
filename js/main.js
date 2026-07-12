@@ -222,6 +222,7 @@ async function init() {
   $('btn-random-stage').addEventListener('click', () => { sfxClick(); randomOutfit(); });
   $('btn-prev-bg').addEventListener('click', () => { sfxClick(); changeBackground(-1); });
 
+
   // --- Dynamic Proportional Scaling for Panel Controls ---
   function fitPanelControls() {
     const outer = $('panel-controls');

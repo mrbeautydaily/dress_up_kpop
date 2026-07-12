@@ -38,7 +38,7 @@ const T = {
     loadingText:   'Loading...',
     // Header
     gameTitle:     'K-Pop Star: Dress Up',
-    btnRunway:     'Publish Post',
+    btnRunway:     'Publish',
     // Panels
     catHair:       'Hair',
     catTops:       'Tops',
