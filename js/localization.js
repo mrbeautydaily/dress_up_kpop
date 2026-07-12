@@ -34,10 +34,10 @@ function t(key) {
 const T = {
   en: {
     // Loading
-    loadingTitle:  'K-Pop Idol: Star Maker',
+    loadingTitle:  'K-Pop Star: Dress Up',
     loadingText:   'Loading...',
     // Header
-    gameTitle:     'K-Pop Star Maker',
+    gameTitle:     'K-Pop Star: Dress Up',
     btnRunway:     'Publish Post',
     // Panels
     catHair:       'Hair',
@@ -65,10 +65,10 @@ const T = {
   },
   ru: {
     // Loading
-    loadingTitle:  'Путь к славе: K-Pop',
+    loadingTitle:  'K-Pop Звезда: Одевалка',
     loadingText:   'Загрузка...',
     // Header
-    gameTitle:     'K-Pop: Путь к славе',
+    gameTitle:     'K-Pop Звезда: Одевалка',
     btnRunway:     'Опубликовать',
     // Panels
     catHair:       'Волосы',

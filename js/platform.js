@@ -13,6 +13,25 @@ window.yandexResumeCallbacks = [];
 let deviceType = 'desktop';
 let isMobileDevice = false;
 
+window.isIOSDevice = false;
+
+function applyIOSHiding() {
+  if (window.isIOSDevice && !window.iosHiddenApplied) {
+    window.iosHiddenApplied = true;
+    console.log('[Device] iOS detected. Hiding share buttons.');
+    const style = document.createElement('style');
+    style.innerHTML = '#btn-share-stage, #btn-share-score { display: none !important; }';
+    document.head.appendChild(style);
+  }
+}
+
+// Initial check via User Agent (runs immediately)
+const initialUaCheck = navigator.userAgent.toLowerCase();
+if (/iphone|ipad|ipod/i.test(initialUaCheck) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+  window.isIOSDevice = true;
+  applyIOSHiding();
+}
+
 function detectDevice() {
   const ua = navigator.userAgent.toLowerCase();
   
@@ -120,6 +139,13 @@ async function initYandexSDK() {
     }
 
     const i18n    = ysdk.environment.i18n;
+    
+    // Check for iOS via YSDK environment if available
+    if (ysdk.environment && ysdk.environment.browser && ysdk.environment.browser.os === 'iOS') {
+      window.isIOSDevice = true;
+      applyIOSHiding();
+    }
+
     const sdkLang = i18n && i18n.lang ? i18n.lang : '';
     const sdkTld  = i18n && i18n.tld  ? i18n.tld  : '';
 
